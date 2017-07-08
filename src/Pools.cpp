@@ -7,7 +7,8 @@
 
 #include "Pools.h"
 
-Pools::Pools(Credits & cr,int posx,int posy,int number) :Button(posx,posy)
+Pools::Pools(Credits & cr,int posx,int posy, int number)
+	:Button(posx, posy)
 {
 
 	this->number=number;
@@ -20,20 +21,12 @@ Pools::~Pools() {
 
 bool Pools::isBet()
 {
-return true;
+return false;
 }
 
 int Pools::GetNumber()
 {
 	return this->number;
-}
-
-
-SDL_Rect Pools::Draw(SDL_Rect & dest)
-{
-	SDL_RenderCopy(gRenderer,mTexture,NULL,&dest);
-	SDL_RenderPresent(gRenderer);
-	return dest;
 }
 
 

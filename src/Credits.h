@@ -7,6 +7,7 @@
 
 #ifndef CREDITS_H_
 #define CREDITS_H_
+#include  "Globals.h"
 
 class Credits
 {

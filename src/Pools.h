@@ -7,10 +7,9 @@
 
 #ifndef POOLS_H_
 #define POOLS_H_
-
+#include "Globals.h"
 #include "Button.h"
 #include "Credits.h"
-using namespace std;
 
 class Pools :public Button{
 public:
@@ -18,7 +17,6 @@ public:
 	Pools(Credits& ,int x=0,int y=0,int number=0);
 	virtual ~Pools();
 	bool isBet();
-	SDL_Rect Draw(SDL_Rect &);
 	int GetNumber();
 	int PossibleWin();
 private:

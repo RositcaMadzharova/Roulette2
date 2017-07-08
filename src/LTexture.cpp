@@ -57,8 +57,8 @@ void LTexture::render(SDL_Renderer* gRenderer, SDL_Rect* clip)
 	    }
 
 	    //Render to screen
-	    SDL_RenderCopy( gRenderer, mTexture, clip, &renderQuad);
-	    SDL_RenderPresent(gRenderer);
+	    SDL_RenderCopy( Background::gRenderer, mTexture, clip, &renderQuad);
+	    SDL_RenderPresent(Background::gRenderer);
 }
 
 void LTexture::free() {
@@ -119,4 +119,9 @@ bool LTexture::loadFromFile(SDL_Renderer* gRenderer, std::string path)
 void LTexture::setPosition(int _x, int _y) {
 	this->x = _x;
 	this->x = _y;
+}
+
+void LTexture::Show()
+{
+	SDL_RenderPresent(Background::gRenderer);
 }
