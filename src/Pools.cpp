@@ -6,7 +6,7 @@
  */
 
 #include "Pools.h"
-
+Pools::Pools(){}
 Pools::Pools(Credits & cr,int posx,int posy, int number)
 	:Button(posx, posy)
 {
