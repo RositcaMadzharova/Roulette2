@@ -13,26 +13,37 @@
 #include "Background.h"
 
 
-GameState MenuState;
+//GameState MenuState;
 
 class Application {
 public:
 
 	Application();
-	void WhitchState(GameState& MenuState);
+	void initIntro();
+	void initInfo();
+	void initGameBoard();
+	void initRoulette();
+	void initOutro();
+	void initWin();
+	void SwitchState(SDL_Event &e);
+	void WitchState();//will change gamestate
 	void SpinRoulette(int, LTexture ball);//some argument time , sector , velocity
 	virtual ~Application();
+	GameState getMenuState() const;
+
 private:
-	Background Intro;
-	Button IntroButtons[5];
-	Background Info;
-	Button InfoBackToIntro;
-	Background GameBoard;
+	GameState MenuState;
+	Background * intro;
+	//insert credit , volume , info,start new game , resume game
+	Button * introButtons[5];
+	Background *info;
+	Button *infoBackToIntro;
+	Background *gameBoard;
 	//TODO MAIN make other class who enherit button
-	Background Roulette;// spin roulette
-	LTexture ball;
-	Background Outro;// Animation who backs to Intro 10 sec;
-	Background Win;// animation 6 seconds
+	Background *roulette;// spin roulette
+	LTexture *ball;
+	Background *outro;// Animation who backs to Intro 10 sec;
+	Background *win;// animation 6 seconds
 
 	//TODO CREDITS
 };
