@@ -13,6 +13,7 @@
 
 class Pools :public Button{
 public:
+	Pools();
 	Credits cr;
 	Pools(Credits& ,int x=0,int y=0,int number=0);
 	virtual ~Pools();
