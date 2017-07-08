@@ -11,7 +11,7 @@
 #include "Credits.h"
 
 GameState game = INTRO_MENU;
-
+//INFO,GAME_BOARD,SPIN,OUTRO,WIN
 static int static_counter = 0;
 
 Pools MenuScreen(Credits cr) {
@@ -37,6 +37,19 @@ Pools MenuScreen(Credits cr) {
 	p1.setHeight(59);
 	p1.setWidth(59);
 	p1.render(Background::gRenderer, &rect);
+
+
+
+//	Pools pG(cr, 300, 330, 10);
+//	p1.loadFromFile(Background::gRenderer, "Pools.png");
+//
+//	SDL_Rect rect = { 118, 1, 118, 111 };
+//	p1.setHeight(59);
+//	p1.setWidth(59);
+//	p1.render(Background::gRenderer, &rect);
+
+
+
 
 	return p1;
 }
@@ -71,7 +84,7 @@ int main(int argc, char *argv[]) {
 
 					bMainMenu.loadFromFile(Background::gRenderer, "Pools.png");
 
-					SDL_Rect rect1 = { 118, 100, 118, 200 };
+					SDL_Rect rect1 = { 118, 1, 118, 111 };
 					bMainMenu.setHeight(59);
 					bMainMenu.setWidth(59);
 					bMainMenu.render(Background::gRenderer, &rect1);
