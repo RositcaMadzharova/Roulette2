@@ -16,9 +16,10 @@
 using namespace std;
 
 
-enum GameState{
+ enum GameState{
 	INTRO_MENU=1,INFO,GAME_BOARD,SPIN,OUTRO,WIN
 };
+
 
 //main renderer
 //static SDL_Renderer * gRenderer = NULL;
@@ -29,5 +30,7 @@ static SDL_Texture *gTexture = NULL;
 const int SCREEN_W = 800;
 const int SCREEN_H = 600;
 
+const int INTRO_BUTTON_W = 200;
+const int INTRO_BUTTON_H = 100;
 
 #endif /* GLOBALS_H_ */
