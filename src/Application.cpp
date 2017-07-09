@@ -66,7 +66,7 @@ void Application::initInfo()
 void Application::initGameBoard()
 {
 	MenuState = GAME_BOARD;
-	gameBoard = new Background("GameBoard",SCREEN_W,SCREEN_H,"Board.jpg");
+	gameBoard = new Background("GameBoard",SCREEN_BOARD_W,SCREEN_BOARD_H,"tap_resized.jpg");
 	cashOut = new Button (700,450);
 	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	cashOut->setHeight(200);
