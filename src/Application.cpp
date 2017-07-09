@@ -28,8 +28,9 @@ Application::Application()
 void Application::initIntro()
 {
 	MenuState=INTRO_MENU;
-	intro=new Background("INTROSCREEN",SCREEN_W,SCREEN_H,"INTRO SCREEN.jpg");
-	for(int i=0;i<5;i++){
+	intro=new Background("INTROSCREEN",SCREEN_W,SCREEN_H,"IntroScreen.jpg");
+	for(int i=0;i<5;i++)
+	{
 		introButtons[i]= new Button(SCREEN_W/2-INTRO_BUTTON_W/2,SCREEN_H/5-INTRO_BUTTON_H/2+i*(INTRO_BUTTON_H+20));
 		introButtons[i]->loadFromFile(Background::gRenderer,"Pools.png");
 		introButtons[i]->setHeight(INTRO_BUTTON_H);
@@ -56,36 +57,35 @@ void Application::initInfo()
 {
 	MenuState = INFO;
 	info=new Background("INFOSCREEN",SCREEN_W,SCREEN_H,"rouletterules.jpg");
-	infoBackToIntro=new Button(300,400);
-	infoBackToIntro->loadFromFile(Background::gRenderer,"chessFigures.png");
+	infoBackToIntro=new Button(10,10);
+	infoBackToIntro->loadFromFile(Background::gRenderer,"BackButton.png");
 	infoBackToIntro->setHeight(INTRO_BUTTON_H);
 	infoBackToIntro->setWidth(INTRO_BUTTON_W);
 	infoBackToIntro->render(Background::gRenderer,NULL);
 }
 
-//TODO:
 void Application::initGameBoard()
 {
 	MenuState = GAME_BOARD;
-	gameBoard = new Background("GameBoard",SCREEN_BOARD_W,SCREEN_BOARD_H,"tap_resized.jpg");
+	gameBoard = new Background("GameBoard",SCREEN_W,SCREEN_H,"tap_resized.jpg");
 	cashOut = new Button (700,450);
 	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	cashOut->setHeight(200);
 	cashOut->setWidth(100);
 	cashOut->render(Background::gRenderer,NULL);
-
-
 	//draw 5 Pulls
 	//TODO: Each Poll needs different credit value.
 	Credits cr;
-	for(int i=0;i<5;i++){
-		gameBoardPools[i]= new Pools(cr, 1, i*70, 1);
+	for(int i=0;i<5;i++)
+	{
+		gameBoardPools[i]= new Pools(cr, 1,SCREEN_H*3/5+10+ i*60, 1);
 		gameBoardPools[i]->loadFromFile(Background::gRenderer,"Pools.png");
 		gameBoardPools[i]->setHeight(PULLS_W);
 		gameBoardPools[i]->setWidth(PULLS_H);
-		SDL_Rect rectButton = {110*i,1,118,111};
+		SDL_Rect rectButton = {113*i,1,118,111};
 		gameBoardPools[i]->render(Background::gRenderer,&rectButton);
 	}
+
 }
 
 void Application::initRoulette() {
