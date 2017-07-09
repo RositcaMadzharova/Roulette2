@@ -6,84 +6,80 @@
  */
 
 #include "Application.h"
+#include "Point.h"
 
-Application::Application()
-{
+Application::Application() {
 
-		intro = NULL;
-		for(unsigned int i=0;i<5;i++)
-		 {
-			 introButtons[i] = NULL;
-		 }
-		info = NULL;
-		infoBackToIntro = NULL;
-		gameBoard = NULL;
-		roulette = NULL;// spin roulette
-		ball = NULL;
-		outro = NULL;// Animation who backs to Intro 10 sec;
-		win = NULL;// anima
-		initIntro();
+	intro = NULL;
+	for (unsigned int i = 0; i < 5; i++) {
+		introButtons[i] = NULL;
+	}
+	info = NULL;
+	infoBackToIntro = NULL;
+	gameBoard = NULL;
+	roulette = NULL; // spin roulette
+	ball = NULL;
+	outro = NULL; // Animation who backs to Intro 10 sec;
+	win = NULL; // anima
+	initIntro();
 }
 
-void Application::initIntro()
-{
-	MenuState=INTRO_MENU;
-	intro=new Background("INTROSCREEN",SCREEN_W,SCREEN_H,"IntroScreen.jpg");
-	for(int i=0;i<5;i++)
-	{
-		introButtons[i]= new Button(SCREEN_W/2-INTRO_BUTTON_W/2,SCREEN_H/5-INTRO_BUTTON_H/2+i*(INTRO_BUTTON_H+20));
-		introButtons[i]->loadFromFile(Background::gRenderer,"Pools.png");
+void Application::initIntro() {
+	MenuState = INTRO_MENU;
+	intro = new Background("INTROSCREEN", SCREEN_W, SCREEN_H,
+			"IntroScreen.jpg");
+	for (int i = 0; i < 5; i++) {
+		introButtons[i] = new Button(SCREEN_W / 2 - INTRO_BUTTON_W / 2,
+				SCREEN_H / 5 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 20));
+		introButtons[i]->loadFromFile(Background::gRenderer, "Pools.png");
 		introButtons[i]->setHeight(INTRO_BUTTON_H);
 		introButtons[i]->setWidth(INTRO_BUTTON_W);
-		SDL_Rect rectButton = {1,1,118,111};
-		introButtons[i]->render(Background::gRenderer,&rectButton);
+		SDL_Rect rectButton = { 1, 1, 118, 111 };
+		introButtons[i]->render(Background::gRenderer, &rectButton);
 
 	}
 
 }
 
-Application::~Application()
-{
+Application::~Application() {
 
-	for(unsigned int i=0;i<5;i++)
-	{
-		delete introButtons[i] ;
+	for (unsigned int i = 0; i < 5; i++) {
+		delete introButtons[i];
 	}
 	delete intro;
 	// TODO Auto-generated destructor stub
 }
 
-void Application::initInfo()
-{
+void Application::initInfo() {
 	MenuState = INFO;
-	info=new Background("INFOSCREEN",SCREEN_W,SCREEN_H,"rouletterules.jpg");
-	infoBackToIntro=new Button(10,10);
-	infoBackToIntro->loadFromFile(Background::gRenderer,"BackButton.png");
+	info = new Background("INFOSCREEN", SCREEN_W, SCREEN_H,
+			"rouletterules.jpg");
+	infoBackToIntro = new Button(10, 10);
+	infoBackToIntro->loadFromFile(Background::gRenderer, "BackButton.png");
 	infoBackToIntro->setHeight(INTRO_BUTTON_H);
 	infoBackToIntro->setWidth(INTRO_BUTTON_W);
-	infoBackToIntro->render(Background::gRenderer,NULL);
+	infoBackToIntro->render(Background::gRenderer, NULL);
 }
 
-void Application::initGameBoard()
-{
+void Application::initGameBoard() {
 	MenuState = GAME_BOARD;
-	gameBoard = new Background("GameBoard",SCREEN_W,SCREEN_H,"tap_resized.jpg");
-	cashOut = new Button (700,450);
+	gameBoard = new Background("GameBoard", SCREEN_W, SCREEN_H,
+			"tap_resized.jpg");
+	cashOut = new Button(700, 450);
 	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	cashOut->setHeight(200);
 	cashOut->setWidth(100);
-	cashOut->render(Background::gRenderer,NULL);
+	cashOut->render(Background::gRenderer, NULL);
 	//draw 5 Pulls
 	//TODO: Each Poll needs different credit value.
 	Credits cr;
-	for(int i=0;i<5;i++)
-	{
-		gameBoardPools[i]= new Pools(cr, 1,SCREEN_H*3/5+10+ i*60, 1);
-		gameBoardPools[i]->loadFromFile(Background::gRenderer,"Pools.png");
+	for (int i = 0; i < 5; i++) {
+		gameBoardPools[i] = new Pools(cr, 1, SCREEN_H * 3 / 5 + 10 + i * 60, 1);
+		gameBoardPools[i]->loadFromFile(Background::gRenderer, "Pools.png");
 		gameBoardPools[i]->setHeight(PULLS_W);
 		gameBoardPools[i]->setWidth(PULLS_H);
-		SDL_Rect rectButton = {113*i,1,118,111};
-		gameBoardPools[i]->render(Background::gRenderer,&rectButton);
+		SDL_Rect rectButton = { 113 * i, 1, 118, 111 };
+		gameBoardPools[i]->render(Background::gRenderer, &rectButton);
 	}
 
 }
@@ -91,24 +87,22 @@ void Application::initGameBoard()
 void Application::initRoulette() {
 }
 
-void Application::initOutro()
-{
+void Application::initOutro() {
 
 }
 
 void Application::initWin() {
 }
 
-void Application::WitchState()
-{
+void Application::WitchState() {
 
-	switch (MenuState){
-	case INTRO_MENU :
+	switch (MenuState) {
+	case INTRO_MENU:
 		initIntro();
 		introButtons[0]->isHover();
 
 		break;
-	case INFO :
+	case INFO:
 		initInfo();
 		break;
 	default:
@@ -116,67 +110,90 @@ void Application::WitchState()
 	}
 }
 
+void Application::GamePlay() {
 
-void Application::GamePlay()
-{
+	vector<Point> v_coordsAllBetPulls;
+
+	int currentX = 0;
+	int currentY = 0;
+	int pullYellow = 0;
+	int pullGreen = 0;
+
 	bool close = false;
 	while (!close) {
 
 		SDL_Event e;
-		while (SDL_PollEvent(&e))
-		{
-			switch (MenuState)
-			{
-				case INTRO_MENU:
-					if(introButtons[0]->isClicked(&e))
-							{
-								Free();
-								MenuState=INFO;
-								initInfo();
-							}
-					if(introButtons[3]->isClicked(&e))
-							{
-								Free();
-								MenuState=GAME_BOARD;
-								initGameBoard();
-							}
+		while (SDL_PollEvent(&e)) {
+			switch (MenuState) {
+			case INTRO_MENU:
+				if (introButtons[0]->isClicked(&e)) {
+					Free();
+					MenuState = INFO;
+					initInfo();
+				}
+				if (introButtons[3]->isClicked(&e)) {
+					Free();
+					MenuState = GAME_BOARD;
+					initGameBoard();
+				}
 
-					break;
-				case INFO :
-					if(infoBackToIntro->isClicked(&e))
-								{
-									Free();
-									MenuState=INTRO_MENU;
-									initIntro();
-								}
-					break;
-				case GAME_BOARD :
-					if(cashOut->isClicked(&e)){
-						Free();
-						MenuState = OUTRO;
-						initOutro();
-					}
-					break;
-				default:
-					break;
+				break;
+			case INFO:
+				if (infoBackToIntro->isClicked(&e)) {
+					Free();
+					MenuState = INTRO_MENU;
+					initIntro();
+				}
+				break;
+			case GAME_BOARD:
+
+				if (cashOut->isClicked(&e)) {
+					Free();
+					MenuState = OUTRO;
+					initOutro();
+				}
+
+				if (gameBoardPools[0]->isClicked(&e)) {
+					cout << "Clicked yellow poll";
+					pullYellow = 1;
+					pullGreen = 0;
+
+				}
+
+				if (gameBoardPools[1]->isClicked(&e)) {
+					cout << "Click green poll";
+					pullGreen = 1;
+					pullYellow = 0;
+				}
+				if(gameBoardPools[2]->isClicked(&e))
+				{
+					cout << "Clicked red poll";
+					//TODO
+				}
+				if(gameBoardPools[3]->isClicked(&e))
+				{
+					cout << "Clicked blue poll";
+					//TODO
+				}
+
+
+				break;
+			default:
+				break;
 			}
 
-
-
-			if (e.type == SDL_QUIT)
-			{
+			if (e.type == SDL_QUIT) {
 				close = true;
 			}
 
-
 		}
+
+
 	}
 }
 
-void Application::Free()
-{
-	if(MenuState == INTRO_MENU)
-	{
+void Application::Free() {
+	if (MenuState == INTRO_MENU) {
 		intro->Clear();
 		introButtons[0]->free();
 		introButtons[1]->free();
@@ -190,8 +207,7 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if(MenuState == INFO)
-	{
+	if (MenuState == INFO) {
 		info->Clear();
 		infoBackToIntro->free();
 		SDL_RenderClear(Background::gRenderer);
@@ -201,8 +217,7 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if(MenuState ==GAME_BOARD)
-	{
+	if (MenuState == GAME_BOARD) {
 		gameBoardPools[0]->free();
 		gameBoardPools[1]->free();
 		gameBoardPools[2]->free();
