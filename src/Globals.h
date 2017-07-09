@@ -30,8 +30,13 @@ static SDL_Texture *gTexture = NULL;
 const int SCREEN_W = 800;
 const int SCREEN_H = 600;
 
+
 const int SCREEN_BOARD_W = 1200;
 const int SCREEN_BOARD_H = 428;
+
+const int PULLS_W = 60;
+const int PULLS_H = 60;
+
 
 const int INTRO_BUTTON_W = 200;
 const int INTRO_BUTTON_H = 100;
