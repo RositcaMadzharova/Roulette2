@@ -9,8 +9,7 @@
 
 Application::Application()
 {
-	MenuState=INTRO_MENU;
-		isInit=false;
+
 		intro = NULL;
 		for(unsigned int i=0;i<5;i++)
 		 {
@@ -23,19 +22,22 @@ Application::Application()
 		ball = NULL;
 		outro = NULL;// Animation who backs to Intro 10 sec;
 		win = NULL;// anima
+		initIntro();
 }
 
 void Application::initIntro()
 {
+	MenuState=INTRO_MENU;
 	intro=new Background("INTROSCREEN",SCREEN_W,SCREEN_H,"INTRO SCREEN.jpg");
-	introButtons[0]= new Button(SCREEN_W/2-INTRO_BUTTON_W/2,SCREEN_H/5-INTRO_BUTTON_H/2);
-	introButtons[0]->loadFromFile(Background::gRenderer,"Pools.png");
-	introButtons[0]->setHeight(INTRO_BUTTON_H);
-	introButtons[0]->setWidth(INTRO_BUTTON_W);
-	SDL_Rect rectButton = {1,1,118,111};
-	introButtons[0]->render(Background::gRenderer,&rectButton);
-	isInit=true;
+	for(int i=0;i<5;i++){
+		introButtons[i]= new Button(SCREEN_W/2-INTRO_BUTTON_W/2,SCREEN_H/5-INTRO_BUTTON_H/2+i*(INTRO_BUTTON_H+20));
+		introButtons[i]->loadFromFile(Background::gRenderer,"Pools.png");
+		introButtons[i]->setHeight(INTRO_BUTTON_H);
+		introButtons[i]->setWidth(INTRO_BUTTON_W);
+		SDL_Rect rectButton = {1,1,118,111};
+		introButtons[i]->render(Background::gRenderer,&rectButton);
 
+	}
 
 }
 
@@ -52,24 +54,33 @@ Application::~Application()
 
 void Application::initInfo()
 {
+	MenuState = INFO;
 	info=new Background("INFOSCREEN",SCREEN_W,SCREEN_H,"rouletterules.jpg");
 	infoBackToIntro=new Button(300,400);
 	infoBackToIntro->loadFromFile(Background::gRenderer,"chessFigures.png");
 	infoBackToIntro->setHeight(INTRO_BUTTON_H);
 	infoBackToIntro->setWidth(INTRO_BUTTON_W);
 	infoBackToIntro->render(Background::gRenderer,NULL);
-	infoBackToIntro->isHover();
-
-
 }
 
-void Application::initGameBoard() {
+void Application::initGameBoard()
+{
+	MenuState = GAME_BOARD;
+	gameBoard = new Background("GameBoard",SCREEN_W,SCREEN_H,"Board.jpg");
+	cashOut = new Button (700,450);
+	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
+	cashOut->setHeight(200);
+	cashOut->setWidth(100);
+	cashOut->render(Background::gRenderer,NULL);
+
 }
 
 void Application::initRoulette() {
 }
 
-void Application::initOutro() {
+void Application::initOutro()
+{
+
 }
 
 void Application::initWin() {
@@ -92,44 +103,53 @@ void Application::WitchState()
 	}
 }
 
-void Application::SwitchState(SDL_Event &e)
-{
-	if(introButtons[0]->isClicked(&e) && MenuState==INTRO_MENU)
-	{
-		if(isInit==true){
-			return ;
-		}
-		WitchState();
-		intro->Clear();
-		introButtons[0]->free();
-		isInit=false;
-
-	}
-	if(infoBackToIntro->isClicked(&e) && MenuState==INFO)
-	{
-		WitchState();
-		info->Clear();
-		infoBackToIntro->free();
-
-	}
-}
 
 void Application::GamePlay()
 {
-	initIntro();
-
 	bool close = false;
 	while (!close) {
 
 		SDL_Event e;
 		while (SDL_PollEvent(&e))
 		{
-			if(introButtons[0]->isClicked(&e))
+			switch (MenuState)
 			{
-				Free();
-				MenuState=INFO;
-				initInfo();
+				case INTRO_MENU:
+					if(introButtons[0]->isClicked(&e))
+							{
+								Free();
+								MenuState=INFO;
+								initInfo();
+							}
+					if(introButtons[3]->isClicked(&e))
+							{
+								Free();
+								MenuState=GAME_BOARD;
+								initGameBoard();
+							}
+
+					break;
+				case INFO :
+					if(infoBackToIntro->isClicked(&e))
+								{
+									Free();
+									MenuState=INTRO_MENU;
+									initIntro();
+								}
+					break;
+				case GAME_BOARD :
+					if(cashOut->isClicked(&e)){
+						Free();
+						MenuState = OUTRO;
+						initOutro();
+					}
+					break;
+				default:
+					break;
 			}
+
+
+
 			if (e.type == SDL_QUIT)
 			{
 				close = true;
@@ -146,14 +166,31 @@ void Application::Free()
 	{
 		intro->Clear();
 		introButtons[0]->free();
+		introButtons[1]->free();
+		introButtons[2]->free();
+		introButtons[3]->free();
+		introButtons[4]->free();
 		SDL_RenderClear(Background::gRenderer);
 		SDL_DestroyWindow(gWindow);
 		gWindow = NULL;
 		Background::gRenderer = NULL;
-
-		//Quit SDL subsystems
 		IMG_Quit();
 		SDL_Quit();
+	}
+	if(MenuState == INFO)
+	{
+		info->Clear();
+		infoBackToIntro->free();
+		SDL_RenderClear(Background::gRenderer);
+		SDL_DestroyWindow(gWindow);
+		gWindow = NULL;
+		Background::gRenderer = NULL;
+		IMG_Quit();
+		SDL_Quit();
+	}
+	if(MenuState ==GAME_BOARD)
+	{
+
 	}
 }
 

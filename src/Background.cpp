@@ -13,7 +13,8 @@ SDL_Renderer* Background::gRenderer= NULL;
 Background::Background(string title, int width, int height, string path) :
 		_title(title), _width(width), _height(height), _path(path)
 {
-
+		gWindow = NULL;
+		Background::gRenderer = NULL;
 	if (false==Init())
 		std::cerr<<"cant init sdl";
 	Show();
@@ -55,6 +56,12 @@ bool Background::Init()
 	gWindow = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED, _width, _height, 0);
 	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+	if( gRenderer == NULL )
+			{
+				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+				SDL_DestroyWindow( gWindow );
+				gWindow = NULL;
+			}
 	loadedSurface = IMG_Load(this->_path.c_str());
 	Texture= SDL_CreateTextureFromSurface( Background::gRenderer, loadedSurface );
 	SDL_RenderCopy(Background::gRenderer,Texture,NULL,NULL);
@@ -92,4 +99,33 @@ bool Background::loadMedia()
 			}
 
 	return success;
+}
+
+int Background::getHeight() const {
+	return _height;
+}
+
+void Background::setHeight(int height) {
+	_height = height;
+}
+
+const string& Background::getPath() const {
+	return _path;
+}
+
+void Background::setPath(const string& path) {
+	_path = path;
+}
+
+int Background::getWidth() const {
+	return _width;
+}
+
+void Background::setWidth(int width) {
+	_width = width;
+}
+
+
+void Background::setTitle(const string& title) {
+	_title = title;
 }

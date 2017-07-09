@@ -19,6 +19,14 @@ public:
 	void Show();
 	bool loadMedia();
 	bool Init();
+	int getHeight() const;
+	void setHeight(int height);
+	const string& getPath() const;
+	void setPath(const string& path);
+	int getWidth() const;
+	void setWidth(int width);
+	void setTitle(const string& title);
+
 	SDL_Surface * loadedSurface=NULL;
 	SDL_Texture *Texture = NULL;
 	static SDL_Renderer * gRenderer;
@@ -27,7 +35,6 @@ private:
 	int _width;
 	int _height;
 	string _path;
-
 };
 
 
