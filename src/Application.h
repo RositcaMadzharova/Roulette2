@@ -47,6 +47,8 @@ private:
 	Background *outro;// Animation who backs to Intro 10 sec;
 	Background *win;// animation 6 seconds
 	//TODO OTHER BUTTONS;
+	Pools *gameBoardPools[5];
+	
 	//TODO CREDITS
 };
 
