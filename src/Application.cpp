@@ -10,9 +10,9 @@
 Application::Application()
 {
 	MenuState=INTRO_MENU;
-
-		 intro = NULL;
-		 for(unsigned int i=0;i<5;i++)
+		isInit=false;
+		intro = NULL;
+		for(unsigned int i=0;i<5;i++)
 		 {
 			 introButtons[i] = NULL;
 		 }
@@ -34,7 +34,7 @@ void Application::initIntro()
 	introButtons[0]->setWidth(INTRO_BUTTON_W);
 	SDL_Rect rectButton = {1,1,118,111};
 	introButtons[0]->render(Background::gRenderer,&rectButton);
-
+	isInit=true;
 
 
 }
@@ -58,6 +58,7 @@ void Application::initInfo()
 	infoBackToIntro->setHeight(INTRO_BUTTON_H);
 	infoBackToIntro->setWidth(INTRO_BUTTON_W);
 	infoBackToIntro->render(Background::gRenderer,NULL);
+	infoBackToIntro->isHover();
 
 
 }
@@ -81,6 +82,7 @@ void Application::WitchState()
 	case INTRO_MENU :
 		initIntro();
 		introButtons[0]->isHover();
+
 		break;
 	case INFO :
 		initInfo();
@@ -92,21 +94,66 @@ void Application::WitchState()
 
 void Application::SwitchState(SDL_Event &e)
 {
-	WitchState();
 	if(introButtons[0]->isClicked(&e) && MenuState==INTRO_MENU)
 	{
-		MenuState=INFO;
+		if(isInit==true){
+			return ;
+		}
 		WitchState();
 		intro->Clear();
 		introButtons[0]->free();
+		isInit=false;
+
 	}
 	if(infoBackToIntro->isClicked(&e) && MenuState==INFO)
 	{
-		MenuState=INTRO_MENU;
 		WitchState();
 		info->Clear();
 		infoBackToIntro->free();
-		SDL_DestroyRenderer(Background::gRenderer);
+
+	}
+}
+
+void Application::GamePlay()
+{
+	initIntro();
+
+	bool close = false;
+	while (!close) {
+
+		SDL_Event e;
+		while (SDL_PollEvent(&e))
+		{
+			if(introButtons[0]->isClicked(&e))
+			{
+				Free();
+				MenuState=INFO;
+				initInfo();
+			}
+			if (e.type == SDL_QUIT)
+			{
+				close = true;
+			}
+
+
+		}
+	}
+}
+
+void Application::Free()
+{
+	if(MenuState == INTRO_MENU)
+	{
+		intro->Clear();
+		introButtons[0]->free();
+		SDL_RenderClear(Background::gRenderer);
+		SDL_DestroyWindow(gWindow);
+		gWindow = NULL;
+		Background::gRenderer = NULL;
+
+		//Quit SDL subsystems
+		IMG_Quit();
+		SDL_Quit();
 	}
 }
 

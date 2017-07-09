@@ -17,14 +17,15 @@
 
 class Application {
 public:
-
 	Application();
 	void initIntro();
 	void initInfo();
 	void initGameBoard();
 	void initRoulette();
 	void initOutro();
+	void Free();
 	void initWin();
+	void GamePlay();
 	void SwitchState(SDL_Event &e);
 	void WitchState();//will change gamestate
 	void SpinRoulette(int, LTexture ball);//some argument time , sector , velocity
@@ -32,6 +33,7 @@ public:
 	GameState getMenuState() const;
 
 private:
+	bool isInit ;
 	GameState MenuState;
 	Background * intro;
 	//insert credit , volume , info,start new game , resume game
