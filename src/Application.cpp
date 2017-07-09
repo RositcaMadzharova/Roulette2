@@ -63,6 +63,7 @@ void Application::initInfo()
 	infoBackToIntro->render(Background::gRenderer,NULL);
 }
 
+//TODO:
 void Application::initGameBoard()
 {
 	MenuState = GAME_BOARD;
@@ -73,6 +74,18 @@ void Application::initGameBoard()
 	cashOut->setWidth(100);
 	cashOut->render(Background::gRenderer,NULL);
 
+
+	//draw 5 Pulls
+	//TODO: Each Poll needs different credit value.
+	Credits cr;
+	for(int i=0;i<5;i++){
+		gameBoardPools[i]= new Pools(cr, 1, i*70, 1);
+		gameBoardPools[i]->loadFromFile(Background::gRenderer,"Pools.png");
+		gameBoardPools[i]->setHeight(PULLS_W);
+		gameBoardPools[i]->setWidth(PULLS_H);
+		SDL_Rect rectButton = {110*i,1,118,111};
+		gameBoardPools[i]->render(Background::gRenderer,&rectButton);
+	}
 }
 
 void Application::initRoulette() {
@@ -190,7 +203,17 @@ void Application::Free()
 	}
 	if(MenuState ==GAME_BOARD)
 	{
-
+		gameBoardPools[0]->free();
+		gameBoardPools[1]->free();
+		gameBoardPools[2]->free();
+		gameBoardPools[3]->free();
+		gameBoardPools[4]->free();
+		SDL_RenderClear(Background::gRenderer);
+		SDL_DestroyWindow(gWindow);
+		gWindow = NULL;
+		Background::gRenderer = NULL;
+		IMG_Quit();
+		SDL_Quit();
 	}
 }
 
