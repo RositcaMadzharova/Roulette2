@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+#include <ctime>
 #include <cstdio>
 #include <vector>
 #include <iostream>
@@ -35,6 +36,11 @@ const int SCREEN_BOARD_H = 428;
 
 const int INTRO_BUTTON_W = 59;
 const int INTRO_BUTTON_H = 59;
+
+const int POOLS_BUTTON = 5;
+
+const int BUTTON_W=200;
+const int BUTTON_H= 100;
 
 const int PULLS_W = 60;
 const int PULLS_H = 60;
