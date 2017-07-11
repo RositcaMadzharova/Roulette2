@@ -24,15 +24,14 @@ public:
 	void initGameBoard();
 	void initRoulette();
 	void initOutro();
-	void Free();
 	void initWin();
+
+	void Free();
 	void GamePlay();
+	void DisplayBets(int x, int y, int pY, int pGr, int pRed, vector<Point>);
 
-	void DisplayBets();
-
-
-	void WitchState();//will change gamestate
-	void SpinRoulette(int, LTexture ball);//some argument time , sector , velocity
+	void SpinAnimation ();
+	void SpinRoulette(LTexture &ball,int);
 	virtual ~Application();
 	GameState getMenuState() const;
 
@@ -52,12 +51,14 @@ private:
 	Background *win;// animation 6 seconds
 	//TODO OTHER BUTTONS;
 	Pools *gameBoardPools[5];
-
+	Pools *betPools [5];
 	//hardcoded limit of 100 Pulls
 	//TODO:must be fxed
-	Pools *pollsBet[100];
 
-	vector<Point> v_coordsAllBetPulls;
+
+	Credits cr;
+
+
 
 
 	//TODO CREDITS
