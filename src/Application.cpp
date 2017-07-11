@@ -7,6 +7,8 @@
 
 #include "Application.h"
 #include "Point.h"
+#include <vector>
+
 
 Application::Application() {
 
@@ -71,11 +73,12 @@ void Application::initGameBoard() {
 	cashOut->setHeight(BUTTON_W);
 	cashOut->setWidth(BUTTON_W);
 	cashOut->render(Background::gRenderer, NULL);
-	//draw 5 Pulls
+
+	//draw 5 Pulls and PICK PICK >>>>!!!!!!
 	//TODO: Each Poll needs different credit value.
-	Credits cr;
-	for (int i = 0; i < 5; i++) {
-		gameBoardPools[i] = new Pools(cr, 100 * i, SCREEN_BOARD_H - 60, 1);
+
+	for (int i = 0; i < POOLS_BUTTON; i++) {
+		gameBoardPools[i] = new Pools(cr, 100 * i, SCREEN_BOARD_H - 60);
 		gameBoardPools[i]->loadFromFile(Background::gRenderer, "Pools.png");
 		gameBoardPools[i]->setHeight(PULLS_W);
 		gameBoardPools[i]->setWidth(PULLS_H);
@@ -95,76 +98,82 @@ void Application::initOutro() {
 void Application::initWin() {
 }
 
-void Application::WitchState() {
 
-	switch (MenuState) {
-	case INTRO_MENU:
-		initIntro();
-		introButtons[0]->isHover();
+void Application::DisplayBets(int x, int y, int pY, int pGr, int pRed, vector<Point> v_allBetPoints)
+{
 
-		break;
-	case INFO:
-		initInfo();
-		break;
 
-	case GAME_BOARD:
-		initGameBoard();
-		break;
+	if (pY == 1 && pGr == 0 &&  pRed == 0) {
 
-	default:
-		break;
-	}
-}
+		if (y < 220) {
+			Credits cr(1);
+			Pools gameBoardPools(cr, x, y);
+			gameBoardPools.loadFromFile(
+					Background::gRenderer, "Pools.png");
+			gameBoardPools.setWidth(PULLS_W);
+			gameBoardPools.setHeight(PULLS_H);
+			cout << x << ":" << y << endl;
+			SDL_Rect rec = { 1, 1, 118, 111 };
+			gameBoardPools.render(Background::gRenderer,
+					&rec);
 
-void Application::DisplayBets() {
-	for (int i = 0; i < v_coordsAllBetPulls.size(); i++) {
+			Point p (x,y,"yellow",1);
+			v_allBetPoints.push_back(p);
 
-		//get value of Poll from vector
-		Credits cr(v_coordsAllBetPulls.at(i).m_value);
-		pollsBet[i] = new Pools(cr, v_coordsAllBetPulls.at(i).X,
-				v_coordsAllBetPulls.at(i).Y);
-		pollsBet[i]->loadFromFile(Background::gRenderer, "Pools.png");
-		pollsBet[i]->setHeight(PULLS_W);
-		pollsBet[i]->setWidth(PULLS_H);
-		SDL_Rect rectButton;
-		//get different coordinates
-		if (v_coordsAllBetPulls.at(i).m_PullColor == "yellow") {
-			rectButton = {1, 1, 118, 111};
 		}
-
-		if (v_coordsAllBetPulls.at(i).m_PullColor == "green") {
-			rectButton = {118, 1, 118, 111};
-		}
-
-		if (v_coordsAllBetPulls.at(i).m_PullColor == "red") {
-			rectButton = {236, 1, 118, 111};
-		}
-
-		if (v_coordsAllBetPulls.at(i).m_PullColor == "blue") {
-			rectButton = {354, 1, 118, 111};
-		}
-
-		if (v_coordsAllBetPulls.at(i).m_PullColor == "black") {
-			rectButton = {460, 1, 118, 111};
-		}
-
-		pollsBet[i]->render(Background::gRenderer, &rectButton);
-
 	}
 
+	if (pY == 0 && pGr == 1 && pRed == 0) {
+
+		if (y < 220) {
+			Credits cr(10);
+			Pools gameBoardPools(cr, x, y);
+			gameBoardPools.loadFromFile(
+					Background::gRenderer, "Pools.png");
+			gameBoardPools.setWidth(PULLS_W);
+			gameBoardPools.setHeight(PULLS_H);
+			cout << x << ":" << y << endl;
+			SDL_Rect rec = { 118, 1, 118, 111 };
+			gameBoardPools.render(Background::gRenderer,
+					&rec);
+
+			Point p (x,y,"green",10);
+			v_allBetPoints.push_back(p);
+		}
+	}
+
+
+	if (pY == 0 && pGr == 0 && pRed == 1) {
+
+		if (y < 220) {
+			Credits cr(20);
+			Pools gameBoardPools(cr, x, y);
+			gameBoardPools.loadFromFile(
+					Background::gRenderer, "Pools.png");
+			gameBoardPools.setWidth(PULLS_W);
+			gameBoardPools.setHeight(PULLS_H);
+			cout << x << ":" << y << endl;
+			SDL_Rect rec = { 236, 1, 118, 111 };
+			gameBoardPools.render(Background::gRenderer,
+					&rec);
+			Point p (x,y,"red",20);
+					v_allBetPoints.push_back(p);
+		}
+	}
+
+	//TODO:
+	//blue
+	//black
+
 }
+
 
 void Application::GamePlay() {
-
-	int currentX = 0;
-	int currentY = 0;
-	int pullYellow = 0;
-	int pullGreen = 0;
-	int pullRed = 0;
-	int pullBlue = 0;
-	int pullBlack = 0;
-
 	bool close = false;
+
+	vector<Point> v_allBetPoolsInfo;
+
+
 	while (!close) {
 
 		SDL_Event e;
@@ -199,110 +208,56 @@ void Application::GamePlay() {
 //				//	initOutro();
 //				}
 
+				int x, y;
+				int pY;
+				int pGr;
+				int pRed;
+				//yellow
 				if (gameBoardPools[0]->isClicked(&e)) {
-					pullYellow = 1;
-					pullGreen = 0;
-					pullRed = 0;
-					pullBlue = 0;
-					pullBlack = 0;
+					SDL_GetMouseState(&x, &y);
+					pY = 1;
+					pGr = 0;
+					pRed = 0;
 				}
 
+				//green
 				if (gameBoardPools[1]->isClicked(&e)) {
-					pullYellow = 0;
-					pullGreen = 1;
-					pullRed = 0;
-					pullBlue = 0;
-					pullBlack = 0;
-
+					SDL_GetMouseState(&x, &y);
+					pY = 0;
+					pGr = 1;
+					pRed = 0;
 				}
 
+				//red
 				if (gameBoardPools[2]->isClicked(&e)) {
-					pullYellow = 0;
-					pullGreen = 0;
-					pullRed = 1;
-					pullBlue = 0;
-					pullBlack = 0;
-
-				}
-
-				if (gameBoardPools[3]->isClicked(&e)) {
-					pullYellow = 0;
-					pullGreen = 0;
-					pullRed = 0;
-					pullBlue = 1;
-					pullBlack = 0;
-				}
-
-				if (gameBoardPools[4]->isClicked(&e)) {
-					pullYellow = 0;
-					pullGreen = 0;
-					pullRed = 0;
-					pullBlue = 0;
-					pullBlack = 1;
-
+					SDL_GetMouseState(&x, &y);
+					pY = 0;
+					pGr = 0;
+					pRed = 1;
 				}
 
 				if (e.type == SDL_MOUSEBUTTONDOWN) {
 
 					if (e.button.button == SDL_BUTTON_LEFT) {
 
-						SDL_GetMouseState(&currentX, &currentY);
-						currentX = e.button.x;
-						currentY = e.button.y;
+						SDL_GetMouseState(&x, &x);
+						x = e.button.x;
+						y = e.button.y;
 
-						cout << currentX << ":" << currentY << endl;
+						cout << x << ":" << y << endl;
 
-						//yellow
-						if (pullYellow == 1 && pullGreen == 0 && pullRed == 0
-								&& pullBlue == 0 && pullBlack == 0) {
 
-							if (currentY <= 250) {
-								Point pYellow(currentX, currentY, "yellow", 1);
-								v_coordsAllBetPulls.push_back(pYellow);
-							}
-						}
-
-						//green
-						if (pullYellow == 0 && pullGreen == 1 && pullRed == 0
-								&& pullBlue == 0 && pullBlack == 0) {
-
-							if (currentY <= 250) {
-								Point pGreen(currentX, currentY, "green", 10);
-								v_coordsAllBetPulls.push_back(pGreen);
-							}
-						}
-
-						//red
-						if (pullYellow == 0 && pullGreen == 0 && pullRed == 1
-								&& pullBlue == 0 && pullBlack == 0) {
-
-							if (currentY <= 250) {
-								Point pRed(currentX, currentY, "red", 20);
-								v_coordsAllBetPulls.push_back(pRed);
-							}
-						}
-
-						//blue
-						if (pullYellow == 0 && pullGreen == 0 && pullRed == 0
-								&& pullBlue == 1 && pullBlack == 0) {
-
-							if (currentY <= 250) {
-								Point pBlue(currentX, currentY, "blue", 50);
-								v_coordsAllBetPulls.push_back(pBlue);
-							}
-						}
-
-						//blue
-						if (pullYellow == 0 && pullGreen == 0 && pullRed == 0
-								&& pullBlue == 0 && pullBlack == 1) {
-
-							if (currentY <= 250) {
-								Point pBlack(currentX, currentY, "black", 100);
-								v_coordsAllBetPulls.push_back(pBlack);
-							}
-						}
+						DisplayBets(x, y, pY, pGr, pRed, v_allBetPoolsInfo);
 
 					}
+				}
+
+				if (gameBoardPools[3]->isClicked(&e)) {
+					//TODO blue
+				}
+
+				if (gameBoardPools[4]->isClicked(&e)) {
+					//TODO black
 				}
 
 				break;
@@ -317,7 +272,6 @@ void Application::GamePlay() {
 		}
 
 		//separate function that traverse vector with Bets and display polls
-		DisplayBets();
 
 	}
 
@@ -364,6 +318,4 @@ void Application::Free() {
 	}
 }
 
-GameState Application::getMenuState() const {
-	return MenuState;
-}
+
