@@ -9,7 +9,6 @@
 #include "Point.h"
 #include <vector>
 
-
 Application::Application() {
 
 	intro = NULL;
@@ -98,66 +97,102 @@ void Application::initOutro() {
 void Application::initWin() {
 }
 
+void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
+		int poolRed, int poolBlack, int poolBlue,
+		vector<Point> v_allBetPoints) {
 
-void Application::DisplayBets(int x, int y, int pY, int pGr, int pRed, vector<Point> v_allBetPoints)
-{
+	cout << "ehopoo";
 
-
-	if (pY == 1 && pGr == 0 &&  pRed == 0) {
+	if (poolYellow == 1 && poolGreen == 0 && poolRed == 0 && poolBlack == 0
+			&& poolBlue == 0) {
 
 		if (y < 220) {
 			Credits cr(1);
 			Pools gameBoardPools(cr, x, y);
-			gameBoardPools.loadFromFile(
-					Background::gRenderer, "Pools.png");
+			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
 			gameBoardPools.setWidth(PULLS_W);
 			gameBoardPools.setHeight(PULLS_H);
 			cout << x << ":" << y << endl;
 			SDL_Rect rec = { 1, 1, 118, 111 };
-			gameBoardPools.render(Background::gRenderer,
-					&rec);
+			gameBoardPools.render(Background::gRenderer, &rec);
 
-			Point p (x,y,"yellow",1);
+			Point p(x, y, "yellow", 1);
 			v_allBetPoints.push_back(p);
 
 		}
 	}
 
-	if (pY == 0 && pGr == 1 && pRed == 0) {
+	if (poolYellow == 0 && poolGreen == 1 && poolRed == 0 && poolBlack == 0
+			&& poolBlue == 0) {
 
 		if (y < 220) {
 			Credits cr(10);
 			Pools gameBoardPools(cr, x, y);
-			gameBoardPools.loadFromFile(
-					Background::gRenderer, "Pools.png");
+			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
 			gameBoardPools.setWidth(PULLS_W);
 			gameBoardPools.setHeight(PULLS_H);
 			cout << x << ":" << y << endl;
 			SDL_Rect rec = { 118, 1, 118, 111 };
-			gameBoardPools.render(Background::gRenderer,
-					&rec);
+			gameBoardPools.render(Background::gRenderer, &rec);
 
-			Point p (x,y,"green",10);
+			Point p(x, y, "green", 10);
 			v_allBetPoints.push_back(p);
 		}
 	}
 
-
-	if (pY == 0 && pGr == 0 && pRed == 1) {
+	if (poolYellow == 0 && poolGreen == 0 && poolRed == 1 && poolBlack == 0
+			&& poolBlue == 0) {
+		cout << "REDD";
 
 		if (y < 220) {
 			Credits cr(20);
 			Pools gameBoardPools(cr, x, y);
-			gameBoardPools.loadFromFile(
-					Background::gRenderer, "Pools.png");
+			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
 			gameBoardPools.setWidth(PULLS_W);
 			gameBoardPools.setHeight(PULLS_H);
 			cout << x << ":" << y << endl;
 			SDL_Rect rec = { 236, 1, 118, 111 };
-			gameBoardPools.render(Background::gRenderer,
-					&rec);
-			Point p (x,y,"red",20);
-					v_allBetPoints.push_back(p);
+			gameBoardPools.render(Background::gRenderer, &rec);
+			Point p(x, y, "red", 20);
+			v_allBetPoints.push_back(p);
+		}
+	}
+
+	if (poolYellow == 0 && poolGreen == 0 && poolRed == 0 && poolBlack == 1
+			&& poolBlue == 0) {
+
+		cout << "BLACK";
+
+		if (y < 220) {
+			Credits cr(100);
+			Pools gameBoardPools(cr, x, y);
+			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
+			gameBoardPools.setWidth(PULLS_W);
+			gameBoardPools.setHeight(PULLS_H);
+			cout << x << ":" << y << endl;
+			SDL_Rect rec = { 472, 1, 118, 111 };
+			gameBoardPools.render(Background::gRenderer, &rec);
+			Point p(x, y, "black", 100);
+			v_allBetPoints.push_back(p);
+		}
+	}
+
+	if (poolYellow == 0 && poolGreen == 0 && poolRed == 0 && poolBlack == 0
+			&& poolBlue == 1) {
+
+		cout << "BLue";
+
+		if (y < 220) {
+			Credits cr(100);
+			Pools gameBoardPools(cr, x, y);
+			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
+			gameBoardPools.setWidth(PULLS_W);
+			gameBoardPools.setHeight(PULLS_H);
+			cout << x << ":" << y << endl;
+			SDL_Rect rec = { 344, 1, 118, 111 };
+			gameBoardPools.render(Background::gRenderer, &rec);
+			Point p(x, y, "blue", 100);
+			v_allBetPoints.push_back(p);
 		}
 	}
 
@@ -167,12 +202,10 @@ void Application::DisplayBets(int x, int y, int pY, int pGr, int pRed, vector<Po
 
 }
 
-
 void Application::GamePlay() {
 	bool close = false;
 
-	vector<Point> v_allBetPoolsInfo;
-
+	vector<Point> v_pointsBetInfo;
 
 	while (!close) {
 
@@ -208,32 +241,64 @@ void Application::GamePlay() {
 //				//	initOutro();
 //				}
 
+
+				//TODO: here we are more than 10 times in a second. to be fixed
 				int x, y;
-				int pY;
-				int pGr;
-				int pRed;
+				int poolYellow;
+				int poolGreen;
+				int poolRed;
+				int poolBlack;
+				int poolBlue;
 				//yellow
 				if (gameBoardPools[0]->isClicked(&e)) {
 					SDL_GetMouseState(&x, &y);
-					pY = 1;
-					pGr = 0;
-					pRed = 0;
+					poolYellow = 1;
+					poolGreen = 0;
+					poolRed = 0;
+					poolBlack = 0;
+					poolBlue = 0;
 				}
 
 				//green
 				if (gameBoardPools[1]->isClicked(&e)) {
 					SDL_GetMouseState(&x, &y);
-					pY = 0;
-					pGr = 1;
-					pRed = 0;
+					poolYellow = 0;
+					poolGreen = 1;
+					poolRed = 0;
+					poolBlack = 0;
+					poolBlue = 0;
 				}
 
 				//red
 				if (gameBoardPools[2]->isClicked(&e)) {
 					SDL_GetMouseState(&x, &y);
-					pY = 0;
-					pGr = 0;
-					pRed = 1;
+					poolYellow = 0;
+					poolGreen = 0;
+					poolRed = 1;
+					poolBlack = 0;
+					poolBlue = 0;
+
+				}
+				//black
+				if (gameBoardPools[4]->isClicked(&e)) {
+					SDL_GetMouseState(&x, &y);
+					poolYellow = 0;
+					poolGreen = 0;
+					poolRed = 0;
+					poolBlack = 1;
+					poolBlue = 0;
+				}
+				//blue
+				if (gameBoardPools[3]->isClicked(&e)) {
+					cout << "blue";
+
+					;
+					SDL_GetMouseState(&x, &y);
+					poolYellow = 0;
+					poolGreen = 0;
+					poolRed = 0;
+					poolBlack = 0;
+					poolBlue = 1;
 				}
 
 				if (e.type == SDL_MOUSEBUTTONDOWN) {
@@ -246,8 +311,8 @@ void Application::GamePlay() {
 
 						cout << x << ":" << y << endl;
 
-
-						DisplayBets(x, y, pY, pGr, pRed, v_allBetPoolsInfo);
+						DisplayBets(x, y, poolYellow, poolGreen, poolRed,
+								poolBlack, poolBlue, v_pointsBetInfo);
 
 					}
 				}
@@ -255,10 +320,7 @@ void Application::GamePlay() {
 				if (gameBoardPools[3]->isClicked(&e)) {
 					//TODO blue
 				}
-
-				if (gameBoardPools[4]->isClicked(&e)) {
-					//TODO black
-				}
+//
 
 				break;
 			default:
@@ -317,5 +379,6 @@ void Application::Free() {
 		SDL_Quit();
 	}
 }
+
 
 
