@@ -31,6 +31,9 @@ public:
 	void GamePlay();
 	void DisplayBets(int x , int y  , int poolYellow , int poolGreen , int poolRed , int poolBlack , int poolBlue, vector<Point> v_allBetPoints);
 
+
+	int CalcQuadrandClicked(int x, int y);
+
 	void SpinAnimation ();
 	void SpinRoulette(LTexture &ball,int);
 	virtual ~Application();
