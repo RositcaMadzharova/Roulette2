@@ -97,30 +97,32 @@ void Application::initWin() {
 }
 
 int Application::CalcQuadrandClicked(int x, int y) {
-	int sequence = 0;
+	int sequence = -1;
 	int clickedCell = -1;
 
+	for (int line = 0; line < 3; line++)
+	{
+		for (int i = 0; i < 13; i++) {
+			sequence++;
 
-	for (int i = 0; i < 13; i++) {
-
-		if (x >= 70 + (75 * i)
-				&& x <= (140 + 75 * i)
-				&& y >= 280
-				&& y <= 350) {
-			//cout << i;
-			clickedCell = i;
+			//step is 75
+			//start from x=70
+			//start from y=140
+			if (x >= 70 + (75 * i) && x <= (140 + 75 * i) && y >= 280 + (75*line) && y <= 350 + (75*line)) {
+				clickedCell = sequence;
+			}
 		}
 	}
 
-
+	cout << "clickedCell:" << clickedCell<<endl;
 	return clickedCell;
-
 }
 
 void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
 		int poolRed, int poolBlack, int poolBlue,
 		vector<Point> v_allBetPoints) {
 
+	//choose Yellow Pool for Bet
 	if (poolYellow == 1 && poolGreen == 0 && poolRed == 0 && poolBlack == 0
 			&& poolBlue == 0) {
 
@@ -134,17 +136,39 @@ void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
 			int coordX = -1;
 			int coordY = -1;
 
+
+
 			//for first line
-			for (int i = 0; i <= 26; i++) {
+			for (int i = 0; i <= 39; i++) {
 				if (clickedCell == i) {
-					coordX = 70 + (75 * i) + 10 ;
 
-					//if line 1
-					if(i<=13){ coordY = 285; }
+					//offset/step is 75
+					//10 is because of table fix pixels
+					coordX = 70 + (75 * i) + 10;
 
+					//1rst line
+					if (i <= 12) {
+						coordY = 285;
+					}
+
+					//2nd line
+					if (i > 12 && i<= 25) {
+						coordX = 70 + (75 * (i-13)) + 10;
+
+						cout << "coordX"<< coordX;
+						coordY = 360;
+					}
+
+					//3rd line
+					if (i >= 26 && i<= 39) {
+						coordX = 70 + (75 * (i-26)) + 10;
+
+						cout << "3coordX"<< coordX;
+
+						coordY = 445;
+					}
 				}
 			}
-
 
 			if (coordX != -1 && coordY != -1) {
 				Credits cr(1);
@@ -159,7 +183,6 @@ void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
 				Point p(x, y, "yellow", 1);
 				v_allBetPoints.push_back(p);
 			}
-
 		}
 	}
 
