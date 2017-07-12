@@ -12,6 +12,7 @@
 #include "Button.h"
 #include "Background.h"
 #include "Point.h"
+#include <vector>
 
 
 //GameState MenuState;
@@ -28,7 +29,7 @@ public:
 
 	void Free();
 	void GamePlay();
-	void DisplayBets(int x, int y, int pY, int pGr, int pRed, vector<Point>);
+	void DisplayBets(int x , int y  , int poolYellow , int poolGreen , int poolRed , int poolBlack , int poolBlue, vector<Point> v_allBetPoints);
 
 	void SpinAnimation ();
 	void SpinRoulette(LTexture &ball,int);
