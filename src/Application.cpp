@@ -37,9 +37,7 @@ void Application::initIntro() {
 		introButtons[i]->setWidth(INTRO_BUTTON_W);
 		SDL_Rect rectButton = { 1, 1, 118, 111 };
 		introButtons[i]->render(Background::gRenderer, &rectButton);
-
 	}
-
 }
 
 Application::~Application() {
@@ -101,62 +99,20 @@ void Application::initWin() {
 int Application::CalcQuadrandClicked(int x, int y) {
 	int sequence = 0;
 	int clickedCell = -1;
-	for (int i = 1; i <= 3; i++) {
-		for (int j = 1; j <= 13; j++) {
-			sequence++;
-
-			cout << "||||||||" << sequence;
-
-			//    75*1 75*2 75*3 75*4 ... 75*13
-			cout << "[" << 75 * j << "]" << endl;
-
-//					        0[0]  x[75]
-//					||||||||1[75] x[75]
-//					||||||||2[150]x[75]
-//					||||||||3[225]x[75]
-//					||||||||4[300]x[75]
-//					||||||||5[375]x[75]
-//					||||||||6[450]x[75]
-//					||||||||7[525]x[75]
-//					||||||||8[600]x[75]
-//					||||||||9[675]x[75]
-//					||||||||10[750]x[75]
-//					||||||||11[825]x[75]
-//					||||||||12[900]x[75]
-//					||||||||13[975]x[75]
-
-			// x >= 70+75*i
-			// x <= 140+75*i
-			// y >= 280
-			// y<=350
-
-			//For first line
-			for (int i = 0; i < 13; i++) {
-
-				if (x >= 70 + (75 * i)
-						&& x <= (140 + 75 * i)
-						&& y >= 280
-						&& y <= 350) {
-					//cout << i;
-					clickedCell = i;
-				}
 
 
-//				if (x >= 70 + (75 * i)
-//						&& x <= (140 + 75 * i)
-//						&& y >= 355
-//						&& y <= 440) {
-//					//cout << i;
-//					cout << "2nd line" << i+14;
-//					clickedCell = i+14;
-//				}
+	for (int i = 0; i < 13; i++) {
 
-
-			}
-
-
+		if (x >= 70 + (75 * i)
+				&& x <= (140 + 75 * i)
+				&& y >= 280
+				&& y <= 350) {
+			//cout << i;
+			clickedCell = i;
 		}
 	}
+
+
 	return clickedCell;
 
 }
