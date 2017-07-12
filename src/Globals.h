@@ -32,7 +32,7 @@ const int SCREEN_W = 1300;
 const int SCREEN_H = 800;
 
 const int SCREEN_BOARD_W = 1200;
-const int SCREEN_BOARD_H = 428;
+const int SCREEN_BOARD_H = 750;
 
 const int INTRO_BUTTON_W = 59;
 const int INTRO_BUTTON_H = 59;
