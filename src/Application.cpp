@@ -251,24 +251,6 @@ void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
 
 
 
-		//
-//		if (y >= 280 && y <= 510) {
-//			Credits cr(10);
-//			Pools gameBoardPools(cr, x, y);
-//			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
-//			gameBoardPools.setWidth(PULLS_W);
-//			gameBoardPools.setHeight(PULLS_H);
-//			cout << x << ":" << y << endl;
-//			SDL_Rect rec = { 118, 1, 118, 111 };
-//			gameBoardPools.render(Background::gRenderer, &rec);
-//
-//			Point p(x, y, "green", 10);
-//			v_allBetPoints.push_back(p);
-//		}
-//
-
-	//}
-
 	if (poolYellow == 0 && poolGreen == 0 && poolRed == 1 && poolBlack == 0
 			&& poolBlue == 0) {
 		cout << "REDD";
