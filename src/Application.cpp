@@ -189,20 +189,85 @@ void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
 	if (poolYellow == 0 && poolGreen == 1 && poolRed == 0 && poolBlack == 0
 			&& poolBlue == 0) {
 
-		if (y >= 280 && y <= 510) {
-			Credits cr(10);
-			Pools gameBoardPools(cr, x, y);
-			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
-			gameBoardPools.setWidth(PULLS_W);
-			gameBoardPools.setHeight(PULLS_H);
-			cout << x << ":" << y << endl;
-			SDL_Rect rec = { 118, 1, 118, 111 };
-			gameBoardPools.render(Background::gRenderer, &rec);
 
-			Point p(x, y, "green", 10);
-			v_allBetPoints.push_back(p);
+
+		//TODO:
+		//for each cell 75x75, display in which cell is clicked
+
+		int clickedCell = CalcQuadrandClicked(x, y);
+
+		int coordX = -1;
+		int coordY = -1;
+
+		//for first line
+		for (int i = 0; i <= 39; i++) {
+			if (clickedCell == i) {
+
+				//offset/step is 75
+				//10 is because of table fix pixels
+				coordX = 70 + (75 * i) + 10;
+
+				//1rst line
+				if (i <= 12) {
+					coordY = 285;
+				}
+
+				//2nd line
+				if (i > 12 && i<= 25) {
+					coordX = 70 + (75 * (i-13)) + 10;
+
+					cout << "coordX"<< coordX;
+					coordY = 360;
+				}
+
+				//3rd line
+				if (i >= 26 && i<= 39) {
+					coordX = 70 + (75 * (i-26)) + 10;
+
+					cout << "3coordX"<< coordX;
+
+					coordY = 445;
+				}
+			}
+		}
+
+		if (coordX != -1 && coordY != -1) {
+
+
+
+			Credits cr(10);
+				Pools gameBoardPools(cr, coordX, coordY);
+				gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
+				gameBoardPools.setWidth(PULLS_W);
+				gameBoardPools.setHeight(PULLS_H);
+				cout << x << ":" << y << endl;
+				SDL_Rect rec = { 118, 1, 118, 111 };
+				gameBoardPools.render(Background::gRenderer, &rec);
+
+				Point p(x, y, "green", 10);
+				v_allBetPoints.push_back(p);
 		}
 	}
+
+
+
+		//
+//		if (y >= 280 && y <= 510) {
+//			Credits cr(10);
+//			Pools gameBoardPools(cr, x, y);
+//			gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
+//			gameBoardPools.setWidth(PULLS_W);
+//			gameBoardPools.setHeight(PULLS_H);
+//			cout << x << ":" << y << endl;
+//			SDL_Rect rec = { 118, 1, 118, 111 };
+//			gameBoardPools.render(Background::gRenderer, &rec);
+//
+//			Point p(x, y, "green", 10);
+//			v_allBetPoints.push_back(p);
+//		}
+//
+
+	//}
 
 	if (poolYellow == 0 && poolGreen == 0 && poolRed == 1 && poolBlack == 0
 			&& poolBlue == 0) {
