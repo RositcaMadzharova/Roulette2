@@ -68,7 +68,7 @@ void Application::initGameBoard() {
 
 	//display cashout button
 	cashOut = new Button(SCREEN_BOARD_W - BUTTON_W,
-			SCREEN_BOARD_H - BUTTON_H - 10);
+			SCREEN_BOARD_H - BUTTON_H - 10 );
 	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	cashOut->setHeight(BUTTON_W);
 	cashOut->setWidth(BUTTON_W);
@@ -77,7 +77,7 @@ void Application::initGameBoard() {
 	//draw 5 Pulls and PICK PICK >>>>!!!!!!
 	//TODO: Each Poll needs different credit value.
 	for (int i = 0; i < POOLS_BUTTON; i++) {
-		gameBoardPools[i] = new Pools(cr, 100 * i, SCREEN_BOARD_H - 60);
+		gameBoardPools[i] = new Pools(cr, 100 * i + SCREEN_BOARD_W - 800, SCREEN_BOARD_H - 60);
 		gameBoardPools[i]->loadFromFile(Background::gRenderer, "Pools.png");
 		gameBoardPools[i]->setHeight(PULLS_W);
 		gameBoardPools[i]->setWidth(PULLS_H);
@@ -152,31 +152,35 @@ void Application::DisplayBets(int x, int y, int poolYellow, int poolGreen,
 
 				if (clickedCell == i) {
 
-					//offset/step is 75
-					//10 is hardcoded for izmestvaneto na kartinkata
-					coordX = 70 + (75 * i) + 10;
 
-					//1rst line
-					if (i <= 12) {
-						coordY = 285;
-					}
+					coordX = 77 + (i - ((i/13)*13))* 75 + i % 13;
+					coordY = 285 + (i / 13) * 77;
 
-					//2nd line
-					if (i > 12 && i<= 25) {
-						coordX = 70 + (75 * (i-13)) + 10;
-
-						cout << "coordX"<< coordX;
-						coordY = 360;
-					}
-
-					//3rd line
-					if (i >= 26 && i<= 39) {
-						coordX = 70 + (75 * (i-26)) + 10;
-
-						cout << "3coordX"<< coordX;
-
-						coordY = 445;
-					}
+//					//offset/step is 75
+//					//10 is hardcoded for izmestvaneto na kartinkata
+//					coordX = 77 + i * 75 + i * 1.25;
+//
+//					//1rst line
+//					if (i <= 12) {
+//						coordY = 285;
+//					}
+//
+//					//2nd line
+//					if (i > 12 && i<= 25) {
+//						coordX = 70 + (75 * (i-13)) + 10;
+//
+//						cout << "coordX"<< coordX;
+//						coordY = 360;
+//					}
+//
+//					//3rd line
+//					if (i >= 26 && i<= 39) {
+//						coordX = 70 + (75 * (i-26)) + 10;
+//
+//						cout << "3coordX"<< coordX;
+//
+//						coordY = 445;
+//					}
 				}
 			}
 
