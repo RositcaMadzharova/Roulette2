@@ -18,7 +18,6 @@ Credits::Credits(int cCredit)
 
 Credits::~Credits()
 {
-	// TODO Auto-generated destructor stub
 }
 
 void Credits::SetBet(int betCredit)

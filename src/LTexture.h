@@ -15,9 +15,13 @@ class LTexture
 public:
 	LTexture(int x = 0, int y = 0);
 
-	virtual bool loadFromFile(SDL_Renderer* gRenderer, std::string path);
+	virtual bool loadFromFile(SDL_Renderer* gRenderer, std::string path,
+								int width = -1,
+								int height = -1);
 	virtual ~LTexture();
-	virtual void render(SDL_Renderer * gRenderer,SDL_Rect *clip);
+	virtual void render(SDL_Renderer * gRenderer, SDL_Rect *clip,
+						double angle = 0,
+						int w = 0, int h = 0);
 	virtual void free();
 	virtual void Show();
 	int getHeight() const;
@@ -25,14 +29,16 @@ public:
 	int getWidth() const;
 	void setWidth(int width);
 	int getX() const;
+	void setX(int x);
 	int getY() const;
+	void setY(int y);
 	virtual void setPosition(int _x, int _y);
 	SDL_Texture * mTexture;
-protected:
+	protected:
 	int mWidth;
-    int mHeight;
-    int x;
-    int y;
+	int mHeight;
+	int x;
+	int y;
 };
 
 #endif /* LTexture_H_ */

@@ -6,22 +6,24 @@
  */
 
 #include "Pools.h"
-Pools::Pools(){}
-Pools::Pools(Credits & cr,int posx,int posy, int number)
-	:Button(posx, posy)
+Pools::Pools()
+{
+}
+Pools::Pools(Credits & cr, int posx, int posy, int number)
+		: Button(posx, posy)
 {
 
-	this->number=number;
+	this->number = number;
 	//static counter
 }
 
-Pools::~Pools() {
-	// TODO Auto-generated destructor stub
+Pools::~Pools()
+{
 }
 
 bool Pools::isBet()
 {
-return false;
+	return false;
 }
 
 int Pools::GetNumber()
@@ -29,10 +31,9 @@ int Pools::GetNumber()
 	return this->number;
 }
 
-
 int Pools::PossibleWin()
 {
-	if(GetNumber()<37)
+	if (GetNumber() < 37)
 	{
 		//cr.SetPossibleWin(cred.GetBet()*36);
 
