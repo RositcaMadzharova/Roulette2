@@ -17,6 +17,7 @@
 #include <time.h>
 #include <iostream>
 #include <math.h>
+#include <map>
 using namespace std;
 
 //GameState MenuState;
@@ -83,7 +84,7 @@ private:
 
 
 	vector<Point> v_coordsAllBetPulls;
-	Credits cr;
+	Credits credits;
 
 };
 

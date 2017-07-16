@@ -61,4 +61,9 @@ const int BUTTON_H = 100;
 const int PULLS_W = 60;
 const int PULLS_H = 60;
 
+const int NUMBER_OF_SECTORS = 37;
+const int MULTIPLIER_NUMBER = 36;
+const int MULTIPLIER_COLOR = 2;
+const int MULTIPLIER_PARITY = 2;
+
 #endif /* GLOBALS_H_ */

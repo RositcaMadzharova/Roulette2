@@ -7,6 +7,9 @@
 
 #include "Application.h"
 
+string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
+int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
+
 Application::Application()
 {
 
@@ -100,9 +103,9 @@ void Application::initGameBoard()
 //	spin->render(Background::gRenderer, NULL);
 
 	//draw 5 Pulls and PICK PICK >>>>!!!!!!
-	//TODO: Each Poll needs different credit value.
 	for (int i = 0; i < POOLS_BUTTON; i++)
 	{
+		Credits cr;
 		gameBoardPools[i] = new Pools(cr, 113 * i + SCREEN_BOARD_W - 865,
 				SCREEN_BOARD_H - 90);
 		gameBoardPools[i]->loadFromFile(Background::gRenderer, "Pools.png");
@@ -159,8 +162,8 @@ void Application::initSpin()
 //cells: From 0 to 39
 // cell[i] = 0 (if i==13);
 // cell[i] = 3*i (if i/13==0, i!= 0);
-// cell[i] = 3*i-1 (if i/13==1, i!=13);
-// cell[i] = 3*i-2 (if i/13==2, i!=26);
+// cell[i] = 3*(i-13)-1 (if i/13==1, i!=13);
+// cell[i] = 3*(i-26)-2 (if i/13==2, i!=26);
 //get parameters: positionX, positionY
 int Application::CalcQuadrandClicked(int x, int y)
 {
@@ -194,14 +197,13 @@ int Application::CalcQuadrandClicked(int x, int y)
 
 void Application::DisplayBets(int x, int y, int color,
 								vector<Point> v_allBetPoints)
+// also use for the credit calculations
 {
 
 	int coordX = -1;
 	int coordY = -1;
 
 	int clickedCell = CalcQuadrandClicked(x, y);
-	string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
-	int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
 
 	for (int j = 0; j < POOLS_BUTTON; j++)
 		if (color == j + 1)
@@ -221,18 +223,26 @@ void Application::DisplayBets(int x, int y, int color,
 
 			if (coordX != -1 && coordY != -1)
 			{
-				Credits cr(value[j]);
-				Pools gameBoardPools(cr, coordX, coordY);
-				gameBoardPools.loadFromFile(Background::gRenderer, "Pools.png");
-				gameBoardPools.setWidth(PULLS_W);
-				gameBoardPools.setHeight(PULLS_H);
-				cout << x << ":" << y << endl;
-				SDL_Rect rec =
-						{ j * 112 + 3, 1, 112, 111 };
-				gameBoardPools.render(Background::gRenderer, &rec);
+				if (credits.GetCredit() >= value[j])	//credits logic
+				{
+					credits.AddBet(value[j]);
+					credits.ChangeCredits(-value[j]);
+					credits.betByNumberCell[Credits::NumberInCell(clickedCell)] +=
+							value[j];
 
-				Point p(x, y, colors[j], value[j]);
-				v_allBetPoints.push_back(p);
+					Credits cr(value[j]);
+					Pools gameBoardPools(cr, coordX, coordY);
+					gameBoardPools.loadFromFile(Background::gRenderer,
+							"Pools.png");
+					gameBoardPools.setWidth(PULLS_W);
+					gameBoardPools.setHeight(PULLS_H);
+					cout << x << ":" << y << endl;
+					SDL_Rect rec = { j * 112 + 3, 1, 112, 111 };
+					gameBoardPools.render(Background::gRenderer, &rec);
+
+					Point p(x, y, colors[j], value[j]);
+					v_allBetPoints.push_back(p);
+				}					//end credits
 			}
 		}
 }
@@ -312,7 +322,7 @@ int Application::spinBall()
 	wheel->render(Background::gRenderer, NULL, result * 2 * M_PI / 37);
 	SDL_Delay(100);
 
-	return result;
+	return 5; //result;
 }
 
 void Application::GamePlay()
@@ -336,6 +346,12 @@ void Application::GamePlay()
 					Free();
 					MenuState = INFO;
 					initInfo();
+				}
+				if (introButtons[1]->isClicked(&e))
+				{
+					int addCredit = 0;
+					cin >> addCredit;
+					credits.ChangeCredits(addCredit);
 				}
 				if (introButtons[3]->isClicked(&e))
 				{
@@ -408,11 +424,33 @@ void Application::GamePlay()
 				break;
 
 			case SPIN:
-				cout << spinBall() << endl;
+			{
+				int roulletteWinningNumber = spinBall();
+				int winProfit = credits.betByNumberCell[roulletteWinningNumber]
+						* MULTIPLIER_NUMBER;
+				credits.ChangeCredits(winProfit);
+				for(int i = 0; i < NUMBER_OF_SECTORS; i++)
+					credits.betByNumberCell[i] = 0;
+
+				cout << "Winning number is " << roulletteWinningNumber << endl
+						<< "You win: " << winProfit << endl
+						<< "And you bet: " << credits.GetBet() << endl;
+
+				if(winProfit > credits.GetBet())
+				{
+					Free();
+					initWin();
+				}
+				credits.SetBet(0);
+
 				Free();
 				initGameBoard();
 
+				cout << "You have " << credits.GetCredit() << " credits left"
+						<<endl << endl;
+
 				break;
+			}
 			default:
 				break;
 			}
