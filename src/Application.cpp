@@ -262,18 +262,6 @@ int Application::CalcQuadrandClicked(int x, int y) {
 		}
 	}
 
-	//separate logic or 40, 41, 42, 43 (event, red, black, odd)
-	//even  [40 number cell]
-	//red   [41 number cell]
-	//black [42 number cell]
-	//odd   [43 number cell]
-	//start from x=300; step = 150; y btw 585 and 650
-	for (int i = 0; i < 4; i++) {
-		if (x >= 300 + (150 * i) && x <= 450 + (150 * i) && y >= 585
-				&& y <= 650) {
-			clickedCell = 40 + i;
-		}
-	}
 
 	cout << "clickedCell:" << clickedCell << endl;
 	return clickedCell;
