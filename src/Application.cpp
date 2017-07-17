@@ -9,6 +9,87 @@
 
 string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
 int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
+map<int, int> posissionToNumberInRoulette;
+map<int, char> colorToNumberInRoulette;
+
+void FillTheMapsOfRoulette()
+{
+	posissionToNumberInRoulette[6] = 0;
+	posissionToNumberInRoulette[27] = 1;
+	posissionToNumberInRoulette[13] = 2;
+	posissionToNumberInRoulette[36] = 3;
+	posissionToNumberInRoulette[11] = 4;
+	posissionToNumberInRoulette[30] = 5;
+	posissionToNumberInRoulette[8] = 6;
+	posissionToNumberInRoulette[23] = 7;
+	posissionToNumberInRoulette[10] = 8;
+	posissionToNumberInRoulette[5] = 9;
+	posissionToNumberInRoulette[24] = 10;
+	posissionToNumberInRoulette[16] = 11;
+	posissionToNumberInRoulette[33] = 12;
+	posissionToNumberInRoulette[1] = 13;
+	posissionToNumberInRoulette[20] = 14;
+	posissionToNumberInRoulette[14] = 15;
+	posissionToNumberInRoulette[31] = 16;
+	posissionToNumberInRoulette[9] = 17;
+	posissionToNumberInRoulette[22] = 18;
+	posissionToNumberInRoulette[18] = 19;
+	posissionToNumberInRoulette[29] = 20;
+	posissionToNumberInRoulette[7] = 21;
+	posissionToNumberInRoulette[28] = 22;
+	posissionToNumberInRoulette[12] = 23;
+	posissionToNumberInRoulette[35] = 24;
+	posissionToNumberInRoulette[3] = 25;
+	posissionToNumberInRoulette[26] = 26;
+	posissionToNumberInRoulette[0] = 27;
+	posissionToNumberInRoulette[32] = 28;
+	posissionToNumberInRoulette[15] = 29;
+	posissionToNumberInRoulette[19] = 30;
+	posissionToNumberInRoulette[4] = 31;
+	posissionToNumberInRoulette[21] = 32;
+	posissionToNumberInRoulette[2] = 33;
+	posissionToNumberInRoulette[25] = 34;
+	posissionToNumberInRoulette[17] = 35;
+	posissionToNumberInRoulette[34] = 36;
+
+	colorToNumberInRoulette[6] = 'b';
+	colorToNumberInRoulette[27] = 'r';
+	colorToNumberInRoulette[13] = 'b';
+	colorToNumberInRoulette[36] = 'r';
+	colorToNumberInRoulette[11] = 'b';
+	colorToNumberInRoulette[30] = 'r';
+	colorToNumberInRoulette[8] = 'b';
+	colorToNumberInRoulette[23] = 'r';
+	colorToNumberInRoulette[10] = 'b';
+	colorToNumberInRoulette[5] = 'r';
+	colorToNumberInRoulette[24] = 'b';
+	colorToNumberInRoulette[16] = 'r';
+	colorToNumberInRoulette[33] = 'b';
+	colorToNumberInRoulette[1] = 'r';
+	colorToNumberInRoulette[20] = 'b';
+	colorToNumberInRoulette[14] = 'r';
+	colorToNumberInRoulette[31] = 'b';
+	colorToNumberInRoulette[9] = 'r';
+	colorToNumberInRoulette[22] = 'b';
+	colorToNumberInRoulette[18] = 'r';
+	colorToNumberInRoulette[29] = 'b';
+	colorToNumberInRoulette[7] = 'r';
+	colorToNumberInRoulette[28] = 'b';
+	colorToNumberInRoulette[12] = 'r';
+	colorToNumberInRoulette[35] = 'b';
+	colorToNumberInRoulette[3] = 'r';
+	colorToNumberInRoulette[26] = 'b';
+	colorToNumberInRoulette[0] = 'g';
+	colorToNumberInRoulette[32] = 'r';
+	colorToNumberInRoulette[15] = 'b';
+	colorToNumberInRoulette[19] = 'r';
+	colorToNumberInRoulette[4] = 'b';
+	colorToNumberInRoulette[21] = 'r';
+	colorToNumberInRoulette[2] = 'b';
+	colorToNumberInRoulette[25] = 'r';
+	colorToNumberInRoulette[17] = 'b';
+	colorToNumberInRoulette[34] = 'r';
+}
 
 Application::Application()
 {
@@ -38,6 +119,7 @@ Application::Application()
 	{
 		coin[i] = NULL;
 	}
+	FillTheMapsOfRoulette();
 
 	initIntro();
 }
@@ -84,25 +166,25 @@ void Application::initInfo()
 void Application::initGameBoard()
 {
 	MenuState = GAME_BOARD;
-	//display background
+//display background
 	gameBoard = new Background("GameBoard", SCREEN_BOARD_W, SCREEN_BOARD_H,
 			"EuropeanRouletteFinal.bmp");
 
-	//display cashout button
+//display cashout button
 	cashOut = new Button(SCREEN_BOARD_W - BUTTON_W - 50, 77);
 	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	cashOut->setWidth(210);
 	cashOut->setHeight(120);
 //	cashOut->render(Background::gRenderer, NULL);
 
-	//this will be spin button need picture ;
+//this will be spin button need picture ;
 	spin = new Button(SCREEN_BOARD_W - BUTTON_W - 58, SCREEN_BOARD_H - 105);
 	spin->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	spin->setWidth(213);
 	spin->setHeight(125);
 //	spin->render(Background::gRenderer, NULL);
 
-	//draw 5 Pulls and PICK PICK >>>>!!!!!!
+//draw 5 Pulls and PICK PICK >>>>!!!!!!
 	for (int i = 0; i < POOLS_BUTTON; i++)
 	{
 		Credits cr;
@@ -155,7 +237,7 @@ void Application::initSpin()
 	ball->loadFromFile(Background::gRenderer, "BALL.png");
 	ball->setWidth(BALL_W);
 	ball->setHeight(BALL_H);
-	//ball->render(Background::gRenderer, NULL);
+//ball->render(Background::gRenderer, NULL);
 }
 
 //return the number of cell
@@ -167,11 +249,11 @@ void Application::initSpin()
 //get parameters: positionX, positionY
 int Application::CalcQuadrandClicked(int x, int y)
 {
-	//help variable that starts from 0 to 39 in the loops below
+//help variable that starts from 0 to 39 in the loops below
 	int sequence = -1;
 	int clickedCell = -1;
 
-	//for 3 lines
+//for 3 lines
 	for (int line = 0; line < 3; line++)
 	{
 		//for each cell in each line
@@ -188,6 +270,20 @@ int Application::CalcQuadrandClicked(int x, int y)
 
 				clickedCell = sequence;
 			}
+		}
+	}
+	//separate logic or 40, 41, 42, 43 (event, red, black, odd)
+	//even  [40 number cell]
+	//red   [41 number cell]
+	//black [42 number cell]
+	//odd   [43 number cell]
+	//start from x=300; step = 150; y btw 585 and 650
+	for (int i = 0; i < 4; i++)
+	{
+		if (x >= 300 + (150 * i) && x <= 450 + (150 * i) && y >= 585
+				&& y <= 650)
+		{
+			clickedCell = 40 + i;
 		}
 	}
 
@@ -221,6 +317,22 @@ void Application::DisplayBets(int x, int y, int color,
 				}
 			}
 
+			//separate logic for Even, Red, Black, Odd (Cell with numbers: 40,41,42,43)
+
+			for (int i = 40; i <= 43; i++)
+
+				if (clickedCell == i)
+				{
+
+					//start from x=350, step = 150, i-40 used to get sequence 0,1,2,3
+					coordX = 350 + (150 * (i - 40));
+					coordY = 590;
+
+				}
+
+			//TODO add logic for 40,41,42,43
+			//Viktor TODO: later in function below to be added logic for : red,black, event, odd
+
 			if (coordX != -1 && coordY != -1)
 			{
 				if (credits.GetCredit() >= value[j])	//credits logic
@@ -237,7 +349,8 @@ void Application::DisplayBets(int x, int y, int color,
 					gameBoardPools.setWidth(PULLS_W);
 					gameBoardPools.setHeight(PULLS_H);
 					cout << x << ":" << y << endl;
-					SDL_Rect rec = { j * 112 + 3, 1, 112, 111 };
+					SDL_Rect rec =
+							{ j * 112 + 3, 1, 112, 111 };
 					gameBoardPools.render(Background::gRenderer, &rec);
 
 					Point p(x, y, colors[j], value[j]);
@@ -254,7 +367,8 @@ bool Application::WinAnimation()
 	short int timeout = 6000;
 	vector<SDL_Rect> goldCoins;
 	for (int i = 0; i < 10; i++)
-		goldCoins.push_back( { COIN_W * i, 0, COIN_W, COIN_H });
+		goldCoins.push_back(
+				{ COIN_W * i, 0, COIN_W, COIN_H });
 
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout))
 	{
@@ -281,7 +395,8 @@ int Application::spinBall()
 	srand(time(NULL));
 	int result = rand() % 37;
 
-	double angleBall = 0;
+	double angleBall = -0.03
+			+ 0.168 * (posissionToNumberInRoulette[result] - 13);
 	double angleWheel = 0; //2 * M_PI * result / 37;
 
 	double radius = 330;
@@ -313,14 +428,14 @@ int Application::spinBall()
 	while (angleWheel < andleEnd + 10 * M_PI);
 //	while (radius > minRaduis);
 
-	delete wheel;
-	wheel = new LTexture(SCREEN_ROULETTE_W, SCREEN_ROULETTE_H);
-	wheel->loadFromFile(Background::gRenderer, "wheel2.png");
+//	delete wheel;
+//	wheel = new LTexture(SCREEN_ROULETTE_W, SCREEN_ROULETTE_H);
+//	wheel->loadFromFile(Background::gRenderer, "wheel2.png");
 
 //	wheel->setWidth(640);
 //	wheel->setHeight(640);
-	wheel->render(Background::gRenderer, NULL, result * 2 * M_PI / 37);
-	SDL_Delay(100);
+//	wheel->render(Background::gRenderer, NULL, result * 2 * M_PI / 37);
+	SDL_Delay(4000);
 
 	return 5; //result;
 }
@@ -424,19 +539,33 @@ void Application::GamePlay()
 				break;
 
 			case SPIN:
-			{
+				{
 				int roulletteWinningNumber = spinBall();
+				cout << "credits.betByNumberCell[roulletteWinningNumber] = "
+						<< credits.betByNumberCell[roulletteWinningNumber]
+						<< endl;
 				int winProfit = credits.betByNumberCell[roulletteWinningNumber]
 						* MULTIPLIER_NUMBER;
+				if (roulletteWinningNumber != 0)
+				{
+					if (roulletteWinningNumber % 2)
+						winProfit += credits.betOdd * MULTIPLIER_PARITY;
+					else
+						winProfit += credits.betEven * MULTIPLIER_PARITY;
+					if (colorToNumberInRoulette[roulletteWinningNumber] == 'b')
+						winProfit += credits.betBlack * MULTIPLIER_COLOR;
+					else
+						winProfit += credits.betRed * MULTIPLIER_COLOR;
+				}
 				credits.ChangeCredits(winProfit);
-				for(int i = 0; i < NUMBER_OF_SECTORS; i++)
+				for (int i = 0; i < NUMBER_OF_SECTORS + 4; i++)
 					credits.betByNumberCell[i] = 0;
 
 				cout << "Winning number is " << roulletteWinningNumber << endl
 						<< "You win: " << winProfit << endl
 						<< "And you bet: " << credits.GetBet() << endl;
 
-				if(winProfit > credits.GetBet())
+				if (winProfit > credits.GetBet())
 				{
 					Free();
 					initWin();
@@ -447,7 +576,7 @@ void Application::GamePlay()
 				initGameBoard();
 
 				cout << "You have " << credits.GetCredit() << " credits left"
-						<<endl << endl;
+						<< endl << endl;
 
 				break;
 			}
