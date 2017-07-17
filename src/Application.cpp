@@ -91,12 +91,10 @@ void FillTheMapsOfRoulette()
 	colorToNumberInRoulette[34] = 'r';
 }
 
-Application::Application()
-{
+Application::Application() {
 
 	intro = NULL;
-	for (unsigned int i = 0; i < INTRO_BUTTONS; i++)
-	{
+	for (unsigned int i = 0; i < INTRO_BUTTONS; i++) {
 		introButtons[i] = NULL;
 	}
 	info = NULL;
@@ -109,14 +107,12 @@ Application::Application()
 	cashOut = NULL;
 	spin = NULL;
 
-	for (unsigned int i = 0; i < POOLS_BUTTON; i++)
-	{
+	for (unsigned int i = 0; i < POOLS_BUTTON; i++) {
 		gameBoardPools[i] = NULL;
 		betPools[i] = NULL;
 	}
 
-	for (unsigned int i = 0; i < COIN_COUNT; i++)
-	{
+	for (unsigned int i = 0; i < COIN_COUNT; i++) {
 		coin[i] = NULL;
 	}
 	FillTheMapsOfRoulette();
@@ -124,23 +120,19 @@ Application::Application()
 	initIntro();
 }
 
-Application::~Application()
-{
+Application::~Application() {
 
-	for (unsigned int i = 0; i < 5; i++)
-	{
+	for (unsigned int i = 0; i < 5; i++) {
 		delete introButtons[i];
 	}
 	delete intro;
 }
 
-void Application::initIntro()
-{
+void Application::initIntro() {
 	MenuState = INTRO_MENU;
 	intro = new Background("INTROSCREEN", SCREEN_W, SCREEN_H,
 			"IntroBackground.jpg");
-	for (int i = 0; i < INTRO_BUTTONS; i++)
-	{
+	for (int i = 0; i < INTRO_BUTTONS; i++) {
 		introButtons[i] = new Button(SCREEN_W / 2 - 500 / 2,
 				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 10));
 		introButtons[i]->loadFromFile(Background::gRenderer, "1.png");
@@ -151,8 +143,7 @@ void Application::initIntro()
 	}
 }
 
-void Application::initInfo()
-{
+void Application::initInfo() {
 	MenuState = INFO;
 	info = new Background("INFOSCREEN", SCREEN_W, SCREEN_H,
 			"rouletterules.jpg");
@@ -163,8 +154,7 @@ void Application::initInfo()
 	infoBackToIntro->render(Background::gRenderer, NULL);
 }
 
-void Application::initGameBoard()
-{
+void Application::initGameBoard() {
 	MenuState = GAME_BOARD;
 //display background
 	gameBoard = new Background("GameBoard", SCREEN_BOARD_W, SCREEN_BOARD_H,
@@ -184,9 +174,14 @@ void Application::initGameBoard()
 	spin->setHeight(125);
 //	spin->render(Background::gRenderer, NULL);
 
+<<<<<<< HEAD
 //draw 5 Pulls and PICK PICK >>>>!!!!!!
 	for (int i = 0; i < POOLS_BUTTON; i++)
 	{
+=======
+	//draw 5 Pulls and PICK PICK >>>>!!!!!!
+	for (int i = 0; i < POOLS_BUTTON; i++) {
+>>>>>>> origin/master
 		Credits cr;
 		gameBoardPools[i] = new Pools(cr, 113 * i + SCREEN_BOARD_W - 865,
 				SCREEN_BOARD_H - 90);
@@ -199,22 +194,18 @@ void Application::initGameBoard()
 
 }
 
-void Application::initRoulette()
-{
+void Application::initRoulette() {
 }
 
-void Application::initOutro()
-{
+void Application::initOutro() {
 
 }
 
-void Application::initWin()
-{
+void Application::initWin() {
 	MenuState = WIN;
 	win = new Background("Win", SCREEN_ROULETTE_W, SCREEN_ROULETTE_H,
 			"CoinBag.png");
-	for (int i = 0; i < COIN_COUNT; i++)
-	{
+	for (int i = 0; i < COIN_COUNT; i++) {
 		coin[i] = new LTexture(rand() % 200 + 100, rand() % SCREEN_ROULETTE_W);
 		coin[i]->loadFromFile(Background::gRenderer, "coin.png");
 		coin[i]->setWidth(COIN_W);
@@ -223,8 +214,7 @@ void Application::initWin()
 	WinAnimation();
 }
 
-void Application::initSpin()
-{
+void Application::initSpin() {
 	MenuState = SPIN;
 	roulette = new Background("spin", SCREEN_ROULETTE_W, SCREEN_ROULETTE_H,
 			"RouletteBoard.png");
@@ -247,6 +237,7 @@ void Application::initSpin()
 // cell[i] = 3*(i-13)-1 (if i/13==1, i!=13);
 // cell[i] = 3*(i-26)-2 (if i/13==2, i!=26);
 //get parameters: positionX, positionY
+<<<<<<< HEAD
 int Application::CalcQuadrandClicked(int x, int y)
 {
 //help variable that starts from 0 to 39 in the loops below
@@ -256,17 +247,22 @@ int Application::CalcQuadrandClicked(int x, int y)
 //for 3 lines
 	for (int line = 0; line < 3; line++)
 	{
+=======
+int Application::CalcQuadrandClicked(int x, int y) {
+	//help variable that starts from 0 to 39 in the loops below
+	int sequence = -1;
+	int clickedCell = -1;
+
+	//for 3 lines
+	for (int line = 0; line < 3; line++) {
+>>>>>>> origin/master
 		//for each cell in each line
-		for (int i = 0; i < 13; i++)
-		{
+		for (int i = 0; i < 13; i++) {
 			sequence++;
 
 			//step is 75 ; start position of table is from x=70 and y=140
-			if (x >= 76 + (75 * i)
-					&& x <= (151 + 75 * i)
-					&& y >= 280 + (75 * line)
-					&& y <= 350 + (75 * line))
-			{
+			if (x >= 76 + (75 * i) && x <= (151 + 75 * i)
+					&& y >= 280 + (75 * line) && y <= 350 + (75 * line)) {
 
 				clickedCell = sequence;
 			}
@@ -287,14 +283,27 @@ int Application::CalcQuadrandClicked(int x, int y)
 		}
 	}
 
+	//separate logic or 40, 41, 42, 43 (event, red, black, odd)
+	//even  [40 number cell]
+	//red   [41 number cell]
+	//black [42 number cell]
+	//odd   [43 number cell]
+	//start from x=300; step = 150; y btw 585 and 650
+	for (int i = 0; i < 4; i++) {
+		if (x >= 300 + (150 * i) && x <= 450 + (150 * i) && y >= 585
+				&& y <= 650) {
+			clickedCell = 40 + i;
+		}
+	}
+
 	cout << "clickedCell:" << clickedCell << endl;
 	return clickedCell;
 }
 
 void Application::DisplayBets(int x, int y, int color,
-								vector<Point> v_allBetPoints)
+		vector<Point> v_allBetPoints)
 // also use for the credit calculations
-{
+		{
 
 	int coordX = -1;
 	int coordY = -1;
@@ -302,22 +311,20 @@ void Application::DisplayBets(int x, int y, int color,
 	int clickedCell = CalcQuadrandClicked(x, y);
 
 	for (int j = 0; j < POOLS_BUTTON; j++)
-		if (color == j + 1)
-		{
+		if (color == j + 1) {
 
 			//for all 39 cells
-			for (int i = 0; i <= 39; i++)
-			{
+			for (int i = 0; i <= 39; i++) {
 				if (i == 0 || i == 26)
 					continue;
-				if (clickedCell == i)
-				{
+				if (clickedCell == i) {
 					coordX = 77 + (i - ((i / 13) * 13)) * 75 + i % 13;
 					coordY = 285 + (i / 13) * 77;
 				}
 			}
 
 			//separate logic for Even, Red, Black, Odd (Cell with numbers: 40,41,42,43)
+<<<<<<< HEAD
 
 			for (int i = 40; i <= 43; i++)
 
@@ -336,7 +343,22 @@ void Application::DisplayBets(int x, int y, int color,
 			if (coordX != -1 && coordY != -1)
 			{
 				if (credits.GetCredit() >= value[j])	//credits logic
+=======
+			for (int i = 40; i <= 43; i++) {
+				if(clickedCell == i)
+>>>>>>> origin/master
 				{
+					//start from x=350, step = 150, i-40 used to get sequence 0,1,2,3
+					coordX = 350 + (150*(i-40));
+					coordY = 590;
+				}
+			}
+
+			//TODO add logic for 40,41,42,43
+			//Viktor TODO: later in function below to be added logic for : red,black, event, odd
+			if (coordX != -1 && coordY != -1) {
+				if (credits.GetCredit() >= value[j])	//credits logic
+						{
 					credits.AddBet(value[j]);
 					credits.ChangeCredits(-value[j]);
 					credits.betByNumberCell[Credits::NumberInCell(clickedCell)] +=
@@ -370,16 +392,13 @@ bool Application::WinAnimation()
 		goldCoins.push_back(
 				{ COIN_W * i, 0, COIN_W, COIN_H });
 
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout))
-	{
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
 
-		for (int i = 0; i < COIN_COUNT; i++)
-		{
+		for (int i = 0; i < COIN_COUNT; i++) {
 			coin[i]->setX(rand() % 350 + 140);
 			coin[i]->setY(rand() % 110 + 20);
 
-			for (int j = 0; j < 10; j++)
-			{
+			for (int j = 0; j < 10; j++) {
 				coin[i]->render(Background::gRenderer, &goldCoins[j]);
 				SDL_Delay(10);
 			}
@@ -390,8 +409,7 @@ bool Application::WinAnimation()
 	return isDone;
 }
 
-int Application::spinBall()
-{
+int Application::spinBall() {
 	srand(time(NULL));
 	int result = rand() % 37;
 
@@ -405,8 +423,7 @@ int Application::spinBall()
 	double stepBall = M_PI / 36;
 	double stepWheel = 0.2;
 
-	do
-	{
+	do {
 		const double MAGIC_NUMBER = 0.08;
 
 		SDL_Delay(3);
@@ -424,8 +441,7 @@ int Application::spinBall()
 		else
 			angleBall -= M_PI / 900;
 		radius -= 0.1;
-	}
-	while (angleWheel < andleEnd + 10 * M_PI);
+	} while (angleWheel < andleEnd + 10 * M_PI);
 //	while (radius > minRaduis);
 
 //	delete wheel;
@@ -440,44 +456,37 @@ int Application::spinBall()
 	return 5; //result;
 }
 
-void Application::GamePlay()
-{
+void Application::GamePlay() {
 	bool close = false;
 
 	vector<Point> v_pointsBetInfo;
 
-	while (!close)
-	{
+	while (!close) {
 
 		SDL_Event e;
-		while (SDL_PollEvent(&e))
-		{
+		while (SDL_PollEvent(&e)) {
 
-			switch (MenuState)
-			{
+			switch (MenuState) {
 			case INTRO_MENU:
-				if (introButtons[0]->isClicked(&e))
-				{
+				if (introButtons[0]->isClicked(&e)) {
 					Free();
 					MenuState = INFO;
 					initInfo();
 				}
-				if (introButtons[1]->isClicked(&e))
-				{
+				if (introButtons[1]->isClicked(&e)) {
 					int addCredit = 0;
+					cout << "Enter $ Credits: "<<endl;
 					cin >> addCredit;
 					credits.ChangeCredits(addCredit);
 				}
-				if (introButtons[3]->isClicked(&e))
-				{
+				if (introButtons[3]->isClicked(&e)) {
 					Free();
 					MenuState = GAME_BOARD;
 					initGameBoard();
 				}
 				break;
 			case INFO:
-				if (infoBackToIntro->isClicked(&e))
-				{
+				if (infoBackToIntro->isClicked(&e)) {
 					Free();
 					MenuState = INTRO_MENU;
 					initIntro();
@@ -493,8 +502,7 @@ void Application::GamePlay()
 //				}
 
 				//Test of Win
-				if (cashOut->isClicked(&e))
-				{
+				if (cashOut->isClicked(&e)) {
 					Free();
 					initWin();
 					Free();
@@ -506,15 +514,12 @@ void Application::GamePlay()
 				int color;
 
 				for (int i = 0; i < POOLS_BUTTON; i++)
-					if (gameBoardPools[i]->isClicked(&e))
-					{
+					if (gameBoardPools[i]->isClicked(&e)) {
 						SDL_GetMouseState(&x, &y);
 						color = i + 1;
 					}
-				if (e.type == SDL_MOUSEBUTTONDOWN)
-				{
-					if (e.button.button == SDL_BUTTON_LEFT)
-					{
+				if (e.type == SDL_MOUSEBUTTONDOWN) {
+					if (e.button.button == SDL_BUTTON_LEFT) {
 						SDL_GetMouseState(&x, &x);
 						x = e.button.x;
 						y = e.button.y;
@@ -525,21 +530,23 @@ void Application::GamePlay()
 					}
 				}
 
-				if (spin->isClicked(&e))
-				{
+				if (spin->isClicked(&e)) {
 					Free();
 					initSpin();
 				}
-				if (cashOut->isClicked(&e))
-				{
+				if (cashOut->isClicked(&e)) {
 					Free();
 					initOutro();
 				}
 
 				break;
 
+<<<<<<< HEAD
 			case SPIN:
 				{
+=======
+			case SPIN: {
+>>>>>>> origin/master
 				int roulletteWinningNumber = spinBall();
 				cout << "credits.betByNumberCell[roulletteWinningNumber] = "
 						<< credits.betByNumberCell[roulletteWinningNumber]
@@ -558,15 +565,23 @@ void Application::GamePlay()
 						winProfit += credits.betRed * MULTIPLIER_COLOR;
 				}
 				credits.ChangeCredits(winProfit);
+<<<<<<< HEAD
 				for (int i = 0; i < NUMBER_OF_SECTORS + 4; i++)
+=======
+				for (int i = 0; i < NUMBER_OF_SECTORS; i++)
+>>>>>>> origin/master
 					credits.betByNumberCell[i] = 0;
 
 				cout << "Winning number is " << roulletteWinningNumber << endl
-						<< "You win: " << winProfit << endl
-						<< "And you bet: " << credits.GetBet() << endl;
+						<< "You win: " << winProfit << endl << "And you bet: "
+						<< credits.GetBet() << endl;
 
+<<<<<<< HEAD
 				if (winProfit > credits.GetBet())
 				{
+=======
+				if (winProfit > credits.GetBet()) {
+>>>>>>> origin/master
 					Free();
 					initWin();
 				}
@@ -584,8 +599,7 @@ void Application::GamePlay()
 				break;
 			}
 
-			if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_SPACE)
-			{
+			if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_SPACE) {
 				close = true;
 			}
 
@@ -597,10 +611,8 @@ void Application::GamePlay()
 
 }
 
-void Application::Free()
-{
-	if (MenuState == INTRO_MENU)
-	{
+void Application::Free() {
+	if (MenuState == INTRO_MENU) {
 		intro->Clear();
 		for (int i = 0; i < INTRO_BUTTONS; i++)
 			introButtons[i]->free();
@@ -611,8 +623,7 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if (MenuState == INFO)
-	{
+	if (MenuState == INFO) {
 		info->Clear();
 		infoBackToIntro->free();
 		SDL_RenderClear(Background::gRenderer);
@@ -622,8 +633,7 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if (MenuState == GAME_BOARD)
-	{
+	if (MenuState == GAME_BOARD) {
 		gameBoard->Clear();
 		for (int i = 0; i < POOLS_BUTTON; i++)
 			gameBoardPools[i]->free();
@@ -634,11 +644,9 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if (MenuState == WIN)
-	{
+	if (MenuState == WIN) {
 		win->Clear();
-		for (int i = 0; i < COIN_COUNT; i++)
-		{
+		for (int i = 0; i < COIN_COUNT; i++) {
 			coin[i]->free();
 		}
 		SDL_RenderClear(Background::gRenderer);
@@ -648,8 +656,7 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if (MenuState == SPIN)
-	{
+	if (MenuState == SPIN) {
 		roulette->Clear();
 		wheel->free();
 		ball->free();
