@@ -122,10 +122,7 @@ Application::Application() {
 
 Application::~Application() {
 
-	for (unsigned int i = 0; i < 5; i++) {
-		delete introButtons[i];
-	}
-	delete intro;
+	Free();
 }
 
 void Application::initIntro() {
@@ -174,14 +171,8 @@ void Application::initGameBoard() {
 	spin->setHeight(125);
 //	spin->render(Background::gRenderer, NULL);
 
-<<<<<<< HEAD
-//draw 5 Pulls and PICK PICK >>>>!!!!!!
-	for (int i = 0; i < POOLS_BUTTON; i++)
-	{
-=======
 	//draw 5 Pulls and PICK PICK >>>>!!!!!!
 	for (int i = 0; i < POOLS_BUTTON; i++) {
->>>>>>> origin/master
 		Credits cr;
 		gameBoardPools[i] = new Pools(cr, 113 * i + SCREEN_BOARD_W - 865,
 				SCREEN_BOARD_H - 90);
@@ -237,17 +228,6 @@ void Application::initSpin() {
 // cell[i] = 3*(i-13)-1 (if i/13==1, i!=13);
 // cell[i] = 3*(i-26)-2 (if i/13==2, i!=26);
 //get parameters: positionX, positionY
-<<<<<<< HEAD
-int Application::CalcQuadrandClicked(int x, int y)
-{
-//help variable that starts from 0 to 39 in the loops below
-	int sequence = -1;
-	int clickedCell = -1;
-
-//for 3 lines
-	for (int line = 0; line < 3; line++)
-	{
-=======
 int Application::CalcQuadrandClicked(int x, int y) {
 	//help variable that starts from 0 to 39 in the loops below
 	int sequence = -1;
@@ -255,7 +235,6 @@ int Application::CalcQuadrandClicked(int x, int y) {
 
 	//for 3 lines
 	for (int line = 0; line < 3; line++) {
->>>>>>> origin/master
 		//for each cell in each line
 		for (int i = 0; i < 13; i++) {
 			sequence++;
@@ -324,29 +303,8 @@ void Application::DisplayBets(int x, int y, int color,
 			}
 
 			//separate logic for Even, Red, Black, Odd (Cell with numbers: 40,41,42,43)
-<<<<<<< HEAD
-
-			for (int i = 40; i <= 43; i++)
-
-				if (clickedCell == i)
-				{
-
-					//start from x=350, step = 150, i-40 used to get sequence 0,1,2,3
-					coordX = 350 + (150 * (i - 40));
-					coordY = 590;
-
-				}
-
-			//TODO add logic for 40,41,42,43
-			//Viktor TODO: later in function below to be added logic for : red,black, event, odd
-
-			if (coordX != -1 && coordY != -1)
-			{
-				if (credits.GetCredit() >= value[j])	//credits logic
-=======
 			for (int i = 40; i <= 43; i++) {
 				if(clickedCell == i)
->>>>>>> origin/master
 				{
 					//start from x=350, step = 150, i-40 used to get sequence 0,1,2,3
 					coordX = 350 + (150*(i-40));
@@ -541,12 +499,7 @@ void Application::GamePlay() {
 
 				break;
 
-<<<<<<< HEAD
-			case SPIN:
-				{
-=======
 			case SPIN: {
->>>>>>> origin/master
 				int roulletteWinningNumber = spinBall();
 				cout << "credits.betByNumberCell[roulletteWinningNumber] = "
 						<< credits.betByNumberCell[roulletteWinningNumber]
@@ -565,23 +518,14 @@ void Application::GamePlay() {
 						winProfit += credits.betRed * MULTIPLIER_COLOR;
 				}
 				credits.ChangeCredits(winProfit);
-<<<<<<< HEAD
-				for (int i = 0; i < NUMBER_OF_SECTORS + 4; i++)
-=======
 				for (int i = 0; i < NUMBER_OF_SECTORS; i++)
->>>>>>> origin/master
 					credits.betByNumberCell[i] = 0;
 
 				cout << "Winning number is " << roulletteWinningNumber << endl
 						<< "You win: " << winProfit << endl << "And you bet: "
 						<< credits.GetBet() << endl;
 
-<<<<<<< HEAD
-				if (winProfit > credits.GetBet())
-				{
-=======
 				if (winProfit > credits.GetBet()) {
->>>>>>> origin/master
 					Free();
 					initWin();
 				}
