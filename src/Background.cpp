@@ -34,6 +34,10 @@ void Background::Clear()
 	loadedSurface=NULL;
 	SDL_RenderClear(Background::gRenderer);
 
+//	TTF_CloseFont(font);
+	fontSurface = NULL;
+	TTF_Quit();
+
 }
 
 void Background::Show()
@@ -49,22 +53,47 @@ bool Background::Init()
 			return false;
 		}
 	if (IMG_Init (IMG_INIT_PNG)!=IMG_INIT_PNG)
-			{
-				std::cerr << "Failed to initialized image.\n";
-				return false;
-			}
+	{
+		std::cerr << "Failed to initialized image.\n";
+		return false;
+	}
+
+	TTF_Init();
+
+	 TTF_Font * font = TTF_OpenFont("lazy.ttf", 16);
+	 SDL_Color color = { 255, 255, 100 };
+
+
 	gWindow = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED, _width, _height, 0);
 	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 	if( gRenderer == NULL )
-			{
-				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
-				SDL_DestroyWindow( gWindow );
-				gWindow = NULL;
-			}
+	{
+		printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+		SDL_DestroyWindow( gWindow );
+		gWindow = NULL;
+	}
+
+	//font
+	fontSurface = TTF_RenderText_Solid(font,  "TTF test", color);
+//	 SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,	  surface);
+
 	loadedSurface = IMG_Load(this->_path.c_str());
 	Texture= SDL_CreateTextureFromSurface( Background::gRenderer, loadedSurface );
+
+
+	 int texW = 50;
+	 int texH = 30;
+	 SDL_QueryTexture(fontTexture, NULL, NULL, &texW, &texH);
+	 SDL_Rect dstrect = { 50, 50, texW, texH };
+
+
+	fontTexture = SDL_CreateTextureFromSurface( Background::gRenderer, fontSurface);
+
+
 	SDL_RenderCopy(Background::gRenderer,Texture,NULL,NULL);
+
+	SDL_RenderCopy(Background::gRenderer, fontTexture, NULL, &dstrect);
 
 	if (gWindow == NULL)
 	{
