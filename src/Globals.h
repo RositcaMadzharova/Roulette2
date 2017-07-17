@@ -9,6 +9,7 @@
 #define GLOBALS_H_
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 #include <ctime>
 #include <cstdio>
