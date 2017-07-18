@@ -303,18 +303,18 @@ int Application::CalcQuadrandClicked(int x, int y)
 	int clickedCell = -1;
 
 //for 3 lines
-	for (int line = 0; line < 3; line++)
+	for (int line = 0; line < TABLE_ROW; line++)
 	{
 		//for each cell in each line
-		for (int i = 0; i < 13; i++)
+		for (int i = 0; i < TABLE_COLUMN; i++)
 		{
 			sequence++;
 
 			//step is 75 ; start position of table is from x=70 and y=140
-			if (x >= 76 + (75 * i)
-					&& x <= (151 + 75 * i)
-					&& y >= 280 + (75 * line)
-					&& y <= 350 + (75 * line))
+			if (x >= TABLE_START_X_POS + (TABLE_CELL_WIDTH * i)
+					&& x <= (TABLE_END_X_POS + TABLE_CELL_WIDTH * i)
+					&& y >= TABLE_START_Y_POS + (TABLE_CELL_WIDTH * line)
+					&& y <= TABLE_END_Y_POS + (TABLE_CELL_WIDTH * line))
 			{
 
 				clickedCell = sequence;
@@ -327,10 +327,12 @@ int Application::CalcQuadrandClicked(int x, int y)
 	//black [42 number cell]
 	//odd   [43 number cell]
 	//start from x=300; step = 150; y btw 585 and 650
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < TABLE_SPECIAL_CELLS_COUNT; i++)
 	{
-		if (x >= 300 + (150 * i) && x <= 450 + (150 * i) && y >= 585
-				&& y <= 650)
+		if (x >= TABLE_SPECIAL_CELL_START_X_POS + (TABLE_SPECIAL_CELL_STEP_X * i)
+				&& x <= TABLE_SPECIAL_CELL_END_X_POS + (TABLE_SPECIAL_CELL_STEP_X * i)
+				&& y >= TABLE_SPECIAL_CELL_START_Y_POS
+				&& y <= TABLE_SPECIAL_CELL_END_Y_POS)
 		{
 			clickedCell = 40 + i;
 		}
@@ -339,6 +341,9 @@ int Application::CalcQuadrandClicked(int x, int y)
 	cout << "clickedCell:" << clickedCell << endl;
 	return clickedCell;
 }
+
+
+
 
 void Application::DisplayBets(int x, int y, int color,
 								vector<Point> v_allBetPoints)
