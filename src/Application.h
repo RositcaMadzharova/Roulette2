@@ -69,6 +69,9 @@ private:
 	Pools *betPools [POOLS_BUTTON];
 	Button * cashOut;
 	Button * spin;
+	Button * history;
+	Button * accounting;
+	Button * clearBets;
 
 
 	//TODO MAIN make other class who enherit button
@@ -81,6 +84,15 @@ private:
 
 	Background *win;// animation 6 seconds
 	LTexture *coin [COIN_COUNT];
+
+	//loaded from XML
+	Background * historyBackgound; // last 18 winning numbers
+
+	//loaded from XML then allowed to be changed again
+	Background * accountingBackgound; // wins per number, winnings, added credits, cashed out MONEY, % RTP
+	int winsPerNumber[37];
+	int addedCredits;
+	int cashedOutCredits;
 
 	//TODO OTHER BUTTONS;
 	//hardcoded limit of 100 Pulls

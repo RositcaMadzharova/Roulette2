@@ -8,6 +8,23 @@
 #include "Text.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <cstdio>
+#include <string>
+#include <cassert>
+using namespace std;
+
+
+std::string toString(int x)
+{
+	int length = snprintf( NULL, 0, "%d", x);
+	assert(length >= 0);
+	char* buf = new char[length + 1];
+	snprintf(buf, length + 1, "%d", x);
+	std::string str(buf);
+	delete[] buf;
+	return str;
+}
 
 Text::Text(int x, int y, int w, int h,
 			int front_size,
@@ -34,9 +51,7 @@ Text::Text(int x, int y, int w, int h,
 	textRect->h = h;
 	textRect->x = x;
 	textRect->y = y;
-	char buffer[10];
-	itoa(massage_int, buffer, 10);
-	textTexture = loadFromFile(front_size, buffer, color);
+	textTexture = loadFromFile(front_size, toString(massage_int), color);
 }
 
 Text::~Text()
@@ -52,6 +67,7 @@ SDL_Texture* Text::loadFromFile(
 {
 
 	TTF_Font* gFont = TTF_OpenFont("arial.ttf", front_size);
+//	TTF_Font* gFont = TTF_OpenFont("SFCartoonistHand.ttf", front_size);
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, massage_text.c_str(),
 			color);

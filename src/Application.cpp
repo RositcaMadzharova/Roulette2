@@ -193,7 +193,25 @@ void Application::initGameBoard()
 	spin->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	spin->setWidth(213);
 	spin->setHeight(125);
-	spin->render(Background::gRenderer, NULL);
+//	spin->render(Background::gRenderer, NULL);
+
+	history = new Button(SCREEN_BOARD_W - BUTTON_W - 130 - 377, 73);
+	history->loadFromFile(Background::gRenderer, "Cash OUT.png");
+	history->setWidth(215);
+	history->setHeight(135);
+//	history->render(Background::gRenderer, NULL);
+
+	accounting = new Button(SCREEN_BOARD_W - BUTTON_W - 130 - 755, 73);
+	accounting->loadFromFile(Background::gRenderer, "Cash OUT.png");
+	accounting->setWidth(210);
+	accounting->setHeight(132);
+//	accounting->render(Background::gRenderer, NULL);
+
+	clearBets = new Button(38, SCREEN_BOARD_H - 105);
+	clearBets->loadFromFile(Background::gRenderer, "Cash OUT.png");
+	clearBets->setWidth(213);
+	clearBets->setHeight(125);
+//	clearBets->render(Background::gRenderer, NULL);
 
 //draw 5 Pulls and PICK PICK >>>>!!!!!!
 	for (int i = 0; i < POOLS_BUTTON; i++)
@@ -216,7 +234,23 @@ void Application::initRoulette()
 
 void Application::initOutro()
 {
+	MenuState = OUTRO;
+	outro = new Background("Outro", SCREEN_W, SCREEN_H, "OutroScreen2.jpg");
 
+	double scale = 0.6;
+
+	Text textThankYou(SCREEN_W / 8 * scale, 30 * scale, 900 * scale, 200 * scale, 20,
+			"THANK YOU FOR PLAYING", { 130, 30, 130, 155 });
+	textThankYou.Show();
+	Text textYouHave(SCREEN_W / 8 * scale, 400 * scale, 500 * scale, 200 * scale, 15,
+			"You have", { 30, 30, 120, 255 });
+	textYouHave.Show();
+	Text textMoneyNumber((SCREEN_W / 8 + 520) * scale, 400 * scale, 180 * scale, 200 * scale, 15,
+			credits.GetCredit() * DENOMINATION, { 130, 30, 30, 255 });
+	textMoneyNumber.Show();
+	Text textMoney((SCREEN_W / 8 + 520 + 180) * scale, 400 * scale, 220 * scale, 200 * scale, 15,
+			"BGN", { 30, 30, 140, 255 });
+	textMoney.Show();
 }
 
 void Application::initWin()
@@ -364,6 +398,11 @@ void Application::DisplayBets(int x, int y, int color,
 							{ j * 112 + 3, 1, 112, 111 };
 					gameBoardPools.render(Background::gRenderer, &rec);
 
+					//while piece to write on
+					Button overPullUnderText(coordX + 20,coordY + 20);
+					overPullUnderText.loadFromFile(Background::gRenderer, "BALL.png",PULLS_W /3, PULLS_H/3);
+					overPullUnderText.Show();
+
 					Text textInPool(coordX + 20, coordY + 20, PULLS_W / 3,
 							PULLS_H / 3, 25,
 							credits.betByNumberCell[Credits::NumberInCell(
@@ -376,7 +415,7 @@ void Application::DisplayBets(int x, int y, int color,
 					v_allBetPoints.push_back(p);
 				}					//end credits
 			}
-		}
+		}					//end if and for
 }
 
 bool Application::WinAnimation()
@@ -426,20 +465,30 @@ int Application::spinBall()
 	double stepBall = M_PI / 36;
 	double stepWheel = 0.2;
 
+	bool isTimeToDraw = false;
+	bool isTimeToDraw2 = true;
+
 	do
 	{
 		const double MAGIC_NUMBER = 0.08;
 
 		SDL_Delay(3);
 
-		roulette->Show();
+		isTimeToDraw = !isTimeToDraw;
+		if (isTimeToDraw)
+			isTimeToDraw2 = !isTimeToDraw2;
+		if (isTimeToDraw && isTimeToDraw2)
+		{
+//			isTimeToDraw2 = !isTimeToDraw2;
+			roulette->Show();
+			wheel->render(Background::gRenderer, NULL, -angleWheel);
+		}
 
 		ball->setX(
 				SCREEN_ROULETTE_W / 2 - BALL_W / 2 + cos(angleBall) * radius);
 		ball->setY(
 				SCREEN_ROULETTE_H / 2 - BALL_H / 2 + sin(angleBall) * radius);
 
-		wheel->render(Background::gRenderer, NULL, -angleWheel);
 		ball->render(Background::gRenderer, NULL, 0);
 		angleWheel += stepWheel;
 		if (angleWheel < andleEnd)
@@ -524,20 +573,23 @@ void Application::GamePlay()
 				break;
 			case GAME_BOARD:
 
-//				if (cashOut->isClicked(&e))
-//				{
-//				//	Free();
-//				//	MenuState = OUTRO;
-//				//	initOutro();
-//				}
-
-				//Test of Win
 				if (cashOut->isClicked(&e))
 				{
 					Free();
-					initWin();
+					MenuState = INTRO_MENU;
+					initOutro();
+					SDL_Delay(10000);
 					Free();
-					initGameBoard();
+					initIntro();
+				}
+
+				if (clearBets->isClicked(&e))
+				{
+					for (int i = 0; i < (int) v_coordsAllBetPulls.size(); i++)
+						v_coordsAllBetPulls.pop_back();
+					credits.ChangeCredits(credits.GetBet());
+					credits.SetBet(-credits.GetBet());
+					gameBoard->Show();
 				}
 
 				//TODO: here we are more than 10 times in a second. to be fixed
