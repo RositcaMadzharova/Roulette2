@@ -140,30 +140,20 @@ void Application::initIntro()
 {
 	MenuState = INTRO_MENU;
 	intro = new Background("INTROSCREEN", SCREEN_W, SCREEN_H,
-			"IntroBackground.jpg");
+			"IntroBackgroundFinal.bmp");
 	for (int i = 0; i < INTRO_BUTTONS; i++)
 	{
-		introButtons[i] = new Button(SCREEN_W / 2 - 500 / 2,
-				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 10));
+		introButtons[i] = new Button(SCREEN_W / 2 - 600 / 2,
+				SCREEN_H / 13 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 20));
 		introButtons[i]->loadFromFile(Background::gRenderer, "1.png");
-		introButtons[i]->setWidth(500);
+		introButtons[i]->setWidth(600);
 		introButtons[i]->setHeight(50);
 		SDL_Rect rectButton = { 0, 0, 1000, 300 };
-		introButtons[i]->render(Background::gRenderer, &rectButton, 0, 500, 50);
-		Text text(SCREEN_W / 2 - 500 / 2 + 50,
-				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 10)
-						+ 5, 400, 30, 20, introButtonText[i],
-				{ 100, 200, 100 });
-	}
-	if (credits.GetCredit())
-	{
-		Text text1(SCREEN_W / 2 - 500 / 2 + 50 + 450,
-				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + (INTRO_BUTTON_H + 10)
-						+ 5, 280, 30, 20, "Credits: ", { 100, 200, 100, 255 });
-		Text text2(SCREEN_W / 2 - 500 / 2 + 50 + 750,
-				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + (INTRO_BUTTON_H + 10)
-						+ 5, 60, 30, 15, credits.GetCredit(),
-				{ 100, 200, 100 });
+//		introButtons[i]->render(Background::gRenderer, &rectButton, 0, 500, 50);
+//		Text text(SCREEN_W / 2 - 500 / 2 + 50,
+//				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 10)
+//						+ 5, 400, 30, 20, introButtonText[i],
+//				{ 100, 200, 100 });
 	}
 
 }
@@ -178,6 +168,10 @@ void Application::initInfo()
 	infoBackToIntro->setHeight(INTRO_BUTTON_H);
 	infoBackToIntro->setWidth(INTRO_BUTTON_W);
 	infoBackToIntro->render(Background::gRenderer, NULL);
+
+	Text textDenomination(SCREEN_W * 3 / 5, SCREEN_H - 30, 150, 15, 20,
+			"*DENOMINATION IS 0.01", { 30, 30, 30, 255 });
+	textDenomination.Show();
 }
 
 void Application::initGameBoard()
@@ -188,10 +182,10 @@ void Application::initGameBoard()
 			"EuropeanRouletteFinal.bmp");
 
 //display cashout button
-	cashOut = new Button(SCREEN_BOARD_W - BUTTON_W - 50, 77);
+	cashOut = new Button(SCREEN_BOARD_W - BUTTON_W - 130, 73);
 	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
-	cashOut->setWidth(210);
-	cashOut->setHeight(120);
+	cashOut->setWidth(215);
+	cashOut->setHeight(135);
 //	cashOut->render(Background::gRenderer, NULL);
 
 //this will be spin button need picture ;
@@ -199,7 +193,7 @@ void Application::initGameBoard()
 	spin->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	spin->setWidth(213);
 	spin->setHeight(125);
-//	spin->render(Background::gRenderer, NULL);
+	spin->render(Background::gRenderer, NULL);
 
 //draw 5 Pulls and PICK PICK >>>>!!!!!!
 	for (int i = 0; i < POOLS_BUTTON; i++)
@@ -370,10 +364,13 @@ void Application::DisplayBets(int x, int y, int color,
 							{ j * 112 + 3, 1, 112, 111 };
 					gameBoardPools.render(Background::gRenderer, &rec);
 
-					Text text1(coordX + 20, coordY + 20, PULLS_W /3, PULLS_H/3 , 25,
-							   credits.betByNumberCell[Credits::NumberInCell(clickedCell)] +=
-							   							value[j]
-													, { 0, 0, 0, 255 });
+					Text textInPool(coordX + 20, coordY + 20, PULLS_W / 3,
+							PULLS_H / 3, 25,
+							credits.betByNumberCell[Credits::NumberInCell(
+									clickedCell)] +=
+									value[j]
+									, { 0, 0, 0, 255 });
+					textInPool.Show();
 
 					Point p(x, y, colors[j], value[j]);
 					v_allBetPoints.push_back(p);
@@ -491,6 +488,24 @@ void Application::GamePlay()
 				if (introButtons[1]->isClicked(&e))
 				{
 					credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
+					intro->Show();
+					if (credits.GetCredit())
+					{
+						Text textCredit(SCREEN_W / 2 - 500 / 2 + 50 + 470,
+								SCREEN_H / 10 - INTRO_BUTTON_H / 2
+										+ (INTRO_BUTTON_H + 10)
+										+ 5, 280, 30, 20, "Credits: ", { 100,
+										200, 100, 255 });
+						textCredit.Show();
+						Text textCreditsNumber(
+								SCREEN_W / 2 - 500 / 2 + 50 + 750,
+								SCREEN_H / 10 - INTRO_BUTTON_H / 2
+										+ (INTRO_BUTTON_H + 10)
+										+ 5, 60, 30, 15, credits.GetCredit(),
+								{ 100, 200, 100 });
+						textCreditsNumber.Show();
+					}
+
 				}
 				if (introButtons[3]->isClicked(&e))
 				{

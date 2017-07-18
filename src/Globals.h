@@ -17,6 +17,9 @@
 #include <iostream>
 using namespace std;
 
+
+const double DENOMINATION = 0.01;
+
 enum GameState
 {
 	INTRO_MENU = 1,

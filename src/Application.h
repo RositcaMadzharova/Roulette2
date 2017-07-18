@@ -58,6 +58,8 @@ private:
 	Background * intro;
 	//insert credit , volume , info,start new game , resume game
 	Button * introButtons[5];
+//	Text text1, text2;
+//	Text * creditText[2];
 
 	Background *info;
 	Button *infoBackToIntro;
