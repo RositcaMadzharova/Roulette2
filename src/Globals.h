@@ -67,4 +67,7 @@ const int MULTIPLIER_NUMBER = 36;
 const int MULTIPLIER_COLOR = 2;
 const int MULTIPLIER_PARITY = 2;
 
+
+const int ADD_CREDIT_BUTTON_VALUE = 100;
+
 #endif /* GLOBALS_H_ */

@@ -12,6 +12,8 @@
 #include "Button.h"
 #include "Background.h"
 #include "Point.h"
+#include "Text.h"
+#include <string>
 #include <vector>
 #include <stdlib.h>
 #include <time.h>

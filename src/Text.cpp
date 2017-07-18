@@ -6,6 +6,8 @@
  */
 
 #include "Text.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 Text::Text(int x,int y,int w,int h,
 		int front_size,
@@ -21,6 +23,21 @@ Text::Text(int x,int y,int w,int h,
 	textTexture=loadFromFile(front_size,massage_text,color);
 }
 
+Text::Text(int x,int y,int w,int h,
+		int front_size,
+		 int massage_int,
+		 SDL_Color color)
+{
+	TTF_Init();
+	textRect= new SDL_Rect;
+	textRect->w=w;
+	textRect->h=h;
+	textRect->x=x;
+	textRect->y=y;
+	char buffer[10];
+	itoa(massage_int,buffer,10);
+	textTexture=loadFromFile(front_size,buffer,color);
+}
 
 
 Text::~Text()
@@ -35,7 +52,7 @@ SDL_Texture* Text::loadFromFile(
 		 std::string massage_text,
 		 SDL_Color color) {
 
-	TTF_Font* gFont =TTF_OpenFont("lazy.ttf", front_size) ;
+	TTF_Font* gFont =TTF_OpenFont("arial.ttf", front_size) ;
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, massage_text.c_str(),
 			color);
@@ -48,5 +65,3 @@ SDL_Texture* Text::loadFromFile(
 	//Return success
 	return textTexture;
 }
-
-

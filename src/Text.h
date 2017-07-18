@@ -16,6 +16,10 @@ public:
 			int front_size,
 			 std::string massage_text,
 			 SDL_Color color );
+	Text(int x, int y, int w,int h,
+			int front_size,
+			 int massage_int,
+			 SDL_Color color );
 	virtual ~Text();
 	SDL_Texture * loadFromFile(
 			int front_size,
