@@ -239,16 +239,20 @@ void Application::initOutro()
 
 	double scale = 0.6;
 
-	Text textThankYou(SCREEN_W / 8 * scale, 30 * scale, 900 * scale, 200 * scale, 20,
+	Text textThankYou(SCREEN_W / 8 * scale, 30 * scale, 900 * scale,
+			200 * scale, 20,
 			"THANK YOU FOR PLAYING", { 130, 30, 130, 155 });
 	textThankYou.Show();
-	Text textYouHave(SCREEN_W / 8 * scale, 400 * scale, 500 * scale, 200 * scale, 15,
+	Text textYouHave(SCREEN_W / 8 * scale, 400 * scale, 500 * scale,
+			200 * scale, 15,
 			"You have", { 30, 30, 120, 255 });
 	textYouHave.Show();
-	Text textMoneyNumber((SCREEN_W / 8 + 520) * scale, 400 * scale, 180 * scale, 200 * scale, 15,
+	Text textMoneyNumber((SCREEN_W / 8 + 520) * scale, 400 * scale, 180 * scale,
+			200 * scale, 15,
 			credits.GetCredit() * DENOMINATION, { 130, 30, 30, 255 });
 	textMoneyNumber.Show();
-	Text textMoney((SCREEN_W / 8 + 520 + 180) * scale, 400 * scale, 220 * scale, 200 * scale, 15,
+	Text textMoney((SCREEN_W / 8 + 520 + 180) * scale, 400 * scale, 220 * scale,
+			200 * scale, 15,
 			"BGN", { 30, 30, 140, 255 });
 	textMoney.Show();
 }
@@ -399,9 +403,12 @@ void Application::DisplayBets(int x, int y, int color,
 					gameBoardPools.render(Background::gRenderer, &rec);
 
 					//while piece to write on
-					Button overPullUnderText(coordX + 20,coordY + 20);
-					overPullUnderText.loadFromFile(Background::gRenderer, "BALL.png",PULLS_W /3, PULLS_H/3);
-					overPullUnderText.Show();
+					LTexture overPullUnderText(coordX + 20, coordY + 20);
+					overPullUnderText.loadFromFile(Background::gRenderer,
+							"BALL.png");
+					overPullUnderText.setWidth(PULLS_W / 3);
+					overPullUnderText.setHeight(PULLS_H / 3);
+					overPullUnderText.render(Background::gRenderer,NULL);
 
 					Text textInPool(coordX + 20, coordY + 20, PULLS_W / 3,
 							PULLS_H / 3, 25,
