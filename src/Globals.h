@@ -27,7 +27,10 @@ enum GameState
 	GAME_BOARD,
 	SPIN,
 	OUTRO,
-	WIN
+	WIN,
+	HISTORY,
+	BONUS,
+	ACCOUNTING
 };
 
 //main renderer

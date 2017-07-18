@@ -123,6 +123,9 @@ Application::Application()
 	}
 	FillTheMapsOfRoulette();
 
+	creditsCollected = 0;
+	numberOfSpins = 0;
+
 	initIntro();
 }
 
@@ -228,8 +231,17 @@ void Application::initGameBoard()
 
 }
 
-void Application::initRoulette()
+void Application::initBonus()
 {
+	MenuState = BONUS;
+	bonus = new Background("Mystery Jackpot !", SCREEN_W, SCREEN_H, "Lucky.jpg");
+
+	Text textYouWin (SCREEN_W/4, SCREEN_H/4, SCREEN_W/2, SCREEN_H/8, 20, "You Win", {100, 250, 0});
+	textYouWin.Show();
+	Text textWinnings (SCREEN_W*2/3, SCREEN_H*2/4, SCREEN_W/3, SCREEN_H/8, 20, creditsCollected, {0, 250, 100});
+	textWinnings.Show();
+	Text textCredits(SCREEN_W/4, SCREEN_H*3/4, SCREEN_W/2, SCREEN_H/8, 20, "credits", {100, 250, 0});
+	textCredits.Show();
 }
 
 void Application::initOutro()
@@ -630,6 +642,16 @@ void Application::GamePlay()
 
 				if (spin->isClicked(&e))
 				{
+					creditsCollected += credits.GetBet() * 0.13;
+					numberOfSpins++;
+					if(!(numberOfSpins % 3)) // should be in N spins activated
+					{
+						Free();
+						initBonus();
+						SDL_Delay(3000);
+						credits.AddBet(creditsCollected);
+						creditsCollected = 0;
+					}
 					Free();
 					initSpin();
 				}
@@ -762,7 +784,16 @@ void Application::Free()
 		Background::gRenderer = NULL;
 		IMG_Quit();
 		SDL_Quit();
+	}
+	if(MenuState == BONUS)
+	{
+		bonus->Clear();
 
+		SDL_RenderClear(Background::gRenderer);
+		SDL_DestroyWindow(gWindow);
+		gWindow = NULL;
+		Background::gRenderer = NULL;
+		IMG_Quit();
+		SDL_Quit();
 	}
 }
-

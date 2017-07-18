@@ -24,27 +24,27 @@ using namespace std;
 
 //GameState MenuState;
 
-class Application {
+class Application
+{
 public:
 	Application();
 	void initIntro();
 	void initInfo();
 	void initGameBoard();
-	void initRoulette();
 	void initOutro();
 	void initWin();
 	void initSpin();
+	void initBonus();
 
 	void Free();
 	void GamePlay();
-	void DisplayBets(int x , int y  , int color, // int poolYellow , int poolGreen , int poolRed , int poolBlack , int poolBlue,
-					 vector<Point> v_allBetPoints);
-
+	void DisplayBets(int x, int y, int color, // int poolYellow , int poolGreen , int poolRed , int poolBlack , int poolBlue,
+						vector<Point> v_allBetPoints);
 
 	int CalcQuadrandClicked(int x, int y);
 
-	void SpinAnimation ();
-	void SpinRoulette(LTexture &ball,int);
+	void SpinAnimation();
+	void SpinRoulette(LTexture &ball, int);
 	int spinBall();
 
 	bool WinAnimation();
@@ -58,7 +58,7 @@ private:
 	Background * intro;
 	//insert credit , volume , info,start new game , resume game
 	Button * introButtons[5];
-//	Text text1, text2;
+	//	Text text1, text2;
 //	Text * creditText[2];
 
 	Background *info;
@@ -66,24 +66,26 @@ private:
 
 	Background *gameBoard;
 	Pools *gameBoardPools[POOLS_BUTTON];
-	Pools *betPools [POOLS_BUTTON];
+	Pools *betPools[POOLS_BUTTON];
 	Button * cashOut;
 	Button * spin;
 	Button * history;
 	Button * accounting;
 	Button * clearBets;
 
+	Background * bonus; // Mystery Progresive Jackpot
+	int creditsCollected;
+	int numberOfSpins;
 
 	//TODO MAIN make other class who enherit button
 	Background *roulette;// spin roulette
 	LTexture *ball;
 	LTexture * wheel; // roulette wheel
 
+	Background *outro; // Animation who backs to Intro 10 sec;
 
-	Background *outro;// Animation who backs to Intro 10 sec;
-
-	Background *win;// animation 6 seconds
-	LTexture *coin [COIN_COUNT];
+	Background *win; // animation 6 seconds
+	LTexture *coin[COIN_COUNT];
 
 	//loaded from XML
 	Background * historyBackgound; // last 18 winning numbers
@@ -97,7 +99,6 @@ private:
 	//TODO OTHER BUTTONS;
 	//hardcoded limit of 100 Pulls
 	//TODO:must be fxed
-
 
 	vector<Point> v_coordsAllBetPulls;
 	Credits credits;
