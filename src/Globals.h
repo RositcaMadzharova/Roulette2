@@ -76,21 +76,4 @@ const int MULTIPLIER_PARITY = 2;
 
 const int ADD_CREDIT_BUTTON_VALUE = 100;
 
-//help variables used in function Application::CalcQuadrandClicked
-const int TABLE_CELL_WIDTH = 75;
-const int TABLE_ROW = 3;
-const int TABLE_COLUMN = 13;
-const int TABLE_START_X_POS = 76;
-const int TABLE_END_X_POS = 151;
-const int TABLE_START_Y_POS = 280;
-const int TABLE_END_Y_POS = 350;
-
-const int TABLE_SPECIAL_CELLS_COUNT = 4;
-const int TABLE_SPECIAL_CELL_START_X_POS = 300;
-const int TABLE_SPECIAL_CELL_STEP_X = 150;
-const int TABLE_SPECIAL_CELL_END_X_POS = 450;
-const int TABLE_SPECIAL_CELL_START_Y_POS = 585;
-const int TABLE_SPECIAL_CELL_END_Y_POS = 650;
-
-
 #endif /* GLOBALS_H_ */

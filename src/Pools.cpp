@@ -8,6 +8,7 @@
 #include "Pools.h"
 Pools::Pools()
 {
+	number = 0;
 }
 Pools::Pools(Credits & cr, int posx, int posy, int number)
 		: Button(posx, posy)

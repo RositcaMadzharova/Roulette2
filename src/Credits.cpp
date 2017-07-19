@@ -86,4 +86,11 @@ Credits::Credits(Credits& right)
 	this->currentCredit = right.currentCredit;
 	this->betCredit = right.currentCredit;
 	this->possibleWin = right.possibleWin;
+
+	for (int i = 0; i < NUMBER_OF_SECTORS; i++)
+		betByNumberCell[i] = right.betByNumberCell[i];
+	betRed = right.betRed;
+	betBlack = right.betBlack;
+	betOdd = right.betOdd;
+	betEven = right.betEven;
 }
