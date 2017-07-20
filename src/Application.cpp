@@ -804,6 +804,6 @@ void Application::createXML(string name)
 {
 
     pugi::xml_document xmlDocument;
-    xmlDocument.load_string("<foo bar='baz'>hey</foo>");
-    cout << "Saving result: " << xmlDocument.save_file("roulette_recovery.xml") << endl;
+    xmlDocument.load_string("<myTag attr1='test_attr'>TEST</myTag>");
+    cout << "Create XML File: " << xmlDocument.save_file("roulette_recovery.xml") << endl;
 }
