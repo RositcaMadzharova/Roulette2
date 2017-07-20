@@ -130,8 +130,6 @@ Application::Application()
 
 	initIntro();
 
-	//Create XML File (only once)
-	createXML("roulette_recovery.xml");
 }
 
 Application::~Application()
@@ -434,6 +432,13 @@ void Application::DisplayBets(int x, int y, int color,
 									value[j]
 									, { 0, 0, 0, 255 });
 					textInPool.Show();
+
+
+
+					//Open existing XML and append into it for each bet
+					//read from
+					appendToXML(credits.betByNumberCell);
+
 
 					Point p(x, y, colors[j], value[j]);
 					v_allBetPoints.push_back(p);
@@ -799,11 +804,24 @@ void Application::Free()
 }
 
 
-//TODO: use prameter instead of hardcode
-void Application::createXML(string name)
-{
 
-    pugi::xml_document xmlDocument;
-    xmlDocument.load_string("<myTag attr1='test_attr'>TEST</myTag>");
-    cout << "Create XML File: " << xmlDocument.save_file("roulette_recovery.xml") << endl;
+
+void Application::appendToXML(map<int, int> betByNumberCell)
+{
+	 string XML_FILE_PATH = "roulette_recovery.xml";
+	 pugi::xml_document doc;
+	 doc.load_file(XML_FILE_PATH.c_str(), pugi::parse_default|pugi::parse_declaration);
+	 doc.reset(doc);
+	 map<int,int>::iterator itr;
+	 for(itr = betByNumberCell.begin(); itr!= betByNumberCell.end(); itr++)
+	 {
+		 cout << "Bet: " << itr -> first << " : " << itr -> second << endl ;
+
+		 pugi::xml_node doc_attr = doc.append_child("Bet");
+		 pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") = itr -> first ;
+		 pugi::xml_attribute attr_BetAmount = doc_attr.append_attribute("amount") = itr -> second;
+	 }
+
+	 doc.save_file("roulette_recovery.xml");
+
 }
