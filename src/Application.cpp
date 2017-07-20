@@ -6,6 +6,8 @@
  */
 
 #include "Application.h"
+#include "pugixml.hpp"
+
 
 string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
 int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
@@ -127,6 +129,9 @@ Application::Application()
 	numberOfSpins = 0;
 
 	initIntro();
+
+	//Create XML File (only once)
+	createXML("roulette_recovery.xml");
 }
 
 Application::~Application()
@@ -791,4 +796,14 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
+}
+
+
+//TODO: use prameter instead of hardcode
+void Application::createXML(string name)
+{
+
+    pugi::xml_document xmlDocument;
+    xmlDocument.load_string("<foo bar='baz'>hey</foo>");
+    cout << "Saving result: " << xmlDocument.save_file("roulette_recovery.xml") << endl;
 }
