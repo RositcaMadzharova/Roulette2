@@ -15,6 +15,10 @@
 #include <cstdio>
 #include <vector>
 #include <iostream>
+#include "pugixml.hpp"
+#include <map>
+
+
 using namespace std;
 
 
@@ -32,6 +36,7 @@ enum GameState
 	BONUS,
 	ACCOUNTING
 };
+
 
 //main renderer
 //static SDL_Renderer * gRenderer = NULL;
