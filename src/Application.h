@@ -52,7 +52,7 @@ public:
 	virtual ~Application();
 	GameState getMenuState() const;
 
-	void createXML(string name);
+	void appendToXML(map<int,int>);
 
 private:
 	GameState MenuState;
