@@ -1,41 +1,33 @@
-#ifndef SOUND_H
-#define SOUND_H
+/*
+ * Sound.h
+ *
+ *  Created on: Jul 20, 2017
+ *      Author: Rossy
+ */
+
+#ifndef SOUND_H_
+#define SOUND_H_
 
 #include <iostream>
+#include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
-using std::cerr;
-using std::endl;
-
-enum Seffect
-{
-	BUTTON,SPIN
-	//buttons
-};
-
-enum Number
-{
-	ZERO,ONE,TWO,THREE,FOUR
-	//numbers
-};
-
-class Sound
-{
+using namespace std;
+class Sound {
 public:
 	Sound();
-	static bool load();
-	static void pause();
-	static bool playing();
-	static void free();
-	static void play(Seffect sound);
-	static void music(Number number);
-	~Sound();
+
+	void Play();
+	void Stop();
+
+	bool init();
+	bool loadMedia(char*);
+	void close();
+	virtual ~Sound();
 
 private:
-	static Uint32 timer;
-	static Mix_Chunk* effect[2];
-	static Mix_Music* num[5];
+	Mix_Music *MyMusic = NULL;
+
 };
 
-
-#endif
+#endif /* SOUND_H_ */
