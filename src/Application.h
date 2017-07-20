@@ -52,6 +52,8 @@ public:
 	virtual ~Application();
 	GameState getMenuState() const;
 
+	void createXML(string name);
+
 private:
 	GameState MenuState;
 
@@ -102,6 +104,8 @@ private:
 
 	vector<Point> v_coordsAllBetPulls;
 	Credits credits;
+
+	//TODO: XML file
 
 };
 
