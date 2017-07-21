@@ -14,17 +14,28 @@
 #include <cassert>
 using namespace std;
 
-
 std::string toString(double xx)
 {
-	int x = xx*100;
+	int x = xx * 100;
 	int length = snprintf( NULL, 0, "%d", x);
 	assert(length >= 0);
 	char* buf = new char[length + 1];
 	snprintf(buf, length + 1, "%d", x);
 	std::string str(buf);
 	delete[] buf;
-	str.insert(str.length() - 2, 1, '.');
+	if (x >= 100)
+		str.insert(str.length() - 2, 1, '.');
+	else
+	{
+		str.insert(str.length() - 1, 1, '0');
+		if (x >= 10)
+			str.insert(str.length() - 2, 1, '.');
+		else
+		{
+			str.insert(str.length() - 1, 1, '.');
+			str.insert(str.length() - 1, 1, '0');
+		}
+	}
 	return str;
 }
 

@@ -16,14 +16,14 @@ map<int, char> colorToNumberInRoulette;
 
 int NumberInCell(int i)
 {
-	if(i == 14)
+	if (i == 14)
 		return 0;
-	if(i > 0 && i <= 13)
-		return i*3;
-	if(i > 14 && i <= 26)
-		return (i-13)*3 - 1;
-	if(i> 27 && i <= 39)
-		return (i-26)*i - 2;
+	if (i > 0 && i <= 13)
+		return i * 3;
+	if (i > 14 && i <= 26)
+		return (i - 13) * 3 - 1;
+	if (i > 27 && i <= 39)
+		return (i - 26) * i - 2;
 	return -100;
 }
 
@@ -479,15 +479,18 @@ void Application::DisplayBets(int x, int y, int color,
 			}
 		}					//end if and for
 
-	LTexture underTextLayer(SCREEN_BOARD_W / 2 - 20, 40);
-	underTextLayer.loadFromFile(Background::gRenderer, "EuropeanRouletteFinalGreen.bmp", 0, 0);
-	underTextLayer.setWidth(50);
-	underTextLayer.setHeight(35);
-	underTextLayer.render(Background::gRenderer, NULL);
+	if (MenuState == GAME_BOARD)
+	{
+		LTexture underTextLayer(SCREEN_BOARD_W / 2 - 20, 40);
+		underTextLayer.loadFromFile(Background::gRenderer,
+				"EuropeanRouletteFinalGreen.bmp", 0, 0);
+		underTextLayer.setWidth(50);
+		underTextLayer.setHeight(35);
+		underTextLayer.render(Background::gRenderer, NULL);
 
-
-	Text textBet(SCREEN_BOARD_W / 2 - 20, 40, 50, 35, 15, credits.GetBet(),
-			{ 200, 200, 200, 255 });
+		Text textBet(SCREEN_BOARD_W / 2 - 20, 40, 50, 35, 15, credits.GetBet(),
+				{ 200, 200, 200, 255 });
+	}
 
 }
 
@@ -526,7 +529,11 @@ int Application::spinBall()
 	srand(time(NULL));
 	int result = rand() % 37;
 
+	if (lastWiningNumbers.size() >= 18)
+		lastWiningNumbers.pop();
 	lastWiningNumbers.push(result);
+
+	appendToXMLHistory(lastWiningNumbers);
 
 	cout << result << endl;
 
@@ -573,6 +580,9 @@ int Application::spinBall()
 		radius -= 0.1;
 	}
 	while (angleWheel < andleEnd + 10 * M_PI);
+
+
+
 //	while (radius > minRaduis);
 
 //	delete wheel;
@@ -673,9 +683,20 @@ void Application::GamePlay()
 				if (cashOut->isClicked(&e))
 				{
 					//					click->Play();
+					credits.ChangeCredits(credits.GetBet());
+
 					Free();
-					MenuState = INTRO_MENU;
 					initOutro();
+
+					for (map<int, int>::iterator i =
+							credits.betByNumberCell.begin();
+							i != credits.betByNumberCell.end(); i++)
+						i->second = 0;
+					credits.ChangeCredits(-credits.GetCredit());
+					credits.SetBet(0);
+
+					appendToXML(credits.betByNumberCell);
+
 					SDL_Delay(10000);
 					Free();
 					initIntro();
@@ -689,8 +710,26 @@ void Application::GamePlay()
 							i != credits.betByNumberCell.end(); i++)
 						i->second = 0;
 					credits.ChangeCredits(credits.GetBet());
-					credits.SetBet(-credits.GetBet());
+					credits.SetBet(0);
 					gameBoard->Show();
+
+					Text textCash(SCREEN_BOARD_W / 5, 40, 50, 35, 15,
+							credits.GetCredit() * DENOMINATION, { 200, 200, 200,
+									255 });
+
+					Text textBet(SCREEN_BOARD_W / 2 - 20, 40, 50, 35, 15,
+							credits.GetBet(),
+							{ 200, 200, 200, 255 });
+
+					if (lastWiningNumbers.back() != -1)
+						Text textWin(SCREEN_BOARD_W * 4 / 5, 40, 50, 35, 15,
+								lastWiningNumbers.back(), { 200,
+										200, 200, 255 });
+					else
+						Text textWin(SCREEN_BOARD_W * 4 / 5, 40, 100, 35, 15,
+								"no spins yet", { 200,
+										200, 200, 255 });
+
 				}
 
 				//TODO: here we are more than 10 times in a second. to be fixed
@@ -725,27 +764,27 @@ void Application::GamePlay()
 					numberOfSpins++;
 					if (!(numberOfSpins % 3)) // should be in N spins activated
 					{
+						credits.AddBet(creditsCollected);
+						creditsCollected = 0;
+
 						Free();
 						initBonus();
 
-						int timeOut = 3000;
-						while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeOut))
-						{
+						SDL_Delay(3000);
 
-						}
-
-						credits.AddBet(creditsCollected);
-						creditsCollected = 0;
 					}
 					Free();
 					initSpin();
 				}
-				if (cashOut->isClicked(&e))
-				{
-					//					click->Play();
-					Free();
-					initOutro();
-				}
+//				if (cashOut->isClicked(&e))
+//				{
+//					//					click->Play();
+//					Free();
+//					initOutro();
+//					SDL_Delay(10000);
+//					Free();
+//					initIntro();
+//				}
 
 				if (history->isClicked(&e))
 				{
@@ -761,9 +800,11 @@ void Application::GamePlay()
 				{
 				int roulletteWinningNumber = spinBall();
 				cout << "credits.betByNumberCell[roulletteWinningNumber] = "
-						<< credits.betByNumberCell[NumberInCell(roulletteWinningNumber)]
+						<< credits.betByNumberCell[NumberInCell(
+								roulletteWinningNumber)]
 						<< endl;
-				int winProfit = credits.betByNumberCell[NumberInCell(roulletteWinningNumber)]
+				int winProfit = credits.betByNumberCell[NumberInCell(
+						roulletteWinningNumber)]
 						* MULTIPLIER_NUMBER;
 				if (roulletteWinningNumber != 0)
 				{
@@ -827,40 +868,25 @@ void Application::Free()
 		intro->Clear();
 		for (int i = 0; i < INTRO_BUTTONS; i++)
 			introButtons[i]->free();
-		SDL_RenderClear(Background::gRenderer);
-		SDL_DestroyWindow(gWindow);
-		gWindow = NULL;
-		Background::gRenderer = NULL;
-		IMG_Quit();
-		SDL_Quit();
 	}
 	if (MenuState == INFO)
 	{
 		info->Clear();
 		infoBackToIntro->free();
-		SDL_RenderClear(Background::gRenderer);
-		SDL_DestroyWindow(gWindow);
-		gWindow = NULL;
-		Background::gRenderer = NULL;
-		IMG_Quit();
-		SDL_Quit();
 	}
 	if (MenuState == GAME_BOARD)
 	{
 		gameBoard->Clear();
 		for (int i = 0; i < POOLS_BUTTON; i++)
+		{
+//			betPools[i]->free();
 			gameBoardPools[i]->free();
+		}
 		cashOut->free();
 		spin->free();
 		history->free();
 		accounting->free();
 		clearBets->free();
-		SDL_RenderClear(Background::gRenderer);
-		SDL_DestroyWindow(gWindow);
-		gWindow = NULL;
-		Background::gRenderer = NULL;
-		IMG_Quit();
-		SDL_Quit();
 	}
 	if (MenuState == WIN)
 	{
@@ -869,36 +895,27 @@ void Application::Free()
 		{
 			coin[i]->free();
 		}
-		SDL_RenderClear(Background::gRenderer);
-		SDL_DestroyWindow(gWindow);
-		gWindow = NULL;
-		Background::gRenderer = NULL;
-		IMG_Quit();
-		SDL_Quit();
 	}
 	if (MenuState == SPIN)
 	{
 		roulette->Clear();
 		wheel->free();
 		ball->free();
-		SDL_RenderClear(Background::gRenderer);
-		SDL_DestroyWindow(gWindow);
-		gWindow = NULL;
-		Background::gRenderer = NULL;
-		IMG_Quit();
-		SDL_Quit();
 	}
 	if (MenuState == BONUS)
 	{
 		bonus->Clear();
-
-		SDL_RenderClear(Background::gRenderer);
-		SDL_DestroyWindow(gWindow);
-		gWindow = NULL;
-		Background::gRenderer = NULL;
-		IMG_Quit();
-		SDL_Quit();
 	}
+	if (MenuState == OUTRO)
+	{
+		outro->Clear();
+	}
+	SDL_RenderClear(Background::gRenderer);
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
+	Background::gRenderer = NULL;
+	IMG_Quit();
+	SDL_Quit();
 }
 
 void Application::appendToXML(map<int, int> betByNumberCell)
@@ -911,7 +928,7 @@ void Application::appendToXML(map<int, int> betByNumberCell)
 	map<int, int>::iterator itr;
 	for (itr = betByNumberCell.begin(); itr != betByNumberCell.end(); itr++)
 	{
-		cout << "Bet: " << itr->first << " : " << itr->second << endl;
+//		cout << "Bet: " << itr->first << " : " << itr->second << endl;
 
 		pugi::xml_node doc_attr = doc.append_child("Bet");
 		pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") =
@@ -924,3 +941,25 @@ void Application::appendToXML(map<int, int> betByNumberCell)
 
 }
 
+
+void Application::appendToXMLHistory(queue<int> lastWinningNumbers)
+{
+	string XML_FILE_PATH = "roulette_history.xml";
+	pugi::xml_document doc;
+	doc.load_file(XML_FILE_PATH.c_str(),
+			pugi::parse_default | pugi::parse_declaration);
+	doc.reset(doc);
+	while(lastWinningNumbers.size() != 0)
+	{
+
+		cout << " " << lastWinningNumbers.front();
+
+		pugi::xml_node doc_attr = doc.append_child("Number");
+		pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") =
+				lastWinningNumbers.front();
+
+		lastWinningNumbers.pop();
+	}
+
+	doc.save_file("roulette_history.xml");
+}

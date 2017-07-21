@@ -54,7 +54,8 @@ public:
 	virtual ~Application();
 	GameState getMenuState() const;
 
-	void appendToXML(map<int, int> );
+	void appendToXML(map<int, int> ); //bets
+	void appendToXMLHistory(queue<int>); //history
 private:
 	GameState MenuState;
 
