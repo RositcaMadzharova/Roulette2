@@ -7,6 +7,8 @@
 
 #include "Application.h"
 
+
+
 string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
 int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
 string introButtonText[INTRO_BUTTONS] = { "     INFO     ", " ADD 100 CREDIT ",
@@ -704,6 +706,19 @@ void Application::GamePlay()
 
 				if (clearBets->isClicked(&e))
 				{
+
+					  //start test function readXMLWriteMap
+					  //create map m_FromXmlRead
+					  //map m_FromXmlRead  is populated with returned map from function readXMLWriteMap()
+					  //below just for test: iterate over map and count its content
+					  map<int, int> m_FromXmlRead   = readXMLWriteMap("roulette_recovery.xml");
+					  for(map<int,int>::iterator it = m_FromXmlRead.begin(); it != m_FromXmlRead.end(); it++ )
+					  {
+						  cout << "Read From xmlMap:  " << it->first << ":" << it->second << endl;
+					  }
+					  //end test function readXMLWriteMap
+
+
 					//					click->Play();
 					for (map<int, int>::iterator i =
 							credits.betByNumberCell.begin();
@@ -962,4 +977,25 @@ void Application::appendToXMLHistory(queue<int> lastWinningNumbers)
 	}
 
 	doc.save_file("roulette_history.xml");
+}
+
+
+map<int, int> Application::readXMLWriteMap(string pathXml)
+{
+
+	//map populated from XML
+	map<int, int> m_XMLOutput;
+
+	pugi::xml_document doc;
+	if(!doc.load_file(pathXml.c_str()))
+	{
+		cerr << "file could not be read" ;
+	}
+
+	for(pugi::xml_node bet = doc.child("Bet");bet ; bet= bet.next_sibling("Bet"))
+	{
+		m_XMLOutput[ bet.attribute("cell").as_int() ] = bet.attribute("amount").as_int();
+	}
+
+	return m_XMLOutput;
 }
