@@ -27,9 +27,9 @@ bool Button::isHover()
 
 bool Button::isClicked(SDL_Event * e)
 {
-	if (isHover() && e->type == SDL_MOUSEBUTTONDOWN)
+	if (isHover() && e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT)
 	{
-		cout << "cliuckeddasdasda" << endl;
+		Beep(300,300);
 		return true;
 	}
 	return false;
@@ -40,3 +40,11 @@ Button::~Button()
 {
 }
 
+bool Button::isRightClicked(SDL_Event* e)
+{
+	if (isHover() && e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_RIGHT)
+	{
+		return true;
+	}
+	return false;
+}
