@@ -58,6 +58,7 @@ public:
 	void appendToXMLHistory(queue<int>); //history
 
 	map<int, int> readXMLWriteMap(string pathXml);
+	queue<int> readXMLWriteQueue(string pathXml);
 
 private:
 	GameState MenuState;
