@@ -16,11 +16,9 @@
 #include <vector>
 #include <iostream>
 #include "pugixml.hpp"
-#include <map>
-
-
 using namespace std;
 
+#include "Sound.h"
 
 const double DENOMINATION = 0.01;
 
@@ -37,7 +35,6 @@ enum GameState
 	ACCOUNTING
 };
 
-
 //main renderer
 //static SDL_Renderer * gRenderer = NULL;
 //main window
@@ -46,6 +43,9 @@ static SDL_Window * gWindow = NULL;
 //static SDL_Texture *gTexture = NULL;
 const int SCREEN_W = 1300;
 const int SCREEN_H = 800;
+
+const int SCREEN_BONUS_W = 320;
+const int SCREEN_BONUS_H = 480;
 
 const int SCREEN_BOARD_W = 1200;
 const int SCREEN_BOARD_H = 750;
@@ -57,6 +57,7 @@ const int INTRO_BUTTON_W = 60;
 const int INTRO_BUTTON_H = 60;
 
 const int INTRO_BUTTONS = 5;
+
 const int POOLS_BUTTON = 5;
 
 const int COIN_COUNT = 20;

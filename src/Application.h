@@ -13,6 +13,7 @@
 #include "Background.h"
 #include "Point.h"
 #include "Text.h"
+#include "Sound.h"
 #include <string>
 #include <vector>
 #include <stdlib.h>
@@ -20,6 +21,7 @@
 #include <iostream>
 #include <math.h>
 #include <map>
+#include <queue>
 using namespace std;
 
 //GameState MenuState;
@@ -52,8 +54,7 @@ public:
 	virtual ~Application();
 	GameState getMenuState() const;
 
-	void appendToXML(map<int,int>);
-
+	void appendToXML(map<int, int> );
 private:
 	GameState MenuState;
 
@@ -104,6 +105,10 @@ private:
 
 	vector<Point> v_coordsAllBetPulls;
 	Credits credits;
+
+	Sound* click;
+
+	queue<int> lastWiningNumbers;
 
 	//TODO: XML file
 

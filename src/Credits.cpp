@@ -13,13 +13,8 @@ Credits::Credits(int cCredit)
 	this->betCredit = 0;
 	this->possibleWin = 0;
 
-	for (int i = 0; i < NUMBER_OF_SECTORS; i++)
+	for (int i = 0; i < NUMBER_OF_SECTORS + 2 + 4; i++) // 2 empty, 4 special
 		betByNumberCell[i] = 0;
-	betRed = 0;
-	betBlack = 0;
-	betOdd = 0;
-	betEven = 0;
-
 }
 
 Credits::~Credits()
@@ -34,19 +29,6 @@ void Credits::AddBet(int bet)
 void Credits::ChangeCredits(int change)
 {
 	currentCredit += change;
-}
-
-int Credits::NumberInCell(int i)
-{
-	if(i == 14)
-		return 0;
-	if(i > 0 && i <= 13)
-		return i*3;
-	if(i > 14 && i <= 26)
-		return (i-13)*3 - 1;
-	if(i> 27 && i <= 39)
-		return (i-26)*i - 2;
-	return -1;
 }
 
 void Credits::SetBet(int betCredit)
@@ -87,10 +69,6 @@ Credits::Credits(Credits& right)
 	this->betCredit = right.currentCredit;
 	this->possibleWin = right.possibleWin;
 
-	for (int i = 0; i < NUMBER_OF_SECTORS; i++)
+	for (int i = 0; i < NUMBER_OF_SECTORS + 2 + 4; i++)
 		betByNumberCell[i] = right.betByNumberCell[i];
-	betRed = right.betRed;
-	betBlack = right.betBlack;
-	betOdd = right.betOdd;
-	betEven = right.betEven;
 }

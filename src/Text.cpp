@@ -15,6 +15,19 @@
 using namespace std;
 
 
+std::string toString(double xx)
+{
+	int x = xx*100;
+	int length = snprintf( NULL, 0, "%d", x);
+	assert(length >= 0);
+	char* buf = new char[length + 1];
+	snprintf(buf, length + 1, "%d", x);
+	std::string str(buf);
+	delete[] buf;
+	str.insert(str.length() - 2, 1, '.');
+	return str;
+}
+
 std::string toString(int x)
 {
 	int length = snprintf( NULL, 0, "%d", x);
@@ -27,7 +40,7 @@ std::string toString(int x)
 }
 
 Text::Text(int x, int y, int w, int h,
-			int front_size,
+			int font_size,
 			std::string massage_text,
 			SDL_Color color)
 {
@@ -37,11 +50,13 @@ Text::Text(int x, int y, int w, int h,
 	textRect->h = h;
 	textRect->x = x;
 	textRect->y = y;
-	textTexture = loadFromFile(front_size, massage_text, color);
+	textTexture = loadFromFile(font_size, massage_text, color);
+	Show();
+	delete textRect;
 }
 
 Text::Text(int x, int y, int w, int h,
-			int front_size,
+			int font_size,
 			int massage_int,
 			SDL_Color color)
 {
@@ -51,7 +66,25 @@ Text::Text(int x, int y, int w, int h,
 	textRect->h = h;
 	textRect->x = x;
 	textRect->y = y;
-	textTexture = loadFromFile(front_size, toString(massage_int), color);
+	textTexture = loadFromFile(font_size, toString(massage_int), color);
+	Show();
+	delete textRect;
+}
+
+Text::Text(int x, int y, int w, int h,
+			int font_size,
+			double massage_double,
+			SDL_Color color)
+{
+	TTF_Init();
+	textRect = new SDL_Rect;
+	textRect->w = w;
+	textRect->h = h;
+	textRect->x = x;
+	textRect->y = y;
+	textTexture = loadFromFile(font_size, toString(massage_double), color);
+	Show();
+	delete textRect;
 }
 
 Text::~Text()
@@ -60,14 +93,14 @@ Text::~Text()
 	Clear();
 }
 
-SDL_Texture* Text::loadFromFile(
-								int front_size,
+SDL_Texture* Text::loadFromFile(int font_size,
 								std::string massage_text,
 								SDL_Color color)
 {
 
-	TTF_Font* gFont = TTF_OpenFont("arial.ttf", front_size);
-//	TTF_Font* gFont = TTF_OpenFont("SFCartoonistHand.ttf", front_size);
+	TTF_Font* gFont = TTF_OpenFont("arial.ttf", font_size);
+//	TTF_Font* gFont = TTF_OpenFont("lazy.ttf", font_size);
+//	TTF_Font* gFont = TTF_OpenFont("SFCartoonistHand.ttf", font_size);
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, massage_text.c_str(),
 			color);

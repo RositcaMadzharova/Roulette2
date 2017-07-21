@@ -18,11 +18,14 @@ public:
 			 SDL_Color color );
 	Text(int x, int y, int w,int h,
 			int front_size,
+			 double massage_double,
+			 SDL_Color color );
+	Text(int x, int y, int w,int h,
+			int front_size,
 			 int massage_int,
 			 SDL_Color color );
 	virtual ~Text();
 	void Clear();
-	void Show();
 	SDL_Texture * loadFromFile(
 			int front_size,
 			 std::string massage_text,
@@ -32,6 +35,8 @@ public:
 
 
 private:
+	void Show();
+
 	SDL_Rect * textRect;
 	SDL_Texture *textTexture;
 };

@@ -26,13 +26,11 @@ public:
 	void SetPossibleWin(int);
 	bool isCashedOut();
 
-	static int NumberInCell(int);
-
-	map<int, int> betByNumberCell;
-	int betRed;
-	int betBlack;
-	int betOdd;
-	int betEven;
+	map<int, int> betByNumberCell; //37-41 - even, red, black, odd
+//	int betRed;
+//	int betBlack;
+//	int betOdd;
+//	int betEven;
 
 private:
 	int currentCredit;

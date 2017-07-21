@@ -6,8 +6,6 @@
  */
 
 #include "Application.h"
-#include "pugixml.hpp"
-
 
 string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
 int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
@@ -15,6 +13,19 @@ string introButtonText[INTRO_BUTTONS] = { "     INFO     ", " ADD 100 CREDIT ",
 		"    VOLUME    ", "START NEW GAME", " RESUME GAME " };
 map<int, int> posissionToNumberInRoulette;
 map<int, char> colorToNumberInRoulette;
+
+int NumberInCell(int i)
+{
+	if(i == 14)
+		return 0;
+	if(i > 0 && i <= 13)
+		return i*3;
+	if(i > 14 && i <= 26)
+		return (i-13)*3 - 1;
+	if(i> 27 && i <= 39)
+		return (i-26)*i - 2;
+	return -100;
+}
 
 void FillTheMapsOfRoulette()
 {
@@ -128,18 +139,25 @@ Application::Application()
 	creditsCollected = 0;
 	numberOfSpins = 0;
 
-	initIntro();
+	lastWiningNumbers.push(-1);
 
+	click = new Sound;
+	click->loadMedia("clickSound.wav");
+
+	initIntro();
 }
 
 Application::~Application()
 {
+	delete click;
 
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		delete introButtons[i];
 	}
 	delete intro;
+
+	Free();
 }
 
 void Application::initIntro()
@@ -177,7 +195,6 @@ void Application::initInfo()
 
 	Text textDenomination(SCREEN_W * 3 / 5, SCREEN_H - 30, 150, 15, 20,
 			"*DENOMINATION IS 0.01", { 30, 30, 30, 255 });
-	textDenomination.Show();
 }
 
 void Application::initGameBoard()
@@ -186,6 +203,21 @@ void Application::initGameBoard()
 //display background
 	gameBoard = new Background("GameBoard", SCREEN_BOARD_W, SCREEN_BOARD_H,
 			"EuropeanRouletteFinal.bmp");
+
+	Text textCash(SCREEN_BOARD_W / 5, 40, 50, 35, 15,
+			credits.GetCredit() * DENOMINATION, { 200, 200, 200, 255 });
+
+	Text textBet(SCREEN_BOARD_W / 2 - 20, 40, 50, 35, 15, credits.GetBet(),
+			{ 200, 200, 200, 255 });
+
+	if (lastWiningNumbers.back() != -1)
+		Text textWin(SCREEN_BOARD_W * 4 / 5, 40, 50, 35, 15,
+				lastWiningNumbers.back(), { 200,
+						200, 200, 255 });
+	else
+		Text textWin(SCREEN_BOARD_W * 4 / 5, 40, 100, 35, 15,
+				"no spins yet", { 200,
+						200, 200, 255 });
 
 //display cashout button
 	cashOut = new Button(SCREEN_BOARD_W - BUTTON_W - 130, 73);
@@ -237,14 +269,21 @@ void Application::initGameBoard()
 void Application::initBonus()
 {
 	MenuState = BONUS;
-	bonus = new Background("Mystery Jackpot !", SCREEN_W, SCREEN_H, "Lucky.jpg");
+	bonus = new Background("Mystery Jackpot !", SCREEN_BONUS_W, SCREEN_BONUS_H,
+			"Lucky.jpg");
 
-	Text textYouWin (SCREEN_W/4, SCREEN_H/4, SCREEN_W/2, SCREEN_H/8, 20, "You Win", {100, 250, 0});
-	textYouWin.Show();
-	Text textWinnings (SCREEN_W*2/3, SCREEN_H*2/4, SCREEN_W/3, SCREEN_H/8, 20, creditsCollected, {0, 250, 100});
-	textWinnings.Show();
-	Text textCredits(SCREEN_W/4, SCREEN_H*3/4, SCREEN_W/2, SCREEN_H/8, 20, "credits", {100, 250, 0});
-	textCredits.Show();
+	Text textYouWin(SCREEN_BONUS_W / 4, SCREEN_BONUS_H / 4, SCREEN_BONUS_W / 2,
+			SCREEN_BONUS_H / 8, 20,
+			"You Win", { 100, 250, 0 });
+
+	Text textWinnings(SCREEN_BONUS_W / 3, SCREEN_BONUS_H * 2 / 4,
+			SCREEN_BONUS_W / 3,
+			SCREEN_BONUS_H / 8, 20, creditsCollected, { 0, 250, 100 });
+
+	Text textCredits(SCREEN_BONUS_W / 4, SCREEN_BONUS_H * 3 / 4,
+			SCREEN_BONUS_W / 2, SCREEN_BONUS_H / 8,
+			20, "credits", { 100, 250, 0 });
+
 }
 
 void Application::initOutro()
@@ -256,20 +295,19 @@ void Application::initOutro()
 
 	Text textThankYou(SCREEN_W / 8 * scale, 30 * scale, 900 * scale,
 			200 * scale, 20,
-			"THANK YOU FOR PLAYING", { 130, 30, 130, 155 });
-	textThankYou.Show();
+			"THANK YOU FOR PLAYING", { 0, 200, 0, 155 });
 	Text textYouHave(SCREEN_W / 8 * scale, 400 * scale, 500 * scale,
 			200 * scale, 15,
-			"You have", { 30, 30, 120, 255 });
-	textYouHave.Show();
+			"You have", //{ 80, 80, 120, 255 });
+			{ 255, 255, 255 });
 	Text textMoneyNumber((SCREEN_W / 8 + 520) * scale, 400 * scale, 180 * scale,
 			200 * scale, 15,
-			credits.GetCredit() * DENOMINATION, { 130, 30, 30, 255 });
-	textMoneyNumber.Show();
+			credits.GetCredit() * DENOMINATION, { 200, 10, 10, 255 });
 	Text textMoney((SCREEN_W / 8 + 520 + 180) * scale, 400 * scale, 220 * scale,
 			200 * scale, 15,
-			"BGN", { 30, 30, 140, 255 });
-	textMoney.Show();
+			"BGN", // { 80, 80, 160, 255 });
+			{ 255, 255, 255 });
+
 }
 
 void Application::initWin()
@@ -347,7 +385,7 @@ int Application::CalcQuadrandClicked(int x, int y)
 		if (x >= 300 + (150 * i) && x <= 450 + (150 * i) && y >= 585
 				&& y <= 650)
 		{
-			clickedCell = 40 + i;
+			clickedCell = 39 + i;
 		}
 	}
 
@@ -359,7 +397,6 @@ void Application::DisplayBets(int x, int y, int color,
 								vector<Point> v_allBetPoints)
 // also use for the credit calculations
 {
-
 	int coordX = -1;
 	int coordY = -1;
 
@@ -383,13 +420,13 @@ void Application::DisplayBets(int x, int y, int color,
 
 			//separate logic for Even, Red, Black, Odd (Cell with numbers: 40,41,42,43)
 
-			for (int i = 40; i <= 43; i++)
+			for (int i = 39; i <= 43; i++)
 
 				if (clickedCell == i)
 				{
 
 					//start from x=350, step = 150, i-40 used to get sequence 0,1,2,3
-					coordX = 350 + (150 * (i - 40));
+					coordX = 350 + (150 * (i - 39));
 					coordY = 590;
 
 				}
@@ -412,7 +449,7 @@ void Application::DisplayBets(int x, int y, int color,
 							"Pools.png");
 					gameBoardPools.setWidth(PULLS_W);
 					gameBoardPools.setHeight(PULLS_H);
-					cout << x << ":" << y << endl;
+//					cout << x << ":" << y << endl;
 					SDL_Rect rec =
 							{ j * 112 + 3, 1, 112, 111 };
 					gameBoardPools.render(Background::gRenderer, &rec);
@@ -423,28 +460,35 @@ void Application::DisplayBets(int x, int y, int color,
 							"BALL.png");
 					overPullUnderText.setWidth(PULLS_W / 3);
 					overPullUnderText.setHeight(PULLS_H / 3);
-					overPullUnderText.render(Background::gRenderer,NULL);
+					overPullUnderText.render(Background::gRenderer, NULL);
 
 					Text textInPool(coordX + 20, coordY + 20, PULLS_W / 3,
-							PULLS_H / 3, 25,
-							credits.betByNumberCell[Credits::NumberInCell(
-									clickedCell)] +=
+							PULLS_H / 3, 20,
+							credits.betByNumberCell[	//Credits::NumberInCell(
+							clickedCell] +=
 									value[j]
 									, { 0, 0, 0, 255 });
-					textInPool.Show();
-
-
 
 					//Open existing XML and append into it for each bet
 					//read from
 					appendToXML(credits.betByNumberCell);
-
 
 					Point p(x, y, colors[j], value[j]);
 					v_allBetPoints.push_back(p);
 				}					//end credits
 			}
 		}					//end if and for
+
+	LTexture underTextLayer(SCREEN_BOARD_W / 2 - 20, 40);
+	underTextLayer.loadFromFile(Background::gRenderer, "EuropeanRouletteFinalGreen.bmp", 0, 0);
+	underTextLayer.setWidth(50);
+	underTextLayer.setHeight(35);
+	underTextLayer.render(Background::gRenderer, NULL);
+
+
+	Text textBet(SCREEN_BOARD_W / 2 - 20, 40, 50, 35, 15, credits.GetBet(),
+			{ 200, 200, 200, 255 });
+
 }
 
 bool Application::WinAnimation()
@@ -481,6 +525,8 @@ int Application::spinBall()
 {
 	srand(time(NULL));
 	int result = rand() % 37;
+
+	lastWiningNumbers.push(result);
 
 	cout << result << endl;
 
@@ -559,12 +605,14 @@ void Application::GamePlay()
 			case INTRO_MENU:
 				if (introButtons[0]->isClicked(&e))
 				{
+					//					click->Play();
 					Free();
 					MenuState = INFO;
 					initInfo();
 				}
 				if (introButtons[1]->isClicked(&e))
 				{
+					//					click->Play();
 					credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
 					intro->Show();
 					if (credits.GetCredit())
@@ -572,21 +620,40 @@ void Application::GamePlay()
 						Text textCredit(SCREEN_W / 2 - 500 / 2 + 50 + 470,
 								SCREEN_H / 10 - INTRO_BUTTON_H / 2
 										+ (INTRO_BUTTON_H + 10)
-										+ 5, 280, 30, 20, "Credits: ", { 100,
+										, 230, 40, 20, "Credits: ", { 100,
 										200, 100, 255 });
-						textCredit.Show();
+
 						Text textCreditsNumber(
-								SCREEN_W / 2 - 500 / 2 + 50 + 750,
+								SCREEN_W / 2 - 500 / 2 + 50 + 690,
 								SCREEN_H / 10 - INTRO_BUTTON_H / 2
 										+ (INTRO_BUTTON_H + 10)
-										+ 5, 60, 30, 15, credits.GetCredit(),
+										, 60, 40, 20, credits.GetCredit(),
 								{ 100, 200, 100 });
-						textCreditsNumber.Show();
 					}
-
 				}
-				if (introButtons[3]->isClicked(&e))
+				if (introButtons[1]->isRightClicked(&e) && credits.GetCredit())
 				{
+					credits.ChangeCredits(-ADD_CREDIT_BUTTON_VALUE);
+					intro->Show();
+					if (credits.GetCredit())
+					{
+						Text textCredit(SCREEN_W / 2 - 500 / 2 + 50 + 470,
+								SCREEN_H / 10 - INTRO_BUTTON_H / 2
+										+ (INTRO_BUTTON_H + 10)
+										, 230, 40, 20, "Credits: ", { 100,
+										200, 100, 255 });
+
+						Text textCreditsNumber(
+								SCREEN_W / 2 - 500 / 2 + 50 + 690,
+								SCREEN_H / 10 - INTRO_BUTTON_H / 2
+										+ (INTRO_BUTTON_H + 10)
+										, 60, 40, 20, credits.GetCredit(),
+								{ 100, 200, 100 });
+					}
+				}
+				if (introButtons[3]->isClicked(&e) && credits.GetCredit() > 0)
+				{
+					//					click->Play();
 					Free();
 					MenuState = GAME_BOARD;
 					initGameBoard();
@@ -595,6 +662,7 @@ void Application::GamePlay()
 			case INFO:
 				if (infoBackToIntro->isClicked(&e))
 				{
+					//					click->Play();
 					Free();
 					MenuState = INTRO_MENU;
 					initIntro();
@@ -604,6 +672,7 @@ void Application::GamePlay()
 
 				if (cashOut->isClicked(&e))
 				{
+					//					click->Play();
 					Free();
 					MenuState = INTRO_MENU;
 					initOutro();
@@ -614,8 +683,11 @@ void Application::GamePlay()
 
 				if (clearBets->isClicked(&e))
 				{
-					for (int i = 0; i < (int) v_coordsAllBetPulls.size(); i++)
-						v_coordsAllBetPulls.pop_back();
+					//					click->Play();
+					for (map<int, int>::iterator i =
+							credits.betByNumberCell.begin();
+							i != credits.betByNumberCell.end(); i++)
+						i->second = 0;
 					credits.ChangeCredits(credits.GetBet());
 					credits.SetBet(-credits.GetBet());
 					gameBoard->Show();
@@ -628,6 +700,7 @@ void Application::GamePlay()
 				for (int i = 0; i < POOLS_BUTTON; i++)
 					if (gameBoardPools[i]->isClicked(&e))
 					{
+						//					click->Play();
 						SDL_GetMouseState(&x, &y);
 						color = i + 1;
 					}
@@ -647,13 +720,20 @@ void Application::GamePlay()
 
 				if (spin->isClicked(&e))
 				{
+					//					click->Play();
 					creditsCollected += credits.GetBet() * 0.13;
 					numberOfSpins++;
-					if(!(numberOfSpins % 3)) // should be in N spins activated
+					if (!(numberOfSpins % 3)) // should be in N spins activated
 					{
 						Free();
 						initBonus();
-						SDL_Delay(3000);
+
+						int timeOut = 3000;
+						while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeOut))
+						{
+
+						}
+
 						credits.AddBet(creditsCollected);
 						creditsCollected = 0;
 					}
@@ -662,8 +742,17 @@ void Application::GamePlay()
 				}
 				if (cashOut->isClicked(&e))
 				{
+					//					click->Play();
 					Free();
 					initOutro();
+				}
+
+				if (history->isClicked(&e))
+				{
+					for (map<int, int>::iterator i =
+							credits.betByNumberCell.begin();
+							i != credits.betByNumberCell.end(); i++)
+						cout << i->first << "	" << i->second << endl;
 				}
 
 				break;
@@ -672,23 +761,27 @@ void Application::GamePlay()
 				{
 				int roulletteWinningNumber = spinBall();
 				cout << "credits.betByNumberCell[roulletteWinningNumber] = "
-						<< credits.betByNumberCell[roulletteWinningNumber]
+						<< credits.betByNumberCell[NumberInCell(roulletteWinningNumber)]
 						<< endl;
-				int winProfit = credits.betByNumberCell[roulletteWinningNumber]
+				int winProfit = credits.betByNumberCell[NumberInCell(roulletteWinningNumber)]
 						* MULTIPLIER_NUMBER;
 				if (roulletteWinningNumber != 0)
 				{
 					if (roulletteWinningNumber % 2)
-						winProfit += credits.betOdd * MULTIPLIER_PARITY;
+						winProfit += credits.betByNumberCell[42]
+								* MULTIPLIER_PARITY;
 					else
-						winProfit += credits.betEven * MULTIPLIER_PARITY;
+						winProfit += credits.betByNumberCell[39]
+								* MULTIPLIER_PARITY;
 					if (colorToNumberInRoulette[roulletteWinningNumber] == 'b')
-						winProfit += credits.betBlack * MULTIPLIER_COLOR;
+						winProfit += credits.betByNumberCell[41]
+								* MULTIPLIER_COLOR;
 					else
-						winProfit += credits.betRed * MULTIPLIER_COLOR;
+						winProfit += credits.betByNumberCell[40]
+								* MULTIPLIER_COLOR;
 				}
 				credits.ChangeCredits(winProfit);
-				for (int i = 0; i < NUMBER_OF_SECTORS + 4; i++)
+				for (int i = 0; i < NUMBER_OF_SECTORS + 2 + 4; i++)
 					credits.betByNumberCell[i] = 0;
 
 				cout << "Winning number is " << roulletteWinningNumber << endl
@@ -757,6 +850,11 @@ void Application::Free()
 		gameBoard->Clear();
 		for (int i = 0; i < POOLS_BUTTON; i++)
 			gameBoardPools[i]->free();
+		cashOut->free();
+		spin->free();
+		history->free();
+		accounting->free();
+		clearBets->free();
 		SDL_RenderClear(Background::gRenderer);
 		SDL_DestroyWindow(gWindow);
 		gWindow = NULL;
@@ -790,7 +888,7 @@ void Application::Free()
 		IMG_Quit();
 		SDL_Quit();
 	}
-	if(MenuState == BONUS)
+	if (MenuState == BONUS)
 	{
 		bonus->Clear();
 
@@ -803,25 +901,26 @@ void Application::Free()
 	}
 }
 
-
-
-
 void Application::appendToXML(map<int, int> betByNumberCell)
 {
-	 string XML_FILE_PATH = "roulette_recovery.xml";
-	 pugi::xml_document doc;
-	 doc.load_file(XML_FILE_PATH.c_str(), pugi::parse_default|pugi::parse_declaration);
-	 doc.reset(doc);
-	 map<int,int>::iterator itr;
-	 for(itr = betByNumberCell.begin(); itr!= betByNumberCell.end(); itr++)
-	 {
-		 cout << "Bet: " << itr -> first << " : " << itr -> second << endl ;
+	string XML_FILE_PATH = "roulette_recovery.xml";
+	pugi::xml_document doc;
+	doc.load_file(XML_FILE_PATH.c_str(),
+			pugi::parse_default | pugi::parse_declaration);
+	doc.reset(doc);
+	map<int, int>::iterator itr;
+	for (itr = betByNumberCell.begin(); itr != betByNumberCell.end(); itr++)
+	{
+		cout << "Bet: " << itr->first << " : " << itr->second << endl;
 
-		 pugi::xml_node doc_attr = doc.append_child("Bet");
-		 pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") = itr -> first ;
-		 pugi::xml_attribute attr_BetAmount = doc_attr.append_attribute("amount") = itr -> second;
-	 }
+		pugi::xml_node doc_attr = doc.append_child("Bet");
+		pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") =
+				itr->first;
+		pugi::xml_attribute attr_BetAmount =
+				doc_attr.append_attribute("amount") = itr->second;
+	}
 
-	 doc.save_file("roulette_recovery.xml");
+	doc.save_file("roulette_recovery.xml");
 
 }
+
