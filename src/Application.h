@@ -56,6 +56,9 @@ public:
 
 	void appendToXML(map<int, int> ); //bets
 	void appendToXMLHistory(queue<int>); //history
+
+	map<int, int> readXMLWriteMap(string pathXml);
+
 private:
 	GameState MenuState;
 
@@ -111,7 +114,6 @@ private:
 
 	queue<int> lastWiningNumbers;
 
-	//TODO: XML file
 
 };
 
