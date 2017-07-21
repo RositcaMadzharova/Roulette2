@@ -718,7 +718,15 @@ void Application::GamePlay()
 					  }
 					  //end test function readXMLWriteMap
 
-
+					 //start test function readXmlWriteQueue
+					 queue<int> queue_FromXMLRead = readXMLWriteQueue("roulette_recovery.xml");
+					 while ( !queue_FromXMLRead.empty() )
+					 {
+						cout << queue_FromXMLRead.front() << ' '; // view front element
+						queue_FromXMLRead.pop(); // remove element
+					 } 
+					 //end test function readXmlWriteQueue
+					 
 					//					click->Play();
 					for (map<int, int>::iterator i =
 							credits.betByNumberCell.begin();
@@ -980,6 +988,24 @@ void Application::appendToXMLHistory(queue<int> lastWinningNumbers)
 }
 
 
+
+
+queue<int> Application::readXMLWriteQueue(string pathXml)
+{
+	queue<int> q_XMLOutput;
+	pugi::xml_document doc;
+	if(!doc.load_file(pathXml.c_str()))
+	{
+		cerr << "File could not be read" ;
+	}
+
+	for(pugi::xml_node bet = doc.child("Bet"); bet ; bet= bet.next_sibling("Bet"))
+	{
+		q_XMLOutput.push ( bet.attribute("cell").as_int());
+	}
+	return q_XMLOutput;
+}
+
 map<int, int> Application::readXMLWriteMap(string pathXml)
 {
 
@@ -996,6 +1022,5 @@ map<int, int> Application::readXMLWriteMap(string pathXml)
 	{
 		m_XMLOutput[ bet.attribute("cell").as_int() ] = bet.attribute("amount").as_int();
 	}
-
 	return m_XMLOutput;
 }
