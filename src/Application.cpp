@@ -196,7 +196,7 @@ void Application::initInfo()
 	infoBackToIntro->render(Background::gRenderer, NULL);
 
 	Text textDenomination(SCREEN_W * 3 / 5, SCREEN_H - 30, 150, 15, 20,
-			"*DENOMINATION IS 0.01", { 30, 30, 30, 255 });
+			"*DENOMINATION IS 0.01 in BGN", { 30, 30, 30, 255 });
 }
 
 void Application::initGameBoard()
