@@ -41,7 +41,8 @@ public:
 	void Free();
 	void GamePlay();
 	void DisplayBets(int x, int y, int color, // int poolYellow , int poolGreen , int poolRed , int poolBlack , int poolBlue,
-						vector<Point> v_allBetPoints);
+//						vector<Point> v_allBetPoints,
+						bool resume = false);
 
 	int CalcQuadrandClicked(int x, int y);
 
@@ -54,12 +55,13 @@ public:
 	virtual ~Application();
 	GameState getMenuState() const;
 
-	void appendToXML(map<int, int> ); //bets
+	void appendToXML(map<int, int> , int, int); //bets
 	void appendToXMLHistory(queue<int>); //history
 
 	map<int, int> readXMLWriteMap(string pathXml);
-	queue<int> readXMLWriteQueue(string pathXml);
-
+	int readXMLWriteCurrentCredit(string pathXml);
+	int readXMLWriteBetCredits(string pathXml);
+ 	queue<int> readXMLWriteQueue(string pathXml);
 private:
 	GameState MenuState;
 
@@ -115,6 +117,7 @@ private:
 
 	queue<int> lastWiningNumbers;
 
+	//TODO: XML file
 
 };
 

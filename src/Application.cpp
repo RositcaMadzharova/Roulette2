@@ -7,8 +7,6 @@
 
 #include "Application.h"
 
-
-
 string colors[POOLS_BUTTON] = { "yellow", "green", "red", "blue", "black" };
 int value[POOLS_BUTTON] = { 2, 10, 20, 50, 100 };
 string introButtonText[INTRO_BUTTONS] = { "     INFO     ", " ADD 100 CREDIT ",
@@ -144,7 +142,7 @@ Application::Application()
 	lastWiningNumbers.push(-1);
 
 	click = new Sound;
-	click->loadMedia("clickSound.wav");
+//	click->loadMedia("clickSound.wav");
 
 	initIntro();
 }
@@ -171,10 +169,10 @@ void Application::initIntro()
 	{
 		introButtons[i] = new Button(SCREEN_W / 2 - 600 / 2,
 				SCREEN_H / 13 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 20));
-		introButtons[i]->loadFromFile(Background::gRenderer, "1.png");
+//		introButtons[i]->loadFromFile(Background::gRenderer, "1.png");
 		introButtons[i]->setWidth(600);
 		introButtons[i]->setHeight(50);
-		SDL_Rect rectButton = { 0, 0, 1000, 300 };
+//		SDL_Rect rectButton = { 0, 0, 1000, 300 };
 //		introButtons[i]->render(Background::gRenderer, &rectButton, 0, 500, 50);
 //		Text text(SCREEN_W / 2 - 500 / 2 + 50,
 //				SCREEN_H / 10 - INTRO_BUTTON_H / 2 + i * (INTRO_BUTTON_H + 10)
@@ -196,7 +194,7 @@ void Application::initInfo()
 	infoBackToIntro->render(Background::gRenderer, NULL);
 
 	Text textDenomination(SCREEN_W * 3 / 5, SCREEN_H - 30, 150, 15, 20,
-			"*DENOMINATION IS 0.01 in BGN", { 30, 30, 30, 255 });
+			"*DENOMINATION IS 0.01 BGN", { 30, 30, 30, 255 });
 }
 
 void Application::initGameBoard()
@@ -223,34 +221,34 @@ void Application::initGameBoard()
 
 //display cashout button
 	cashOut = new Button(SCREEN_BOARD_W - BUTTON_W - 130, 73);
-	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
+//	cashOut->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	cashOut->setWidth(215);
-	cashOut->setHeight(135);
+	cashOut->setHeight(100);
 //	cashOut->render(Background::gRenderer, NULL);
 
 //this will be spin button need picture ;
 	spin = new Button(SCREEN_BOARD_W - BUTTON_W - 58, SCREEN_BOARD_H - 105);
-	spin->loadFromFile(Background::gRenderer, "Cash OUT.png");
+//	spin->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	spin->setWidth(213);
-	spin->setHeight(125);
+	spin->setHeight(100);
 //	spin->render(Background::gRenderer, NULL);
 
-	history = new Button(SCREEN_BOARD_W - BUTTON_W - 130 - 377, 73);
-	history->loadFromFile(Background::gRenderer, "Cash OUT.png");
-	history->setWidth(215);
-	history->setHeight(135);
-//	history->render(Background::gRenderer, NULL);
-
-	accounting = new Button(SCREEN_BOARD_W - BUTTON_W - 130 - 755, 73);
-	accounting->loadFromFile(Background::gRenderer, "Cash OUT.png");
-	accounting->setWidth(210);
-	accounting->setHeight(132);
+	accounting = new Button(SCREEN_BOARD_W - BUTTON_W - 130 - 377, 73);
+//	accounting->loadFromFile(Background::gRenderer, "Cash OUT.png");
+	accounting->setWidth(215);
+	accounting->setHeight(100);
 //	accounting->render(Background::gRenderer, NULL);
 
+	history = new Button(SCREEN_BOARD_W - BUTTON_W - 130 - 755, 73);
+	history->loadFromFile(Background::gRenderer, "Cash OUT.png");
+	history->setWidth(210);
+	history->setHeight(100);
+//	history->render(Background::gRenderer, NULL);
+
 	clearBets = new Button(38, SCREEN_BOARD_H - 105);
-	clearBets->loadFromFile(Background::gRenderer, "Cash OUT.png");
+//	clearBets->loadFromFile(Background::gRenderer, "Cash OUT.png");
 	clearBets->setWidth(213);
-	clearBets->setHeight(125);
+	clearBets->setHeight(100);
 //	clearBets->render(Background::gRenderer, NULL);
 
 //draw 5 Pulls and PICK PICK >>>>!!!!!!
@@ -391,12 +389,13 @@ int Application::CalcQuadrandClicked(int x, int y)
 		}
 	}
 
-	cout << "clickedCell:" << clickedCell << endl;
+//	cout << "clickedCell:" << clickedCell << endl;
 	return clickedCell;
 }
 
 void Application::DisplayBets(int x, int y, int color,
-								vector<Point> v_allBetPoints)
+//								vector<Point> v_allBetPoints,
+								bool resume)
 // also use for the credit calculations
 {
 	int coordX = -1;
@@ -433,18 +432,10 @@ void Application::DisplayBets(int x, int y, int color,
 
 				}
 
-			//TODO add logic for 40,41,42,43
-			//Viktor TODO: later in function below to be added logic for : red,black, event, odd
-
 			if (coordX != -1 && coordY != -1)
 			{
 				if (credits.GetCredit() >= value[j])	//credits logic
 				{
-					credits.AddBet(value[j]);
-					credits.ChangeCredits(-value[j]);
-//					credits.betByNumberCell[Credits::NumberInCell(clickedCell)] +=
-//							value[j];
-
 					Credits cr(value[j]);
 					Pools gameBoardPools(cr, coordX, coordY);
 					gameBoardPools.loadFromFile(Background::gRenderer,
@@ -464,19 +455,26 @@ void Application::DisplayBets(int x, int y, int color,
 					overPullUnderText.setHeight(PULLS_H / 3);
 					overPullUnderText.render(Background::gRenderer, NULL);
 
+					if (!resume)
+					{
+						credits.AddBet(value[j]);
+						credits.ChangeCredits(-value[j]);
+						credits.betByNumberCell[clickedCell] += value[j];
+						//					credits.betByNumberCell[Credits::NumberInCell(clickedCell)] +=
+						//							value[j];
+					}
 					Text textInPool(coordX + 20, coordY + 20, PULLS_W / 3,
 							PULLS_H / 3, 20,
-							credits.betByNumberCell[	//Credits::NumberInCell(
-							clickedCell] +=
-									value[j]
-									, { 0, 0, 0, 255 });
+							credits.betByNumberCell[clickedCell]
+							, { 0, 0, 0, 255 });
 
 					//Open existing XML and append into it for each bet
 					//read from
-					appendToXML(credits.betByNumberCell);
+//					appendToXML(credits.betByNumberCell);
 
-					Point p(x, y, colors[j], value[j]);
-					v_allBetPoints.push_back(p);
+//					Point p(x, y, colors[j], value[j]);
+//					v_allBetPoints.push_back(p);
+
 				}					//end credits
 			}
 		}					//end if and for
@@ -583,8 +581,6 @@ int Application::spinBall()
 	}
 	while (angleWheel < andleEnd + 10 * M_PI);
 
-
-
 //	while (radius > minRaduis);
 
 //	delete wheel;
@@ -665,10 +661,44 @@ void Application::GamePlay()
 				}
 				if (introButtons[3]->isClicked(&e) && credits.GetCredit() > 0)
 				{
-					//					click->Play();
 					Free();
 					MenuState = GAME_BOARD;
 					initGameBoard();
+				}
+				if (introButtons[4]->isClicked(&e))
+				{
+					Free();
+					MenuState = GAME_BOARD;
+					initGameBoard();
+
+					//start test function readXMLWriteMap
+					//create map m_FromXmlRead
+					//map m_FromXmlRead  is populated with returned map from function readXMLWriteMap()
+					//below just for test: iterate over map and count its content
+//					map<int, int> m_FromXmlRead
+					credits.betByNumberCell = readXMLWriteMap(
+							"roulette_recovery.xml");
+//					for (map<int, int>::iterator it = m_FromXmlRead.begin();
+//							it != m_FromXmlRead.end(); it++)
+//					{
+//						cout << "Read From xmlMap:  " << it->first << ":"
+//								<< it->second << endl;
+//					}
+//					//end test function readXMLWriteMap
+
+					for (int y = 285; y < SCREEN_BOARD_H; y += 75)
+						for (int x = 77; x < SCREEN_BOARD_W - 77; x += 75)
+						{
+							if (y > 550)
+								x += 75;
+							if (credits.betByNumberCell[
+									CalcQuadrandClicked(x, y)] > 0)
+								DisplayBets(x, y, 1, true);
+						}
+
+					cout<<readXMLWriteBetCredits("roulette_recovery.xml")<<endl;
+					credits.SetBet(readXMLWriteBetCredits("roulette_recovery.xml"));
+					credits.AddBet(readXMLWriteCurrentCredit("roulette_recovery.xml"));
 				}
 				break;
 			case INFO:
@@ -681,6 +711,9 @@ void Application::GamePlay()
 				}
 				break;
 			case GAME_BOARD:
+
+				appendToXML(credits.betByNumberCell, credits.GetCredit(),
+						credits.GetBet());
 
 				if (cashOut->isClicked(&e))
 				{
@@ -697,8 +730,6 @@ void Application::GamePlay()
 					credits.ChangeCredits(-credits.GetCredit());
 					credits.SetBet(0);
 
-					appendToXML(credits.betByNumberCell);
-
 					SDL_Delay(10000);
 					Free();
 					initIntro();
@@ -706,27 +737,6 @@ void Application::GamePlay()
 
 				if (clearBets->isClicked(&e))
 				{
-
-					  //start test function readXMLWriteMap
-					  //create map m_FromXmlRead
-					  //map m_FromXmlRead  is populated with returned map from function readXMLWriteMap()
-					  //below just for test: iterate over map and count its content
-					  map<int, int> m_FromXmlRead   = readXMLWriteMap("roulette_recovery.xml");
-					  for(map<int,int>::iterator it = m_FromXmlRead.begin(); it != m_FromXmlRead.end(); it++ )
-					  {
-						  cout << "Read From xmlMap:  " << it->first << ":" << it->second << endl;
-					  }
-					  //end test function readXMLWriteMap
-
-					 //start test function readXmlWriteQueue
-					 queue<int> queue_FromXMLRead = readXMLWriteQueue("roulette_recovery.xml");
-					 while ( !queue_FromXMLRead.empty() )
-					 {
-						cout << queue_FromXMLRead.front() << ' '; // view front element
-						queue_FromXMLRead.pop(); // remove element
-					 } 
-					 //end test function readXmlWriteQueue
-					 
 					//					click->Play();
 					for (map<int, int>::iterator i =
 							credits.betByNumberCell.begin();
@@ -776,7 +786,7 @@ void Application::GamePlay()
 
 						cout << x << ":" << y << endl;
 
-						DisplayBets(x, y, color, v_pointsBetInfo);
+						DisplayBets(x, y, color);//, v_pointsBetInfo);
 					}
 				}
 
@@ -788,10 +798,12 @@ void Application::GamePlay()
 					if (!(numberOfSpins % 3)) // should be in N spins activated
 					{
 						credits.AddBet(creditsCollected);
-						creditsCollected = 0;
 
 						Free();
 						initBonus();
+
+						credits.AddBet(creditsCollected);
+						creditsCollected = 0;
 
 						SDL_Delay(3000);
 
@@ -799,22 +811,90 @@ void Application::GamePlay()
 					Free();
 					initSpin();
 				}
-//				if (cashOut->isClicked(&e))
-//				{
-//					//					click->Play();
-//					Free();
-//					initOutro();
-//					SDL_Delay(10000);
-//					Free();
-//					initIntro();
-//				}
 
-				if (history->isClicked(&e))
+				//Show last winning numbers   Hover The Button To Hide
+				if (history->isHover())
 				{
+//					static int isShowHistory = false;
+					cout << "History" << endl;
+
+					int x = 20;
+					int y = 200;
+
+//					if (isShowHistory)
+//					{
+//						LTexture underTextLayer(x,y);
+//						underTextLayer.loadFromFile(Background::gRenderer,
+//								"EuropeanRouletteFinal.bmp");
+//						underTextLayer.setWidth(270);
+//						underTextLayer.setHeight(90);
+//						SDL_Rect clip = {x, y, 270, 90};
+//						underTextLayer.render(Background::gRenderer, &clip);
+//					}
+//					else
+//					{
+					queue<int> historyShow(lastWiningNumbers);
+					int counter = 0;
+					SDL_Color red { 255, 0, 0, 255 };
+					SDL_Color black { 0, 0, 30, 255 };
+					while (!historyShow.empty())
+					{
+						if (counter == 9)
+						{
+							x = 30;
+							y = 200;
+						}
+						if (historyShow.front() != -1)
+						{
+							x += 40;
+							if (colorToNumberInRoulette[historyShow.front()]
+									== 'r')
+								Text historyText(x, y, 35, 30, 20,
+										historyShow.front(), red); // view front element
+							else
+								Text historyText(x, y, 35, 30, 10,
+										historyShow.front(), black); // view front element
+						}
+						historyShow.pop(); // remove element
+						counter++;
+					}
+//					}
+//					//start test function readXmlWriteQueue
+//					queue<int> queue_FromXMLRead = readXMLWriteQueue(
+//							"roulette_history.xml");
+//					while (!queue_FromXMLRead.empty())
+//					{
+//						cout << queue_FromXMLRead.front() << ' '; // view front element
+//						queue_FromXMLRead.pop(); // remove element
+//					}
+//					//end test function readXmlWriteQueue
+
+//					isShowHistory = !isShowHistory;
+				}
+				else
+				{
+					int x = 30;
+					int y = 200;
+
+					LTexture underTextLayer(x, y);
+					underTextLayer.loadFromFile(Background::gRenderer,
+							"EuropeanRouletteFinal.bmp");
+//					underTextLayer.setWidth(500);
+//					underTextLayer.setHeight(100);
+					SDL_Rect clip = { x, y, 450, 75 };
+					underTextLayer.render(Background::gRenderer, &clip, 0, 450,
+							75);
+				}
+
+				if (accounting->isClicked(&e))
+				{
+					cout << "Accounting" << endl;
+
 					for (map<int, int>::iterator i =
 							credits.betByNumberCell.begin();
 							i != credits.betByNumberCell.end(); i++)
 						cout << i->first << "	" << i->second << endl;
+
 				}
 
 				break;
@@ -941,7 +1021,8 @@ void Application::Free()
 	SDL_Quit();
 }
 
-void Application::appendToXML(map<int, int> betByNumberCell)
+void Application::appendToXML(map<int, int> betByNumberCell, int credits,
+								int bet)
 {
 	string XML_FILE_PATH = "roulette_recovery.xml";
 	pugi::xml_document doc;
@@ -954,16 +1035,22 @@ void Application::appendToXML(map<int, int> betByNumberCell)
 //		cout << "Bet: " << itr->first << " : " << itr->second << endl;
 
 		pugi::xml_node doc_attr = doc.append_child("Bet");
-		pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") =
+		pugi::xml_attribute attr_cell;
+		attr_cell = doc_attr.append_attribute("cell") =
 				itr->first;
-		pugi::xml_attribute attr_BetAmount =
-				doc_attr.append_attribute("amount") = itr->second;
+		pugi::xml_attribute attr_BetAmount;
+		attr_BetAmount = doc_attr.append_attribute("amount") = itr->second;
 	}
+
+	pugi::xml_node doc_attr = doc.append_child("Credits");
+	pugi::xml_attribute attr_c_cell;
+	attr_c_cell = doc_attr.append_attribute("currentCredit") = credits;
+	pugi::xml_attribute attr_b_cell;
+	attr_b_cell = doc_attr.append_attribute("betCredit") = bet;
 
 	doc.save_file("roulette_recovery.xml");
 
 }
-
 
 void Application::appendToXMLHistory(queue<int> lastWinningNumbers)
 {
@@ -972,38 +1059,21 @@ void Application::appendToXMLHistory(queue<int> lastWinningNumbers)
 	doc.load_file(XML_FILE_PATH.c_str(),
 			pugi::parse_default | pugi::parse_declaration);
 	doc.reset(doc);
-	while(lastWinningNumbers.size() != 0)
+	while (lastWinningNumbers.size() != 0)
 	{
 
 		cout << " " << lastWinningNumbers.front();
 
-		pugi::xml_node doc_attr = doc.append_child("Number");
-		pugi::xml_attribute attr_cell = doc_attr.append_attribute("cell") =
+		pugi::xml_node doc_attr;
+		doc_attr = doc.append_child("Number");
+		pugi::xml_attribute attr_cell;
+		attr_cell = doc_attr.append_attribute("cell") =
 				lastWinningNumbers.front();
 
 		lastWinningNumbers.pop();
 	}
 
 	doc.save_file("roulette_history.xml");
-}
-
-
-
-
-queue<int> Application::readXMLWriteQueue(string pathXml)
-{
-	queue<int> q_XMLOutput;
-	pugi::xml_document doc;
-	if(!doc.load_file(pathXml.c_str()))
-	{
-		cerr << "File could not be read" ;
-	}
-
-	for(pugi::xml_node bet = doc.child("Bet"); bet ; bet= bet.next_sibling("Bet"))
-	{
-		q_XMLOutput.push ( bet.attribute("cell").as_int());
-	}
-	return q_XMLOutput;
 }
 
 map<int, int> Application::readXMLWriteMap(string pathXml)
@@ -1013,14 +1083,64 @@ map<int, int> Application::readXMLWriteMap(string pathXml)
 	map<int, int> m_XMLOutput;
 
 	pugi::xml_document doc;
-	if(!doc.load_file(pathXml.c_str()))
+	if (!doc.load_file(pathXml.c_str()))
 	{
-		cerr << "file could not be read" ;
+		cerr << "file could not be read";
 	}
 
-	for(pugi::xml_node bet = doc.child("Bet");bet ; bet= bet.next_sibling("Bet"))
+	for (pugi::xml_node bet = doc.child("Bet"); bet;
+			bet = bet.next_sibling("Bet"))
 	{
-		m_XMLOutput[ bet.attribute("cell").as_int() ] = bet.attribute("amount").as_int();
+		m_XMLOutput[bet.attribute("cell").as_int()] =
+				bet.attribute("amount").as_int();
 	}
+
 	return m_XMLOutput;
+}
+
+int Application::readXMLWriteCurrentCredit(string pathXml)
+{
+	int currentCredits = 0;
+
+	pugi::xml_document doc;
+	if (!doc.load_file(pathXml.c_str()))
+	{
+		cerr << "file could not be read";
+	}
+	pugi::xml_node bet = doc.child("Credits");
+	currentCredits = bet.attribute("currentCredits").as_int();
+
+	return currentCredits;
+}
+
+int Application::readXMLWriteBetCredits(string pathXml)
+{
+	int betCredits = 0;
+
+	pugi::xml_document doc;
+	if (!doc.load_file(pathXml.c_str()))
+	{
+		cerr << "file could not be read";
+	}
+	pugi::xml_node bet = doc.child("Credits");
+	betCredits = bet.attribute("currentCredits").as_int();
+
+	return betCredits;
+}
+
+queue<int> Application::readXMLWriteQueue(string pathXml)
+{
+	queue<int> q_XMLOutput;
+	pugi::xml_document doc;
+	if (!doc.load_file(pathXml.c_str()))
+	{
+		cerr << "File could not be read";
+	}
+
+	for (pugi::xml_node bet = doc.child("Bet"); bet;
+			bet = bet.next_sibling("Bet"))
+	{
+		q_XMLOutput.push(bet.attribute("cell").as_int());
+	}
+	return q_XMLOutput;
 }
