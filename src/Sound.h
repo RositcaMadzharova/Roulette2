@@ -1,33 +1,38 @@
-/*
- * Sound.h
- *
- *  Created on: Jul 20, 2017
- *      Author: Rossy
- */
-
-#ifndef SOUND_H_
-#define SOUND_H_
+#ifndef SOUND_H
+#define SOUND_H
 
 #include <iostream>
-#include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
-using namespace std;
-class Sound {
-public:
-	Sound();
+using std::cerr;
+using std::endl;
 
-	void Play();
-	void Stop();
-
-	bool init();
-	bool loadMedia(char*);
-	void close();
-	virtual ~Sound();
-
-private:
-	Mix_Music *MyMusic = NULL;
-
+enum EFFECT
+{
+	CLICKBUTTON,SPINROULETTE,HEART
 };
 
-#endif /* SOUND_H_ */
+enum NUMBER
+{
+	N0,N1,N2,N3
+};
+
+class Sound
+{
+public:
+	Sound();
+	static bool load();
+	static void pause();
+	static bool playing();
+	static void free();
+	static void play(EFFECT sound);
+	static void music(NUMBER number);
+	~Sound();
+
+private:
+	static Mix_Chunk* effect[25];
+	static Mix_Music* num[10];
+};
+
+
+#endif
