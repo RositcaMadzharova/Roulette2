@@ -10,16 +10,23 @@
 #include "GLOBALS.h"
 #include "LTexture.h"
 #include "Button.h"
+#include "Credits.h"
+#include "Text.h"
 
 class GameBoard
 {
 public:
-	GameBoard();
+	GameBoard(Credits* credits = NULL);
 	virtual ~GameBoard();
 	bool Draw();
 	void DisplayPools();
 	bool Clear();
 	bool getFlag(){return isActive;}
+
+	void DisplayStatistics(int lastWinningNumber);
+
+	int CalcQuadrandClicked(int x, int y);
+	void DisplayBets(int x, int y, int color, bool resume = false);
 public:
 	LTexture* gameBoard;
 	Button* gameBoardPools[POOLS_BUTTON];
@@ -28,6 +35,7 @@ public:
 	Button* history;
 	Button* accounting;
 	Button* clearBets;
+	Credits * credits;
 	bool isActive;
 };
 

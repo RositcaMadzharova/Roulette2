@@ -69,7 +69,7 @@ void LTexture::free()
 		mTexture = NULL;
 		mWidth = 0;
 		mHeight = 0;
-		IMG_Quit();
+//		IMG_Quit();
 	}
 }
 
@@ -155,4 +155,10 @@ LTexture::LTexture(const LTexture& right)
 	this->mWidth = right.mWidth;
 	this->mHeight=right.mHeight;
 	this->mTexture=right.mTexture;
+}
+
+void LTexture::show()
+{
+	SDL_RenderCopy(LWindow::gRenderer,mTexture,NULL,NULL);
+	SDL_RenderPresent(LWindow::gRenderer);
 }

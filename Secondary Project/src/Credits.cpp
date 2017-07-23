@@ -48,3 +48,8 @@ int Credits::getCreditsCollected() const {
 void Credits::setCreditsCollected(int creditsCollected) {
 	this->creditsCollected = creditsCollected;
 }
+
+void Credits::setBets(int bet)
+{
+
+}

@@ -15,6 +15,7 @@ public:
 	Button(int x = 0, int y = 0);
 	virtual bool isHover();
 	virtual bool isClicked(	SDL_Event *);
+	virtual bool isRightClicked(SDL_Event *);
 	virtual ~Button();
 
 	Button* GetBtn() {return this; }

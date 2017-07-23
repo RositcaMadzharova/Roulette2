@@ -24,7 +24,6 @@ IntroScreen::IntroScreen()
 	introButtons[i]->setHeight(50);
 	}
 	isActive=false;
-	SCREENSTATE  = INTRO_SCREEN;
 }
 
 IntroScreen::~IntroScreen()
@@ -58,3 +57,24 @@ isActive=false;
 return true;
 }
 
+void IntroScreen::IntroScreenShowCredits(Credits& credits)
+{
+	Clear();
+	Draw();
+
+	if (credits.GetCredit())
+	{
+		Text textCredit(SCREEN_W / 2 - 500 / 2 + 50 + 470,
+				SCREEN_H / 10 - INTRO_BUTTONS_H / 2
+						+ (INTRO_BUTTONS_H + 10)
+						, 230, 40, 20, "Credits: ", { 100,
+						200, 100, 255 });
+
+		Text textCreditsNumber(
+				SCREEN_W / 2 - 500 / 2 + 50 + 690,
+				SCREEN_H / 10 - INTRO_BUTTONS_H / 2
+						+ (INTRO_BUTTONS_H + 10)
+						, 60, 40, 20, credits.GetCredit(),
+				{ 100, 200, 100 });
+	}
+}

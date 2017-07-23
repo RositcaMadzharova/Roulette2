@@ -19,7 +19,6 @@ InfoScreen::InfoScreen()
 	infoBack->setHeight(INFO_BUTTON_H);
 
 	isActive = false;
-	SCREENSTATE = INFO_SCREEN;
 }
 
 InfoScreen::~InfoScreen()

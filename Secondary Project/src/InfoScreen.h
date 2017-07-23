@@ -24,7 +24,6 @@ public:
 	LTexture* infoBackground;
 	Button* infoBack;
 	bool isActive;
-	GameState SCREENSTATE;
 };
 
 #endif /* INFOSCREEN_H_ */

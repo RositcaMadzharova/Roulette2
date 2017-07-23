@@ -13,31 +13,30 @@
 #include "GameBoard.h"
 #include "BonusScreen.h"
 #include "WinScreen.h"
+#include "SpinScreen.h"
+#include "OutroScreen.h"
+#include "Recovery.h"
 
 int main(int argc, char *argv[])
 {
+	int numberOfSpins = 0;
+
 	LWindow myWin;
 	myWin.init();
-	Credits cr(500);
-	cr.setCreditsCollected(500);
-//	LTexture myText(0,0);
+
+	Recovery recovery;
+	Credits credits;
 
 	IntroScreen intro;
 	InfoScreen info;
-	GameBoard game;
+	GameBoard game(&credits);
+	SpinScreen spin;
 	BonusScreen bonus;
 	WinScreen win;
+	OutroScreen outro;
 
-//	Button myBut(10 , 10 );
 	intro.Draw();
 
-//	info.DrawInfo();
-//	info.InitInfo();
-
-//	intro.InitIntro( myText.GetPtr());
-//
-//	Button myButton ;
-//
 	while (true)
 	{
 		SDL_Event e;
@@ -50,78 +49,134 @@ int main(int argc, char *argv[])
 
 			if (e.type == SDL_MOUSEBUTTONDOWN)
 			{
-				if (intro.introButtons[0]->isClicked(&e)
-						&& intro.getFlag() == true)
+				//Not in game board
+				if(!game.getFlag())
 				{
-					intro.Clear();
-					info.Draw();
-				}
-
-
-				if(intro.introButtons[1]->isClicked(&e)
-						&& intro.getFlag() == true)
-				{
-
-					intro.Clear();
-					if(bonus.Draw())
-
-					intro.Draw();
-				}
-				if(intro.introButtons[2]->isClicked(&e)
-									&& intro.getFlag() == true)
-				{
-					intro.Clear();
-					if(win.Draw())
+					//Intro
+					if (intro.introButtons[0]->isClicked(&e)
+							&& intro.getFlag() == true)
 					{
+						intro.Clear();
+						info.Draw();
+					}
+					if (intro.introButtons[1]->isRightClicked(&e)
+							&& credits.GetCredit())
+					{
+						credits.ChangeCredits(-ADD_CREDIT_BUTTON_VALUE);
+						intro.IntroScreenShowCredits(credits);
+					}
+					else if(intro.introButtons[1]->isClicked(&e)
+							&& intro.getFlag() == true)
+					{
+						credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
+						intro.IntroScreenShowCredits(credits);
+					}
+					if(intro.introButtons[2]->isClicked(&e)
+							&& intro.getFlag() == true)
+					{
+						//TODO: music
+	//					intro.Clear();
+	//					if(win.Draw())
+	//					{
+	//						win.Clear();
+	//						intro.Draw();
+	//					}
+					}
+					if (intro.introButtons[3]->isClicked(&e)
+							&& intro.getFlag() == true)
+					{
+						intro.Clear();
+						game.Draw();
+						game.DisplayStatistics(recovery.lastWiningNumbers.back());
+
+					}
+					if(intro.introButtons[4]->isClicked(&e)
+							&& intro.getFlag() == true)
+					{
+
+					}
+					//Info
+					if (info.infoBack->isClicked(&e)
+							&& info.getFlag() == true)
+					{
+						info.Clear();
 						intro.Draw();
 					}
-
 				}
-				if (intro.introButtons[3]->isClicked(&e)
-						&& intro.getFlag() == true)
+				//Game board
+				else
 				{
-					intro.Clear();
-					game.Draw();
-				}
-				if (info.infoBack->isClicked(&e)
-						&& info.getFlag() == true)
-				{
-					info.Clear();
-					intro.Draw();
-				}
+					int x, y;
+					int color;
 
+					for (int i = 0; i < POOLS_BUTTON; i++)
+						if (game.gameBoardPools[i]->isClicked(&e))
+						{
+							//					click->Play();
+							SDL_GetMouseState(&x, &y);
+							color = i + 1;
+						}
+					if (e.type == SDL_MOUSEBUTTONDOWN)
+					{
+						if (e.button.button == SDL_BUTTON_LEFT)
+						{
+							SDL_GetMouseState(&x, &x);
+							x = e.button.x;
+							y = e.button.y;
 
+							cout << x << ":" << y << endl;
+
+							game.DisplayBets(x, y, color);//, v_pointsBetInfo);
+						}
+					}
+					if(game.spin->isClicked(&e) )
+					{
+						game.Clear();
+						if(spin.Draw())
+						{
+							spin.Clear();
+							game.Draw();
+							game.DisplayStatistics(recovery.lastWiningNumbers.back());
+						}
+						numberOfSpins ++;
+					}
+					if(game.cashOut->isClicked(&e))
+					{
+						game.Clear();
+						if(outro.Draw())
+						{
+							outro.Clear();
+							intro.Draw();
+						}
+					}
+					if(game.clearBets->isClicked(&e))
+					{
+						for (map<int, int>::iterator i =
+													credits.betByNumberCell.begin();
+													i != credits.betByNumberCell.end(); i++)
+												i->second = 0;
+											credits.ChangeCredits(credits.GetBet());
+											credits.AddBet(-credits.GetBet());
+											game.Draw();
+											game.DisplayStatistics(recovery.lastWiningNumbers.back());
+					}
+					if(numberOfSpins == SPINS_TO_BONUS)
+					{
+						game.Clear();
+						if(bonus.Draw(credits))
+						{
+							bonus.Clear();
+							game.Draw();
+							game.DisplayStatistics(recovery.lastWiningNumbers.back());
+						}
+						numberOfSpins = 0;
+					}
+				}
 			}
 		}
 	}
-
-//		switch (SCREENSTATE)
-//		{
-//
-//		case INTRO_SCREEN:
-//
-//			info.ClearInfo();
-//
-//			if ( intro.InitIntro() )
-//			{
-//				std::cout << "Init Intro " << std::endl ;
-//				SCREENSTATE = LISTEN_TO_EVENT;
-//				continue;
-//			}
-//			break;
-//
-//		case INFO_SCREEN:
-//
-//			intro.ClearIntro();
-//
-//			if (info.InitInfo())
-//			{
-//				std::cout << "INIT" << std::endl;
-//				SCREENSTATE = LISTEN_TO_EVENT;
-//				continue;
-//			}
-//			break;
-//		}
-
+	SDL_Quit();
+	IMG_Quit();
+	TTF_Quit();
 	return 0;
 }

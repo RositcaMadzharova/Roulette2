@@ -16,21 +16,14 @@ public:
 	Credits(int = 0);
 
 	virtual ~Credits();
-
 	void AddBet(int);
-
 	void ChangeCredits(int);
-
 	int GetBet() const;
-
 	int GetCredit() const;
-
-	int GetPossibleWin() const;
-
-	void SetPossibleWin(int);
-
+	void setBets(int bet) ;
+//	int GetPossibleWin() const;
+//	void SetPossibleWin(int);
 	int getCreditsCollected() const;
-
 	void setCreditsCollected(int creditsCollected);
 
 	//37-41 - even, red, black, odd

@@ -37,6 +37,17 @@ bool Button::isClicked(SDL_Event * e )
 	return false;
 }
 
+bool Button::isRightClicked(SDL_Event* e)
+{
+	if (isHover() && e->type == SDL_MOUSEBUTTONDOWN
+			&& e->button.button == SDL_BUTTON_RIGHT)
+	{
+		return true;
+	}
+
+return false;
+}
+
 Button::~Button()
 {
 	LTexture::free();

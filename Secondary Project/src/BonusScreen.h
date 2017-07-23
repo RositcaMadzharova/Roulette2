@@ -9,21 +9,20 @@
 #define BONUSSCREEN_H_
 #include "Text.h"
 #include "Credits.h"
-#include <ctime>
-#include <cstdio>
-#include <stdlib.h>
+#include "GLOBALS.h"
 
 class BonusScreen {
 public:
 	BonusScreen();
 	virtual ~BonusScreen();
-	bool Draw();
+	bool Draw(Credits&);
 	bool Clear();
 	void getBonusCreditsText(Credits&);
 
 
 public:
 		LTexture* bonus;
+		LTexture* bonusSticker;
 		bool isActive;
 };
 

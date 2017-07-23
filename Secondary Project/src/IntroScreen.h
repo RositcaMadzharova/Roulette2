@@ -11,6 +11,8 @@
 #include "LTexture.h"
 #include "Button.h"
 #include "GLOBALS.h"
+#include "Credits.h"
+#include "Text.h"
 
 class IntroScreen
 {
@@ -20,15 +22,14 @@ public:
 	 bool Draw();
 	 bool Clear();
 	 bool getFlag(){return isActive;}
+
+	 void IntroScreenShowCredits(Credits& credits);
 public:
 	 LTexture* introBackground;
 	 Button* introButtons[INTRO_BUTTONS];
 
 	 //bool for mouseEvents
 	 bool isActive;
-
-	 //ENUM For screens
-	 GameState SCREENSTATE;
 };
 
 #endif /* INTROSCREEN_H_ */

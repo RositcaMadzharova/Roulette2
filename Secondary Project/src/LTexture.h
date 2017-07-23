@@ -24,6 +24,9 @@ public:
 		//Loads image at specified path
 		bool loadFromFile(  std::string path );
 
+		//Display texture
+		void show();
+
 		//Deallocates texture
 		void free();
 

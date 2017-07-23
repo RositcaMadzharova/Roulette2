@@ -22,6 +22,7 @@ WinScreen::WinScreen()
 		coin[i]->setHeight(COIN_H);
 	}
 
+	fillRectPosition();
 }
 
 WinScreen::~WinScreen()
@@ -55,20 +56,15 @@ bool WinScreen::Clear()
 
 bool WinScreen::WinAnimation()
 {
-	fillRectPosition();
 	bool isDone = false;
-		short int timeout = 6000;
 		vector<SDL_Rect> goldCoins;
 		for (int i = 0; i < 10; i++)
 			goldCoins.push_back(
 					{ COIN_W * i, 0, COIN_W, COIN_H });
 
-		while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout))
-		{
+
 			for (int i = 0; i < (int) coinFlipz.size(); i++)
 			{
-//				coin[i]->setX(rand() % 350 + 140);
-//				coin[i]->setY(rand() % 350 + 20);
 				coin[i]->setX(coinFlipz[i].x);
 				coin[i]->setY(coinFlipz[i].y);
 				SDL_Color color{rand()%255,rand()%255,rand()%255,rand()%255};
@@ -77,16 +73,15 @@ bool WinScreen::WinAnimation()
 				{
 					SDL_RenderCopyEx(LWindow::gRenderer,coin[i]->getTexture(),&goldCoins[j],&coinFlipz[i],-90,NULL,SDL_FLIP_NONE);
 					SDL_RenderPresent(LWindow::gRenderer);
-//					coin[i]->render( &goldCoins[j] , -90 , NULL, SDL_FLIP_VERTICAL);
 
 
-//					SDL_Delay(5);
+					SDL_Delay(5);
 				}
 //				SDL_Delay(10);
 				isDone = true;
 			}
 
-		}
+//			SDL_Delay(3000);
 	return isDone;
 }
 void fillRectPosition()
