@@ -31,7 +31,9 @@ public:
 			int front_size,
 			 std::string massage_text,
 			 SDL_Color color,
-			 std::string massage_te = "arial.ttf"
+			 std::string massage_te = "arial.ttf",
+			int x = 0,
+			int y = 0
 			 );
 	SDL_Texture * getTexture (){ return textTexture;}
 	bool Show();

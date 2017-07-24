@@ -34,6 +34,8 @@ SpinScreen::SpinScreen()
 	ball->setWidth(BALL_W);
 	ball->setHeight(BALL_H);
 
+	sound = new Sound;
+	sound->load();
 	isActive = false;
 
 	FillTheMapsOfRoulette();
@@ -53,29 +55,35 @@ SpinScreen::~SpinScreen()
 
 }
 
-bool SpinScreen::Draw()
+int SpinScreen::Draw()
 {
 	rouletteBackground->render(NULL,0,NULL);
+
+	srand(time(NULL));
+	int result = rand() % 37;
 	bool isStoped = false;
-	double angleWheel = 0; //2 * M_PI * result / 37;
-	double stepWheel = 2;
-	double angleBall = 6;
+	double angleWheel =-3 + 9.7 * (posissionToNumberInRoulette [result] - 5) ;
+	double stepWheel = 2 ;
+
 	double maxR = 310 ;
 	double minR = 210;
 	double currentR=maxR;
-	double maxAngle = 10;
 	double minAngle = -95;
-
+	double step = M_PI / 36; //128 steps per full circle, so lines are short.
 	int mFrame = 0;
 
-	double step = M_PI / 36; //128 steps per full circle, so lines are short.
+	double angleBall = 0;
+//	if (lastWiningNumbers.size() >= 18)
+//				recovery.lastWiningNumbers.pop();
+//			recovery.lastWiningNumbers.push(result);
 
+	//			+ 0.168 * (result - 13);
+	//	double angleWheel = 0; //2 * M_PI * result / 37;
 	do
 	{
 		angleBall -= ( maxR-currentR) / (12 * 200.0 / M_PI);
-		if (angleBall < maxAngle) {
-			currentR -= (maxR - minR) / ( 10* 200.0 / M_PI);
-		}
+		currentR -= (maxR - minR) / ( 10* 200.0 / M_PI);
+
 		if (currentR < minR) {
 			isStoped = true;
 		}
@@ -87,7 +95,7 @@ bool SpinScreen::Draw()
 		if(mFrame % 3 == 0)
 		{
 			roulette->render(NULL,0);
-			wheel->render( NULL, +angleWheel);
+			wheel->render( NULL, angleWheel);
 			ball->render( NULL, 0);
 		}
 
@@ -97,9 +105,13 @@ bool SpinScreen::Draw()
 
 	}
 	while (angleBall  >  minAngle);
+	sound->play(WINING_NUMBER);
+	SDL_Delay(2000);
+	sound->music(result);
 	SDL_Delay(1000);
 	isStoped = true;
-	return isStoped;
+
+	return result;
 }
 
 bool SpinScreen::Clear()
@@ -112,43 +124,44 @@ bool SpinScreen::Clear()
 
 void FillTheMapsOfRoulette()
 {
+
+	posissionToNumberInRoulette[27] = 36;
+	posissionToNumberInRoulette[13] = 35;
+	posissionToNumberInRoulette[36] = 34;
+	posissionToNumberInRoulette[11] = 33;
+	posissionToNumberInRoulette[30] = 32;
+	posissionToNumberInRoulette[8] = 31;
+	posissionToNumberInRoulette[23] = 30;
+	posissionToNumberInRoulette[10] = 29;
+	posissionToNumberInRoulette[5] = 28;
+	posissionToNumberInRoulette[24] = 27;
+	posissionToNumberInRoulette[16] = 26;
+	posissionToNumberInRoulette[33] = 25;
+	posissionToNumberInRoulette[1] = 24;
+	posissionToNumberInRoulette[20] = 23;
+	posissionToNumberInRoulette[14] = 22;
+	posissionToNumberInRoulette[31] = 21;
+	posissionToNumberInRoulette[9] = 20;
+	posissionToNumberInRoulette[22] = 19;
+	posissionToNumberInRoulette[18] = 18;
+	posissionToNumberInRoulette[29] = 17;
+	posissionToNumberInRoulette[7] = 16;
+	posissionToNumberInRoulette[28] = 15;
+	posissionToNumberInRoulette[12] = 14;
+	posissionToNumberInRoulette[35] = 13;
+	posissionToNumberInRoulette[3] = 12;
+	posissionToNumberInRoulette[26] = 11;
+	posissionToNumberInRoulette[0] = 10;
+	posissionToNumberInRoulette[32] = 9;
+	posissionToNumberInRoulette[15] = 8;
+	posissionToNumberInRoulette[19] = 7;
+	posissionToNumberInRoulette[4] = 6;
+	posissionToNumberInRoulette[21] = 5;
+	posissionToNumberInRoulette[2] = 4;
+	posissionToNumberInRoulette[25] = 3;
+	posissionToNumberInRoulette[17] = 2;
+	posissionToNumberInRoulette[34] = 1;
 	posissionToNumberInRoulette[6] = 0;
-	posissionToNumberInRoulette[27] = 1;
-	posissionToNumberInRoulette[13] = 2;
-	posissionToNumberInRoulette[36] = 3;
-	posissionToNumberInRoulette[11] = 4;
-	posissionToNumberInRoulette[30] = 5;
-	posissionToNumberInRoulette[8] = 6;
-	posissionToNumberInRoulette[23] = 7;
-	posissionToNumberInRoulette[10] = 8;
-	posissionToNumberInRoulette[5] = 9;
-	posissionToNumberInRoulette[24] = 10;
-	posissionToNumberInRoulette[16] = 11;
-	posissionToNumberInRoulette[33] = 12;
-	posissionToNumberInRoulette[1] = 13;
-	posissionToNumberInRoulette[20] = 14;
-	posissionToNumberInRoulette[14] = 15;
-	posissionToNumberInRoulette[31] = 16;
-	posissionToNumberInRoulette[9] = 17;
-	posissionToNumberInRoulette[22] = 18;
-	posissionToNumberInRoulette[18] = 19;
-	posissionToNumberInRoulette[29] = 20;
-	posissionToNumberInRoulette[7] = 21;
-	posissionToNumberInRoulette[28] = 22;
-	posissionToNumberInRoulette[12] = 23;
-	posissionToNumberInRoulette[35] = 24;
-	posissionToNumberInRoulette[3] = 25;
-	posissionToNumberInRoulette[26] = 26;
-	posissionToNumberInRoulette[0] = 27;
-	posissionToNumberInRoulette[32] = 28;
-	posissionToNumberInRoulette[15] = 29;
-	posissionToNumberInRoulette[19] = 30;
-	posissionToNumberInRoulette[4] = 31;
-	posissionToNumberInRoulette[21] = 32;
-	posissionToNumberInRoulette[2] = 33;
-	posissionToNumberInRoulette[25] = 34;
-	posissionToNumberInRoulette[17] = 35;
-	posissionToNumberInRoulette[34] = 36;
 }
 //bool SpinScreen::Draw()
 //{

@@ -12,21 +12,24 @@
 #include "Button.h"
 #include "Credits.h"
 #include "Text.h"
+#include "Sound.h"
+
+
 
 class GameBoard
 {
 public:
-	GameBoard(Credits* credits = NULL);
+	GameBoard();
 	virtual ~GameBoard();
 	bool Draw();
-	void DisplayPools();
 	bool Clear();
 	bool getFlag(){return isActive;}
+	void DisplayStatistics(Credits* credits , int lastWinningNumber);
 
-	void DisplayStatistics(int lastWinningNumber);
+	friend class Credits ;
 
 	int CalcQuadrandClicked(int x, int y);
-	void DisplayBets(int x, int y, int color, bool resume = false);
+	void DisplayBets(Credits* credits , int x, int y, int color, bool resume = false);
 public:
 	LTexture* gameBoard;
 	Button* gameBoardPools[POOLS_BUTTON];
@@ -36,6 +39,7 @@ public:
 	Button* accounting;
 	Button* clearBets;
 	Credits * credits;
+	Sound* sound;
 	bool isActive;
 };
 

@@ -8,6 +8,8 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 #include "LTexture.h"
+#include "Sound.h"
+
 
 
 class Button : public LTexture{

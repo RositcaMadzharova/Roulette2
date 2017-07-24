@@ -16,20 +16,25 @@
 #include "SpinScreen.h"
 #include "OutroScreen.h"
 #include "Recovery.h"
+#include "Sound.h"
 
 int main(int argc, char *argv[])
 {
 	int numberOfSpins = 0;
 
+
 	LWindow myWin;
 	myWin.init();
 
+	//resourse
 	Recovery recovery;
+
 	Credits credits;
 
+	//screens
 	IntroScreen intro;
 	InfoScreen info;
-	GameBoard game(&credits);
+	GameBoard game;
 	SpinScreen spin;
 	BonusScreen bonus;
 	WinScreen win;
@@ -69,6 +74,7 @@ int main(int argc, char *argv[])
 							&& intro.getFlag() == true)
 					{
 						credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
+
 						intro.IntroScreenShowCredits(credits);
 					}
 					if(intro.introButtons[2]->isClicked(&e)
@@ -87,8 +93,7 @@ int main(int argc, char *argv[])
 					{
 						intro.Clear();
 						game.Draw();
-						game.DisplayStatistics(recovery.lastWiningNumbers.back());
-
+						game.DisplayStatistics(&credits,recovery.lastWiningNumbers.back());
 					}
 					if(intro.introButtons[4]->isClicked(&e)
 							&& intro.getFlag() == true)
@@ -112,7 +117,8 @@ int main(int argc, char *argv[])
 					for (int i = 0; i < POOLS_BUTTON; i++)
 						if (game.gameBoardPools[i]->isClicked(&e))
 						{
-							//					click->Play();
+
+							game.sound->play(CLICKBUTTON);//					click->Play();
 							SDL_GetMouseState(&x, &y);
 							color = i + 1;
 						}
@@ -126,22 +132,25 @@ int main(int argc, char *argv[])
 
 							cout << x << ":" << y << endl;
 
-							game.DisplayBets(x, y, color);//, v_pointsBetInfo);
+							game.DisplayBets(&credits,x, y, color);//, v_pointsBetInfo);
 						}
 					}
 					if(game.spin->isClicked(&e) )
 					{
+						game.sound->play(CLICKBUTTON);
 						game.Clear();
 						if(spin.Draw())
 						{
 							spin.Clear();
 							game.Draw();
-							game.DisplayStatistics(recovery.lastWiningNumbers.back());
+							game.DisplayStatistics(&credits ,recovery.lastWiningNumbers.back());
 						}
+
 						numberOfSpins ++;
 					}
 					if(game.cashOut->isClicked(&e))
 					{
+						game.sound->play(CLICKBUTTON);
 						game.Clear();
 						if(outro.Draw())
 						{
@@ -151,6 +160,7 @@ int main(int argc, char *argv[])
 					}
 					if(game.clearBets->isClicked(&e))
 					{
+						game.sound->play(CLICKBUTTON);
 						for (map<int, int>::iterator i =
 													credits.betByNumberCell.begin();
 													i != credits.betByNumberCell.end(); i++)
@@ -158,16 +168,17 @@ int main(int argc, char *argv[])
 											credits.ChangeCredits(credits.GetBet());
 											credits.AddBet(-credits.GetBet());
 											game.Draw();
-											game.DisplayStatistics(recovery.lastWiningNumbers.back());
+											game.DisplayStatistics(&credits , recovery.lastWiningNumbers.back());
 					}
 					if(numberOfSpins == SPINS_TO_BONUS)
 					{
+						game.sound->play(CLICKBUTTON);
 						game.Clear();
 						if(bonus.Draw(credits))
 						{
 							bonus.Clear();
 							game.Draw();
-							game.DisplayStatistics(recovery.lastWiningNumbers.back());
+							game.DisplayStatistics(&credits , recovery.lastWiningNumbers.back());
 						}
 						numberOfSpins = 0;
 					}
@@ -175,8 +186,11 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-	SDL_Quit();
-	IMG_Quit();
+	Mix_Quit();
 	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+
+
 	return 0;
 }

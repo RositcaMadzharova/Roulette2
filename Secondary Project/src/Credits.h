@@ -8,13 +8,14 @@
 #ifndef CREDITS_H_
 #define CREDITS_H_
 #include "GLOBALS.h"
+#include "Text.h"
 #include <map>
 
 class Credits
 {
 public:
 	Credits(int = 0);
-
+	Credits (Credits&);
 	virtual ~Credits();
 	void AddBet(int);
 	void ChangeCredits(int);
@@ -23,6 +24,8 @@ public:
 	void setBets(int bet) ;
 //	int GetPossibleWin() const;
 //	void SetPossibleWin(int);
+
+
 	int getCreditsCollected() const;
 	void setCreditsCollected(int creditsCollected);
 
@@ -33,6 +36,7 @@ private:
 	int currentCredit;
 	int betCredit;
 	int creditsCollected;
+	Text* textCash;
 };
 
 #endif /* CREDIT_H_ */

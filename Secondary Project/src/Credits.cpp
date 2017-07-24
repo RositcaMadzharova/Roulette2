@@ -14,6 +14,7 @@ Credits::Credits(int cCredit)
 	this->creditsCollected = 0;
 	for (int i = 0; i < NUMBER_OF_SECTORS + 2 + 4; i++) // 2 empty, 4 special
 		betByNumberCell[i] = 0;
+	textCash = NULL;
 }
 
 Credits::~Credits()
@@ -53,3 +54,13 @@ void Credits::setBets(int bet)
 {
 
 }
+
+Credits::Credits(Credits& right)
+{
+	this->currentCredit = right.currentCredit;
+	this->betCredit = right.betCredit;
+	this->creditsCollected = right.creditsCollected;
+	this->textCash = NULL;
+
+}
+

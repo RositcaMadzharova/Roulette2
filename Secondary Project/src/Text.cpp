@@ -103,10 +103,15 @@ Text::~Text()
 SDL_Texture* Text::loadFromFile(int font_size,
 								std::string massage_text,
 								SDL_Color color ,
-								std::string massage_te
+								std::string massage_te,
+								int x  , int y
 								)
 {
 
+	if (x != 0 && y != 0){
+		textRect->x=x;
+		textRect->y=y;
+	}
 	TTF_Font* gFont = TTF_OpenFont(massage_te.c_str(), font_size);
 //	TTF_Font* gFont = TTF_OpenFont("lazy.ttf", font_size);
 //	TTF_Font* gFont = TTF_OpenFont("SFCartoonistHand.ttf", font_size);

@@ -9,6 +9,7 @@
 #define SPINSCREEN_H_
 #include "GLOBALS.h"
 #include "LTexture.h"
+#include "Sound.h"
 #include <map>
 using std::map;
 
@@ -16,7 +17,7 @@ class SpinScreen {
 public:
 	SpinScreen();
 	virtual ~SpinScreen();
-	bool Draw();
+	int Draw();
 	bool Clear();
 	bool getFlag(){return isActive;}
 public:
@@ -24,7 +25,9 @@ public:
 	LTexture* roulette;
 	LTexture* wheel;
 	LTexture* ball ;
+	Sound* sound;
 	bool isActive;
+
 };
 
 #endif /* SPINSCREEN_H_ */

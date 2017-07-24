@@ -11,6 +11,7 @@
 Button::Button(int x, int y)
 		: LTexture(x, y)
 {
+
 }
 
 bool Button::isHover()
@@ -32,6 +33,7 @@ bool Button::isClicked(SDL_Event * e )
 		if (isHover() && e->type == SDL_MOUSEBUTTONDOWN)
 		{
 			return true;
+
 		}
 
 	return false;
