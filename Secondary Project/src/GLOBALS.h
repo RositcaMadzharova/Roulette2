@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <ctime>
 #include <cstdio>
 #include <math.h>
@@ -12,6 +13,8 @@
 #include <cstdio>
 #include <assert.h>
 using namespace std;
+
+const double DENOMINATION = 0.01;
 
 // INTRO SCREEN
 const int SCREEN_W =1300;
@@ -24,8 +27,8 @@ const int ADD_CREDIT_BUTTON_VALUE = 100;
 //INFO SCREEN
 const int INFO_BUTTON_X = 10;
 const int INFO_BUTTON_Y = 10;
-const int INFO_BUTTON_H =60;
-const int INFO_BUTTON_W= 60;
+const int INFO_BUTTON_H = 50;
+const int INFO_BUTTON_W = 50;
 
 //GAME BOARD SCREEN
 const int POOLS_BUTTON = 5;
@@ -37,8 +40,6 @@ const int BUTTON_W = 200;
 const int BUTTON_H = 100;
 const int GAME_BOARD_BUTTON_W = 170;
 const int GAME_BOARD_BUTTON_H = 90;
-const int NUMBER_OF_SECTORS = 37;
-const int DENOMINATION = 0.01;
 
 //SPIN SCREEN
 const int BALL_W = 60;
@@ -52,7 +53,16 @@ const int COIN_W = 110;
 const int COIN_H = 110;
 
 //BONUS SCREEN
-const int SPINS_TO_BONUS = 2;
+const int SPINS_TO_BONUS = 3; // 1 more needed
 
+//SOUND
+const int SPECIAL_SOUNDS = 4;
+const int NUMBER_SOUNDS = 37;
+
+//CREDITS
+const int NUMBER_OF_SECTORS = 37;
+const int MULTIPLIER_NUMBER = 36;
+const int MULTIPLIER_COLOR = 2;
+const int MULTIPLIER_PARITY = 2;
 
 #endif

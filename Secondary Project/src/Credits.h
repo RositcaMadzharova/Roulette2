@@ -15,19 +15,18 @@ class Credits
 {
 public:
 	Credits(int = 0);
-	Credits (Credits&);
 	virtual ~Credits();
 	void AddBet(int);
 	void ChangeCredits(int);
 	int GetBet() const;
 	int GetCredit() const;
-	void setBets(int bet) ;
-//	int GetPossibleWin() const;
-//	void SetPossibleWin(int);
+	void SetBets(int bet) ;
+	int GetWinProfit() {return winProfit;}
+	int GetCreditsCollected() const;
+	void AddCreditsCollected(int creditsCollected);
 
+	bool CollectProfit(int roulletteWinningNumber);
 
-	int getCreditsCollected() const;
-	void setCreditsCollected(int creditsCollected);
 
 	//37-41 - even, red, black, odd
 	map<int, int> betByNumberCell;
@@ -36,7 +35,11 @@ private:
 	int currentCredit;
 	int betCredit;
 	int creditsCollected;
-	Text* textCash;
+
+	int winProfit;
+	void FillTheMapsOfRoulette();
+	int NumberInCell(int i);
+
 };
 
 #endif /* CREDIT_H_ */

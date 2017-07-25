@@ -9,6 +9,8 @@
 #define WINSCREEN_H_
 #include "LWindow.h"
 #include "LTexture.h"
+#include "GLOBALS.h"
+#include "Credits.h"
 #include "Text.h"
 #include <vector>
 
@@ -17,11 +19,17 @@ public:
 	WinScreen();
 	virtual ~WinScreen();
 	bool Draw();
+//	friend class Credits;
 	bool Clear();
-	bool WinAnimation();
-public:
+	void WinAnimation();
+	void ShowCredits(Credits*);
+//	void ShowCredits(int, bool = true);
+
+private:
+	void fillRectPosition();
 	LTexture* win ;
 	LTexture* coin[COIN_COUNT];
+
 };
 
 #endif /* WINSCREEN_H_ */

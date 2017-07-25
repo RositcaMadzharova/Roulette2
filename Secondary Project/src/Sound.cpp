@@ -15,12 +15,12 @@ Sound::Sound()
 
 void Sound::free()
 {
-	for (int i = 0; i < 25; i++) {
+	for (int i = 0; i < SPECIAL_SOUNDS; i++) {
 		Mix_FreeChunk(effect[i]);
 		effect[i] = NULL;
 	}
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < NUMBER_SOUNDS; i++) {
 		Mix_FreeChunk(num[i]);
 		num[i] = NULL;
 	}
@@ -38,12 +38,13 @@ void Sound::play(EFFECT sound)
 		case SPINROULETTE:
 			Mix_PlayChannel(-1, effect[1], 0);
 			break;
-		case HEART:
+		case WIN:
 			Mix_PlayChannel(-1, effect[2], 0);
 			break;
 		case WINING_NUMBER:
 			Mix_PlayChannel(-1, effect[3], 0);
 			break;
+
 	}
 }
 
@@ -79,8 +80,8 @@ bool Sound::load()
 	}
 
 	effect[0] = Mix_LoadWAV("button.wav");
-	effect[1] = Mix_LoadWAV("spin.wav");
-	effect[2] = Mix_LoadWAV("heartbeat-02a.mp3");
+	effect[1] = Mix_LoadWAV("Wheel Spinning.mp3");
+	effect[2] = Mix_LoadWAV("You win.mp3");
 	effect[3] = Mix_LoadWAV("the-winning-number-is.wav");
 
 	    num[0] = Mix_LoadWAV("0.wav");

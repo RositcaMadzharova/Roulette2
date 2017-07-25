@@ -20,7 +20,6 @@
 
 int main(int argc, char *argv[])
 {
-	int numberOfSpins = 0;
 
 
 	LWindow myWin;
@@ -28,7 +27,6 @@ int main(int argc, char *argv[])
 
 	//resourse
 	Recovery recovery;
-
 	Credits credits;
 
 	//screens
@@ -74,32 +72,33 @@ int main(int argc, char *argv[])
 							&& intro.getFlag() == true)
 					{
 						credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
-
 						intro.IntroScreenShowCredits(credits);
 					}
 					if(intro.introButtons[2]->isClicked(&e)
 							&& intro.getFlag() == true)
 					{
-						//TODO: music
-	//					intro.Clear();
-	//					if(win.Draw())
-	//					{
-	//						win.Clear();
-	//						intro.Draw();
-	//					}
+//						TODO: music
+						intro.Clear();
+						if( win.Draw() )
+						{
+
+
+						}
 					}
 					if (intro.introButtons[3]->isClicked(&e)
 							&& intro.getFlag() == true)
 					{
 						intro.Clear();
 						game.Draw();
-						game.DisplayStatistics(&credits,recovery.lastWiningNumbers.back());
+						game.DisplayStatistics(&credits,
+								recovery.lastWiningNumbers.back());
 					}
 					if(intro.introButtons[4]->isClicked(&e)
 							&& intro.getFlag() == true)
 					{
-
+//						TODO: resume
 					}
+
 					//Info
 					if (info.infoBack->isClicked(&e)
 							&& info.getFlag() == true)
@@ -117,8 +116,7 @@ int main(int argc, char *argv[])
 					for (int i = 0; i < POOLS_BUTTON; i++)
 						if (game.gameBoardPools[i]->isClicked(&e))
 						{
-
-							game.sound->play(CLICKBUTTON);//					click->Play();
+							game.sound->play(CLICKBUTTON);
 							SDL_GetMouseState(&x, &y);
 							color = i + 1;
 						}
@@ -130,9 +128,7 @@ int main(int argc, char *argv[])
 							x = e.button.x;
 							y = e.button.y;
 
-							cout << x << ":" << y << endl;
-
-							game.DisplayBets(&credits,x, y, color);//, v_pointsBetInfo);
+							game.DisplayBets(&credits,x, y, color);
 						}
 					}
 					if(game.spin->isClicked(&e) )
@@ -142,11 +138,19 @@ int main(int argc, char *argv[])
 						if(spin.Draw())
 						{
 							spin.Clear();
-							game.Draw();
-							game.DisplayStatistics(&credits ,recovery.lastWiningNumbers.back());
-						}
+							credits.AddCreditsCollected(
+									+ 0.13 * credits.GetBet());
+							if(credits.CollectProfit(spin.GetWinningNumber()))
+							{
+								win.Draw();
+								win.ShowCredits(&credits);
+								win.Clear();
+							}
 
-						numberOfSpins ++;
+							game.Draw();
+							game.DisplayStatistics(&credits ,
+									recovery.lastWiningNumbers.back());
+						}
 					}
 					if(game.cashOut->isClicked(&e))
 					{
@@ -154,6 +158,8 @@ int main(int argc, char *argv[])
 						game.Clear();
 						if(outro.Draw())
 						{
+							outro.Show(&credits);
+							SDL_Delay(3000);//10000;
 							outro.Clear();
 							intro.Draw();
 						}
@@ -161,26 +167,29 @@ int main(int argc, char *argv[])
 					if(game.clearBets->isClicked(&e))
 					{
 						game.sound->play(CLICKBUTTON);
-						for (map<int, int>::iterator i =
-													credits.betByNumberCell.begin();
-													i != credits.betByNumberCell.end(); i++)
-												i->second = 0;
-											credits.ChangeCredits(credits.GetBet());
-											credits.AddBet(-credits.GetBet());
-											game.Draw();
-											game.DisplayStatistics(&credits , recovery.lastWiningNumbers.back());
+						for (map<int, int>::iterator
+								i = credits.betByNumberCell.begin();
+								i != credits.betByNumberCell.end();
+								i++)
+							i->second = 0;
+						credits.ChangeCredits(credits.GetBet());
+						credits.AddBet(-credits.GetBet());
+						game.Draw();
+						game.DisplayStatistics(&credits ,
+								recovery.lastWiningNumbers.back());
 					}
-					if(numberOfSpins == SPINS_TO_BONUS)
+					if(spin.IsReadyForBonus())
 					{
-						game.sound->play(CLICKBUTTON);
 						game.Clear();
-						if(bonus.Draw(credits))
+						if(bonus.Draw() && bonus.getBonusCreditsText(&credits))
 						{
 							bonus.Clear();
 							game.Draw();
-							game.DisplayStatistics(&credits , recovery.lastWiningNumbers.back());
+							game.DisplayStatistics(&credits ,
+									recovery.lastWiningNumbers.back());
 						}
-						numberOfSpins = 0;
+						credits.ChangeCredits(credits.GetCreditsCollected());
+						credits.AddCreditsCollected(-credits.GetCreditsCollected());
 					}
 				}
 			}
@@ -190,7 +199,6 @@ int main(int argc, char *argv[])
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
-
 
 	return 0;
 }

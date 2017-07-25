@@ -13,7 +13,7 @@ InfoScreen::InfoScreen()
 	infoBackground->loadFromFile("rouletterules.jpg");
 	infoBackground->setWidth(SCREEN_W);
 	infoBackground->setHeight(SCREEN_H);
-	infoBack = new Button (INFO_BUTTON_X,INFO_BUTTON_Y);
+	infoBack = new Button (SCREEN_W - INFO_BUTTON_W - 10, 0);
 	infoBack->loadFromFile("BackButton.png");
 	infoBack->setWidth(INFO_BUTTON_W);
 	infoBack->setHeight(INFO_BUTTON_H);
@@ -31,8 +31,8 @@ InfoScreen::~InfoScreen()
 
 bool InfoScreen::Draw()
 {
-	if(infoBackground->render(NULL,0,NULL)
-		&& infoBack->render(NULL,0,NULL))
+	if(infoBackground->render(NULL,0)
+		&& infoBack->render(NULL,180))
 	{
 		Text textDenomination(SCREEN_W * 3 / 5, SCREEN_H - 40, 200, 20, 30,
 				"*DENOMINATION IS 0.01 in BGN", { 30, 30, 30, 255 });

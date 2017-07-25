@@ -19,11 +19,11 @@ public:
 
 	virtual ~OutroScreen();
 	bool Draw();
+	void Show(Credits* credits);
 	bool Clear();
 	bool getFlag(){return isActive;}
 public:
 		LTexture* outro;
-		Credits* credits;
 		bool isActive;
 };
 #endif /* OUTROSCREEN_H_ */

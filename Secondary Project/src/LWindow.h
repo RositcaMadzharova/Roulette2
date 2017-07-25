@@ -40,6 +40,8 @@ private:
 		int mWidth;
 		int mHeight;
 
+		Mix_Music* myMusic;
+
 
 	};
 

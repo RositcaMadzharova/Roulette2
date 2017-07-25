@@ -19,7 +19,7 @@ LWindow::LWindow()
 bool LWindow::init()
 {
 
-	mWindow = SDL_CreateWindow( "Roullete", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN );
+	mWindow = SDL_CreateWindow( "Roullete", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN  );
 	if( mWindow != NULL )
 	{
 		mWidth = SCREEN_W;

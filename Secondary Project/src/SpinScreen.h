@@ -17,9 +17,14 @@ class SpinScreen {
 public:
 	SpinScreen();
 	virtual ~SpinScreen();
-	int Draw();
+	bool Draw();
 	bool Clear();
 	bool getFlag(){return isActive;}
+
+	int GenerateWinningNumber();
+	int GetWinningNumber();
+
+	bool IsReadyForBonus();
 public:
 	LTexture* rouletteBackground;
 	LTexture* roulette;
@@ -28,6 +33,11 @@ public:
 	Sound* sound;
 	bool isActive;
 
+private:
+	int numberOfSpins;
+	int winningNumber;
+
+	void FillTheMapsOfRoulette();
 };
 
 #endif /* SPINSCREEN_H_ */

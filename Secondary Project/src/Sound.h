@@ -9,6 +9,7 @@
 #define SOUND_H_
 
 #include <iostream>
+#include "GLOBALS.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 using std::cerr;
@@ -16,7 +17,10 @@ using std::endl;
 
 enum EFFECT
 {
-	CLICKBUTTON,SPINROULETTE,HEART,WINING_NUMBER
+	CLICKBUTTON,
+	SPINROULETTE,
+	WIN,
+	WINING_NUMBER
 };
 
 class Sound
@@ -32,8 +36,8 @@ public:
 	~Sound();
 
 private:
-	 Mix_Chunk* effect[4];
-	 Mix_Chunk* num[36];
+	 Mix_Chunk* effect[SPECIAL_SOUNDS];
+	 Mix_Chunk* num[NUMBER_SOUNDS];
 };
 
 

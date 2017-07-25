@@ -42,9 +42,10 @@ bool WinScreen::Draw()
 {
 	if(win->render(NULL,0,NULL))
 	{
-		WinAnimation();
+
 		return true;
 	}
+
 	return false;
 }
 
@@ -54,37 +55,33 @@ bool WinScreen::Clear()
 	return true;
 }
 
-bool WinScreen::WinAnimation()
+void WinScreen::WinAnimation()
 {
-	bool isDone = false;
-		vector<SDL_Rect> goldCoins;
-		for (int i = 0; i < 10; i++)
-			goldCoins.push_back(
-					{ COIN_W * i, 0, COIN_W, COIN_H });
+	vector<SDL_Rect> goldCoins;
+	for (int i = 0; i < 10; i++)
+		goldCoins.push_back(
+				{ COIN_W * i, 0, COIN_W, COIN_H });
 
 
-			for (int i = 0; i < (int) coinFlipz.size(); i++)
+		for (int i = 0; i < (int) coinFlipz.size(); i++)
+		{
+			coin[i]->setX(coinFlipz[i].x);
+			coin[i]->setY(coinFlipz[i].y);
+			SDL_Color color{rand()%255,rand()%255,rand()%255,rand()%255};
+
+			Text winText (SCREEN_W/2 - 300/2 , SCREEN_H/2 - 100/2 ,
+					300 , 100 , 20 ,"YOU WIN", color);
+			for (int j = 0; j < 10; j++)
 			{
-				coin[i]->setX(coinFlipz[i].x);
-				coin[i]->setY(coinFlipz[i].y);
-				SDL_Color color{rand()%255,rand()%255,rand()%255,rand()%255};
-				Text winText (SCREEN_W/2 - 300/2 , SCREEN_H/2 - 100/2 , 300 , 100 , 20 ,"YOU WIN", color);
-				for (int j = 0; j < 10; j++)
-				{
-					SDL_RenderCopyEx(LWindow::gRenderer,coin[i]->getTexture(),&goldCoins[j],&coinFlipz[i],-90,NULL,SDL_FLIP_NONE);
-					SDL_RenderPresent(LWindow::gRenderer);
+				SDL_RenderCopyEx(LWindow::gRenderer,coin[i]->getTexture(),&goldCoins[j],&coinFlipz[i],-90,NULL,SDL_FLIP_NONE);
+				SDL_RenderPresent(LWindow::gRenderer);
 
 
-					SDL_Delay(5);
-				}
-//				SDL_Delay(10);
-				isDone = true;
+				SDL_Delay(5);
 			}
-
-//			SDL_Delay(3000);
-	return isDone;
+		}
 }
-void fillRectPosition()
+void WinScreen::fillRectPosition()
 {
 
 	SDL_Rect rec = {20,675,90,90};
@@ -132,3 +129,25 @@ void fillRectPosition()
 		coinFlipz.push_back(rec);
 	}
 }
+void WinScreen::ShowCredits(Credits* credits)
+{
+
+	WinAnimation();
+	SDL_Color color{rand()%255,rand()%255,rand()%255,rand()%255};
+
+	Text winAmmount (SCREEN_W/2 - 300/2 , SCREEN_H * 2/3 ,
+			300 , 100 , 20 ,credits->GetWinProfit(), color);
+	SDL_Delay(1000);
+
+}
+
+//void WinScreen::ShowCredits(int winProfit, bool True)
+//{
+//
+//	SDL_Color color{rand()%255,rand()%255,rand()%255,rand()%255};
+//
+//
+//	Text winAmmount (SCREEN_W/2 - 300/2 , SCREEN_H/2 ,
+//			300 , 100 , 20 ,winProfit, color);
+//
+//}

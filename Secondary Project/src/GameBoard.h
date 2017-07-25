@@ -24,12 +24,12 @@ public:
 	bool Draw();
 	bool Clear();
 	bool getFlag(){return isActive;}
+
 	void DisplayStatistics(Credits* credits , int lastWinningNumber);
 
-	friend class Credits ;
-
 	int CalcQuadrandClicked(int x, int y);
-	void DisplayBets(Credits* credits , int x, int y, int color, bool resume = false);
+	void DisplayBets(Credits* credits , int x, int y, int color,
+			bool resume = false);
 public:
 	LTexture* gameBoard;
 	Button* gameBoardPools[POOLS_BUTTON];
@@ -38,7 +38,7 @@ public:
 	Button* history;
 	Button* accounting;
 	Button* clearBets;
-	Credits * credits;
+
 	Sound* sound;
 	bool isActive;
 };

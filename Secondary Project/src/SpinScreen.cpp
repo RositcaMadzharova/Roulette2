@@ -8,10 +8,11 @@
 #include "SpinScreen.h"
 
 map<int, int> posissionToNumberInRoulette;
-void FillTheMapsOfRoulette();
 
 SpinScreen::SpinScreen()
 {
+	numberOfSpins = 1;
+
 	rouletteBackground = new LTexture (0,0);
 	rouletteBackground->loadFromFile("EuropeanRouletteFinal.bmp");
 	rouletteBackground->setWidth(SCREEN_W);
@@ -55,30 +56,20 @@ SpinScreen::~SpinScreen()
 
 }
 
-int SpinScreen::Draw()
+bool SpinScreen::Draw()
 {
+	int result = GenerateWinningNumber();
+
 	rouletteBackground->render(NULL,0,NULL);
-
-	srand(time(NULL));
-	int result = rand() % 37;
 	bool isStoped = false;
-	double angleWheel =-3 + 9.7 * (posissionToNumberInRoulette [result] - 5) ;
-	double stepWheel = 2 ;
-
-	double maxR = 310 ;
-	double minR = 210;
-	double currentR=maxR;
-	double minAngle = -95;
-	double step = M_PI / 36; //128 steps per full circle, so lines are short.
+	sound->play(SPINROULETTE);
+	SDL_Delay(2000);
 	int mFrame = 0;
-
-	double angleBall = 0;
-//	if (lastWiningNumbers.size() >= 18)
-//				recovery.lastWiningNumbers.pop();
-//			recovery.lastWiningNumbers.push(result);
-
-	//			+ 0.168 * (result - 13);
-	//	double angleWheel = 0; //2 * M_PI * result / 37;
+	double angleWheel = -3 + 9.7 * (posissionToNumberInRoulette [result] - 5) ;
+	double stepWheel = 2 ;
+	double maxR = 310, minR = 210,
+			currentR=maxR, minAngle = -95,
+			step = M_PI / 36, angleBall = 0;
 	do
 	{
 		angleBall -= ( maxR-currentR) / (12 * 200.0 / M_PI);
@@ -87,7 +78,6 @@ int SpinScreen::Draw()
 		if (currentR < minR) {
 			isStoped = true;
 		}
-
 		angleBall -= step;
 		ball->setX(SCREEN_W/2 - BALL_W / 2 + cos(angleBall) * maxR);
 		ball->setY(SCREEN_H/2 - BALL_H / 2 + sin(angleBall) * maxR);
@@ -98,20 +88,19 @@ int SpinScreen::Draw()
 			wheel->render( NULL, angleWheel);
 			ball->render( NULL, 0);
 		}
-
 		angleWheel += stepWheel;
 		maxR -= 0.1;
 		mFrame ++;
-
 	}
 	while (angleBall  >  minAngle);
+
 	sound->play(WINING_NUMBER);
 	SDL_Delay(2000);
 	sound->music(result);
 	SDL_Delay(1000);
-	isStoped = true;
 
-	return result;
+	numberOfSpins ++;
+	return true;
 }
 
 bool SpinScreen::Clear()
@@ -122,7 +111,30 @@ bool SpinScreen::Clear()
 	return true;
 }
 
-void FillTheMapsOfRoulette()
+int SpinScreen::GenerateWinningNumber()
+{
+	srand(time(NULL));
+	winningNumber = rand() % 37;
+	return winningNumber;
+}
+
+int SpinScreen::GetWinningNumber()
+{
+	return winningNumber;
+}
+
+bool SpinScreen::IsReadyForBonus()
+{
+	if(numberOfSpins % SPINS_TO_BONUS == 0)
+	{
+		numberOfSpins = 1;
+		return true;
+	}
+	return false;
+}
+
+
+void SpinScreen::FillTheMapsOfRoulette()
 {
 
 	posissionToNumberInRoulette[27] = 36;
@@ -163,77 +175,3 @@ void FillTheMapsOfRoulette()
 	posissionToNumberInRoulette[34] = 1;
 	posissionToNumberInRoulette[6] = 0;
 }
-//bool SpinScreen::Draw()
-//{
-//	srand(time(NULL));
-//	int result = rand() % 37;
-//
-////	if (lastWiningNumbers.size() >= 18)
-////		lastWiningNumbers.pop();
-////	lastWiningNumbers.push(result);
-////
-////	appendToXMLHistory(lastWiningNumbers);
-//	rouletteBackground->render(NULL,0,NULL);
-//
-//
-////
-//	double angleBall = -0.03
-//			+ 0.168 * (result - 13);
-//	double angleWheel = 0; //2 * M_PI * result / 37;
-//
-//	double radius = 330;
-//	const double minRaduis = 210;
-//	double andleEnd = 82 * M_PI;
-//	double stepBall = M_PI / 36;
-//	double stepWheel = 0.2;
-//
-//	bool isTimeToDraw = false;
-//	bool isTimeToDraw2 = true;
-//
-//	do
-//	{
-//		const double MAGIC_NUMBER = 0.08;
-//
-////		SDL_Delay(3);
-//
-//		isTimeToDraw = !isTimeToDraw;
-//		if (isTimeToDraw)
-//			isTimeToDraw2 = !isTimeToDraw2;
-//		if (isTimeToDraw && isTimeToDraw2)
-//		{
-//		isTimeToDraw2 = !isTimeToDraw2;
-//
-//
-//		}
-//		if( mFrame % 3 == 0 )
-//		{
-//
-//			roulette->render(NULL,0,NULL);
-//			wheel->render( NULL, -angleWheel);
-//		}
-//		if( mFrame % 2 == 0 )
-//		{
-//			ball->setX(
-//					SCREEN_W / 2 - BALL_W / 2 + cos(angleBall) * radius);
-//			ball->setY(
-//					SCREEN_H / 2 - BALL_H / 2 + sin(angleBall) * radius);
-//
-//			ball->render( NULL, 0);
-//		}
-//		mFrame++;
-//		angleWheel += stepWheel;
-//		if (angleWheel < andleEnd)
-//			angleBall += stepBall - MAGIC_NUMBER * (minRaduis / radius);
-//		else
-//			angleBall -= M_PI / 900;
-//		radius -= 0.1;
-//
-//	}
-//	while (angleWheel < andleEnd + 10 * M_PI);
-//	ball->render( NULL, 0);
-////	SDL_Delay(4000);
-//
-//	isActive = false;
-//
-//	return 5; //result;
-//}
