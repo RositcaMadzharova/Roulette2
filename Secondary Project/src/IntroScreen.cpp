@@ -24,18 +24,18 @@ IntroScreen::IntroScreen()
 		introButtons[i]->setWidth(580);
 		introButtons[i]->setHeight(50);
 	}
+
 	sound = new Sound;
 }
 
 IntroScreen::~IntroScreen()
 {
+	delete sound;
 	for (int i = 0; i < INTRO_BUTTONS; i++)
 	{
 		introButtons[i]->free();
 		delete introButtons[i];
 	}
-	sound->free();
-	delete sound;
 }
 
 bool IntroScreen::Draw()

@@ -9,9 +9,13 @@
 
 Recovery::Recovery()
 {
+	for (int i = 0; i < NUMBER_OF_SECTORS; i++)
+		winCreditsByNumber[i] = 0;
 	lastWiningNumbers.push(-1);
+
+	currentCedits = 0;
 	creditsBet = 0;
-	creditsWon = 0;
+	creditsCollected = 0;
 }
 
 Recovery::~Recovery()
@@ -19,7 +23,7 @@ Recovery::~Recovery()
 
 }
 
-void Recovery::appendToXML(map<int, int> betByNumberCell, int credits, int bet)
+void Recovery::appendToXML(map<int, int> betByNumberCell)
 {
 	string XML_FILE_PATH = "roulette_recovery.xml";
 	pugi::xml_document doc;
@@ -39,14 +43,29 @@ void Recovery::appendToXML(map<int, int> betByNumberCell, int credits, int bet)
 		attr_BetAmount = doc_attr.append_attribute("amount") = itr->second;
 	}
 
-	pugi::xml_node doc_attr = doc.append_child("Credits");
-	pugi::xml_attribute attr_c_cell;
-	attr_c_cell = doc_attr.append_attribute("currentCredit") = credits;
-	pugi::xml_attribute attr_b_cell;
-	attr_b_cell = doc_attr.append_attribute("betCredit") = bet;
-
 	doc.save_file("roulette_recovery.xml");
+}
 
+void Recovery::appendToXMLCredits(int credits, int bet, int colected)
+{
+	string XML_FILE_PATH = "roulette_recovery_credits.xml";
+	pugi::xml_document doc;
+	doc.load_file(XML_FILE_PATH.c_str(),
+			pugi::parse_default | pugi::parse_declaration);
+	doc.reset(doc);
+
+	pugi::xml_node doc_attr = doc.append_child("Credits");
+	pugi::xml_attribute attr_a_cell;
+	attr_a_cell = doc_attr.append_attribute("creditsColectes")
+			= creditsCollected;
+	pugi::xml_attribute attr_c_cell;
+	attr_c_cell = doc_attr.append_attribute("currentCredit")
+			= credits;
+	pugi::xml_attribute attr_b_cell;
+	attr_b_cell = doc_attr.append_attribute("creditsBet")
+			= bet;
+
+	doc.save_file("roulette_recovery_credits.xml");
 }
 
 void Recovery::appendToXMLHistory(queue<int> lastWinningNumbers)
@@ -95,39 +114,10 @@ map<int, int> Recovery::readXMLWriteMap(string pathXml)
 	return m_XMLOutput;
 }
 
-int Recovery::readXMLWriteCurrentCredit(string pathXml)
-{
-	int currentCredits = 0;
-
-	pugi::xml_document doc;
-	if (!doc.load_file(pathXml.c_str()))
-	{
-		cerr << "file could not be read";
-	}
-	pugi::xml_node bet = doc.child("Credits");
-	currentCredits = bet.attribute("currentCredits").as_int();
-
-	return currentCredits;
-}
-
-int Recovery::readXMLWriteBetCredits(string pathXml)
-{
-	int betCredits = 0;
-
-	pugi::xml_document doc;
-	if (!doc.load_file(pathXml.c_str()))
-	{
-		cerr << "file could not be read";
-	}
-	pugi::xml_node bet = doc.child("Credits");
-	betCredits = bet.attribute("currentCredits").as_int();
-
-	return betCredits;
-}
-
 queue<int> Recovery::readXMLWriteQueue(string pathXml)
 {
 	queue<int> q_XMLOutput;
+
 	pugi::xml_document doc;
 	if (!doc.load_file(pathXml.c_str()))
 	{
@@ -140,4 +130,21 @@ queue<int> Recovery::readXMLWriteQueue(string pathXml)
 		q_XMLOutput.push(bet.attribute("cell").as_int());
 	}
 	return q_XMLOutput;
+}
+
+Credits Recovery::readXMLWriteCredit(string pathXml)
+{
+	Credits credit;
+
+	pugi::xml_document doc;
+	if (!doc.load_file(pathXml.c_str()))
+	{
+		cerr << "file could not be read";
+	}
+	pugi::xml_node bet = doc.child("Credits");
+	credit.AddCreditsCollected(doc.child("Credits").attribute("creditsColected").as_int());
+	credit.ChangeCredits(doc.child("Credits").attribute("currentCredit").as_int());
+	credit.SetBets(doc.child("Credits").attribute("creditsBet").as_int());
+
+	return credit;
 }

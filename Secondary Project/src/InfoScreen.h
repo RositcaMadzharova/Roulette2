@@ -12,6 +12,7 @@
 #include "Button.h"
 #include "Text.h"
 #include "Sound.h"
+
 #include "Screen.h"
 
 class InfoScreen: public Screen
@@ -21,8 +22,9 @@ public:
 	virtual ~InfoScreen();
 	bool Draw();
 	bool Clear();
-	Sound* sound;
+
 	Button* infoBack;
+	Sound* sound;
 };
 
 #endif /* INFOSCREEN_H_ */

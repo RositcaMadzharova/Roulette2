@@ -47,9 +47,7 @@ void Sound::play(EFFECT sound)
 	case WINING_NUMBER:
 		Mix_PlayChannel(-1, effect[3], 0);
 		break;
-	case WINSCREEN:
-		Mix_PlayChannel(-1, effect[4], 0);
-		break;
+
 	}
 }
 
@@ -82,7 +80,6 @@ bool Sound::load()
 	effect[1] = Mix_LoadWAV("Wheel Spinning.mp3");
 	effect[2] = Mix_LoadWAV("You win.mp3");
 	effect[3] = Mix_LoadWAV("the-winning-number-is.wav");
-	effect[4] = Mix_LoadWAV("Winning Sound.mp3");
 
 	num[0] = Mix_LoadWAV("0.wav");
 	num[1] = Mix_LoadWAV("1.wav");

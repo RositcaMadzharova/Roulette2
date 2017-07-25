@@ -149,7 +149,7 @@ int GameBoard::CalcQuadrandClicked(int x, int y)
 }
 
 void GameBoard::DisplayBets(Credits* credits, int x, int y, int color,
-							bool resume)
+							bool resume, Recovery* recovery)
 // also use for the credit calculations
 {
 	int coordX = -1;
@@ -212,21 +212,19 @@ void GameBoard::DisplayBets(Credits* credits, int x, int y, int color,
 						credits->AddBet(value[j]);
 						credits->ChangeCredits(-value[j]);
 						credits->betByNumberCell[clickedCell] += value[j];
-//						credits->betByNumberCell[Credits::NumberInCell(clickedCell)] +=
-//							value[j];
 					}
 					Text textInPool(coordX + 20, coordY + 22, POOLS_W / 2 + 8,
 							POOLS_H / 2 + 8, 15,
 							credits->betByNumberCell[clickedCell]
 							, { 0, 0, 0, 255 }, "Intro.otf");
-//					Text textCash(SCREEN_BOARD_W / 5, 40, 45, 35, 15,
-//								credits->GetCredit() * DENOMINATION , { 200, 200, 200,
-//										255 });
 
 					Text textBet(SCREEN_BOARD_W / 2 + 25, 40, 45, 35, 15,
 							credits->GetBet(),
 							{ 200, 200, 200, 255 });
 
+					recovery->appendToXML(credits->betByNumberCell);
+					recovery->appendToXMLCredits(credits->GetCredit(),
+							credits->GetBet(), credits->GetCreditsCollected());
 				}					//end credits
 			}
 		}					//end if and for

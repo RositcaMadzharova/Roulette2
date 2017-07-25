@@ -14,6 +14,7 @@
 #include "Credits.h"
 #include "Text.h"
 #include "Sound.h"
+
 #include "Screen.h"
 
 class IntroScreen: public Screen
@@ -25,8 +26,9 @@ public:
 	bool Clear();
 
 	void IntroScreenShowCredits(Credits& credits);
-	Sound* sound;
+
 	Button* introButtons[INTRO_BUTTONS];
+	Sound* sound;
 };
 
 #endif /* INTROSCREEN_H_ */

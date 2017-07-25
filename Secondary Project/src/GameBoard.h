@@ -13,6 +13,7 @@
 #include "Credits.h"
 #include "Text.h"
 #include "Sound.h"
+#include "Recovery.h"
 
 #include "Screen.h"
 
@@ -28,7 +29,7 @@ public:
 
 	int CalcQuadrandClicked(int x, int y);
 	void DisplayBets(Credits* credits, int x, int y, int color,
-						bool resume = false);
+						bool resume = false, Recovery* recovery = NULL);
 public:
 	Button* gameBoardPools[POOLS_BUTTON];
 	Button* cashOut;

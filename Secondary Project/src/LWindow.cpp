@@ -10,7 +10,6 @@
 SDL_Renderer* LWindow::gRenderer = NULL;
 LWindow::LWindow()
 {
-
 	//Initialize non-existant window
 	mWindow = NULL;
 	mWidth = 0;
@@ -22,7 +21,6 @@ LWindow::LWindow()
 
 bool LWindow::init()
 {
-
 	bool success = true;
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -36,12 +34,11 @@ bool LWindow::init()
 		success = false;
 	}
 	mWindow = SDL_CreateWindow("Roullete", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
+	SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
 	if (mWindow != NULL)
 	{
 		mWidth = SCREEN_W;
 		mHeight = SCREEN_H;
-		success = false;
 	}
 
 	gRenderer = SDL_CreateRenderer(mWindow, -1,
@@ -52,18 +49,17 @@ bool LWindow::init()
 				SDL_GetError());
 		SDL_DestroyWindow(mWindow);
 		mWindow = NULL;
-		success = false ;
 	}
-	 myMusic = Mix_LoadMUS( "Last Summer In Rio.mp3" );
+	myMusic = Mix_LoadMUS("Last Summer In Rio.mp3");
 
-	    if( myMusic == NULL )
-	    {
-	    	printf("Music could not be opened ! SDL Error: %s\n",
-	    					SDL_GetError());
-	    	success = false ;
+	if (myMusic == NULL)
+	{
+		printf("Music could not be opened ! SDL Error: %s\n",
+				SDL_GetError());
+		success = false;
 
-	    }
-	    success = true;
+	}
+	success = true;
 	return mWindow != NULL && gRenderer != NULL && success;
 }
 
@@ -74,8 +70,8 @@ void LWindow::free()
 		SDL_DestroyWindow(mWindow);
 		mWidth = 0;
 		mHeight = 0;
-		IMG_Quit();
 		Mix_FreeMusic( myMusic );
+		IMG_Quit();
 	}
 
 }
@@ -90,11 +86,9 @@ int LWindow::getHeight()
 	return mHeight;
 }
 
-
 void LWindow::PlayMusic()
 {
 	if( Mix_PlayingMusic() == 0 )
 		 Mix_PlayMusic( myMusic,  10) ;
 
 }
-

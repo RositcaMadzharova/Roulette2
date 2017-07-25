@@ -18,9 +18,9 @@
 #include "Recovery.h"
 #include "Sound.h"
 
-void ActivateGameBoard(SDL_Event e);
-void ActivateIntro(SDL_Event e);
-void ActivateInfo(SDL_Event e);
+//void ActivateGameBoard(SDL_Event e);
+//void ActivateIntro(SDL_Event e);
+//void ActivateInfo(SDL_Event e);
 
 int main(int argc, char *argv[])
 {
@@ -56,24 +56,27 @@ int main(int argc, char *argv[])
 
 				if (info.getFlag())
 				{
+					info.sound->play(CLICKBUTTON);
 					if (info.infoBack->isClicked(&e)
-								&& info.getFlag() == true)
-						{
-							info.Clear();
-							intro.Draw();
-						}
+							&& info.getFlag() == true)
+					{
+						info.Clear();
+						intro.Draw();
+					}
 				}
 				if (intro.getFlag())
 				{
 					if (intro.introButtons[0]->isClicked(&e)
 							&& intro.getFlag() == true)
 					{
+						intro.sound->play(CLICKBUTTON);
 						intro.Clear();
 						info.Draw();
 					}
 					if (intro.introButtons[1]->isRightClicked(&e)
 							&& credits.GetCredit())
 					{
+						intro.sound->play(CLICKBUTTON);
 						credits.ChangeCredits(-ADD_CREDIT_BUTTON_VALUE);
 						intro.IntroScreenShowCredits(credits);
 					}
@@ -81,26 +84,59 @@ int main(int argc, char *argv[])
 						if (intro.introButtons[1]->isClicked(&e)
 								&& intro.getFlag() == true)
 						{
+							intro.sound->play(CLICKBUTTON);
 							credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
 							intro.IntroScreenShowCredits(credits);
 						}
 					if (intro.introButtons[2]->isClicked(&e)
 							&& intro.getFlag() == true)
 					{
-				//						TODO: music
+						intro.sound->play(CLICKBUTTON);
+						if (Mix_PausedMusic() == 1)
+						{
+							//Resume the music
+							Mix_ResumeMusic();
+						}
+						//If the music is playing
+						else
+						{
+							//Pause the music
+							Mix_PauseMusic();
+						}
 					}
 					if (intro.introButtons[3]->isClicked(&e)
 							&& intro.getFlag() == true)
 					{
+						intro.sound->play(CLICKBUTTON);
 						intro.Clear();
 						game.Draw();
 						game.DisplayStatistics(&credits,
 								recovery.lastWiningNumbers.back());
 					}
-					if (intro.introButtons[4]->isClicked(&e)
-							&& intro.getFlag() == true)
+					if (intro.introButtons[4]->isClicked(&e))
 					{
-				//						TODO: resume
+						intro.sound->play(CLICKBUTTON);
+						intro.Clear();
+						if (game.Draw())
+						{
+							credits = recovery.readXMLWriteCredit(
+									"roulette_recovery_credits.xml");
+							credits.betByNumberCell = recovery.readXMLWriteMap(
+									"roulette_recovery.xml");
+							game.DisplayStatistics(&credits,
+									recovery.lastWiningNumbers.back());
+							for (int y = 285; y < SCREEN_BOARD_H; y += 75)
+								for (int x = 77;
+										x < SCREEN_BOARD_W - 77; x += 75)
+								{
+									if (y > 550)
+										x += 75;
+									if (credits.betByNumberCell[
+											game.CalcQuadrandClicked(x, y)] > 0)
+										game.DisplayBets(&credits, x, y, 1,
+												true, &recovery);
+								}
+						}
 					}
 				}
 				if (game.getFlag())
@@ -124,7 +160,8 @@ int main(int argc, char *argv[])
 							x = e.button.x;
 							y = e.button.y;
 
-							game.DisplayBets(&credits, x, y, color);
+							game.DisplayBets(&credits, x, y, color, false,
+									&recovery);
 						}
 					}
 					if (game.spin->isClicked(&e))
@@ -139,6 +176,8 @@ int main(int argc, char *argv[])
 							if (credits.CollectProfit(spin.GetWinningNumber()))
 							{
 								win.Draw();
+//								TODO: Vasil
+//								win.sound->play(WINSCREEN);
 								win.ShowCredits(&credits);
 								win.Clear();
 							}

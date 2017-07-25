@@ -20,16 +20,14 @@ InfoScreen::InfoScreen()
 	sound = new Sound;
 
 	isActive = false;
-
 }
 
 InfoScreen::~InfoScreen()
 {
+	delete sound;
+
 	infoBack->free();
 	delete infoBack;
-
-	sound->free();
-	delete sound;
 }
 
 bool InfoScreen::Draw()
