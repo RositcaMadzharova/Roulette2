@@ -17,13 +17,19 @@ InfoScreen::InfoScreen()
 	infoBack->setWidth(INFO_BUTTON_W);
 	infoBack->setHeight(INFO_BUTTON_H);
 
+	sound = new Sound;
+
 	isActive = false;
+
 }
 
 InfoScreen::~InfoScreen()
 {
 	infoBack->free();
 	delete infoBack;
+
+	sound->free();
+	delete sound;
 }
 
 bool InfoScreen::Draw()

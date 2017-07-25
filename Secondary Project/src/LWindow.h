@@ -7,6 +7,8 @@
 
 #ifndef LWINDOW_H_
 #define LWINDOW_H_
+#include "LWindow.h"
+
 #include "GLOBALS.h"
 #include "LTexture.h"
 
@@ -28,9 +30,7 @@ public:
 
 	//Static Renderer
 	static SDL_Renderer* gRenderer;
-
-	LWindow* getWindow(){return this;}
-
+	void PlayMusic();
 private:
 	//Window data
 	SDL_Window* mWindow;
