@@ -27,7 +27,7 @@ std::string toString(double xx)
 		str.insert(str.length() - 2, 1, '.');
 	else
 	{
-		str.insert(str.length() - 1, 1, '0');
+		str.insert(str.length() - 2, 1, '0');
 		if (x >= 10)
 			str.insert(str.length() - 2, 1, '.');
 		else
