@@ -56,7 +56,10 @@ SpinScreen::~SpinScreen()
 
 bool SpinScreen::Draw()
 {
-	int result = GenerateWinningNumber();
+
+	srand(time(NULL));
+	winningNumber = rand() % 37;
+	int result = winningNumber;
 
 	background->render(NULL, 0, NULL);
 	sound->play(SPINROULETTE);
@@ -107,8 +110,6 @@ bool SpinScreen::Clear()
 
 int SpinScreen::GenerateWinningNumber()
 {
-	srand(time(NULL));
-	winningNumber = rand() % 37;
 	return winningNumber;
 }
 

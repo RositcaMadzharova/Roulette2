@@ -18,10 +18,6 @@
 #include "Recovery.h"
 #include "Sound.h"
 
-//void ActivateGameBoard(SDL_Event e);
-//void ActivateIntro(SDL_Event e);
-//void ActivateInfo(SDL_Event e);
-
 int main(int argc, char *argv[])
 {
 	LWindow myWin;
@@ -105,7 +101,8 @@ int main(int argc, char *argv[])
 						}
 					}
 					if (intro.introButtons[3]->isClicked(&e)
-							&& intro.getFlag() == true)
+							&& intro.getFlag() == true
+							&& credits.GetCredit() != 0)
 					{
 						intro.sound->play(CLICKBUTTON);
 						intro.Clear();
@@ -147,8 +144,6 @@ int main(int argc, char *argv[])
 					for (int i = 0; i < POOLS_BUTTON; i++)
 						if (game.gameBoardPools[i]->isClicked(&e))
 						{
-							//							TODO: sound for placing pools on board
-							//							game.sound->play(CLICKBUTTON);
 							SDL_GetMouseState(&x, &y);
 							color = i + 1;
 						}
@@ -170,17 +165,23 @@ int main(int argc, char *argv[])
 						game.Clear();
 						if (spin.Draw())
 						{
+							recovery.ShowLastWinningNumber(&spin);
+
 							spin.Clear();
 							credits.AddCreditsCollected(
 									+0.13 * credits.GetBet());
 							if (credits.CollectProfit(spin.GetWinningNumber()))
 							{
 								win.Draw();
-//								TODO: Vasil
-//								win.sound->play(WINSCREEN);
+								SDL_Delay(1000);
+								win.sound->play(WINSCREEN);
 								win.ShowCredits(&credits);
 								win.Clear();
 							}
+
+							recovery.appendToXML(credits.betByNumberCell);
+							recovery.appendToXMLCredits(credits.GetCredit(),
+									credits.GetBet(), credits.GetCreditsCollected());
 
 							game.Draw();
 							game.DisplayStatistics(&credits,
@@ -194,6 +195,7 @@ int main(int argc, char *argv[])
 						if (outro.Draw())
 						{
 							outro.Show(&credits);
+							credits.ChangeCredits(-credits.GetCredit());
 							SDL_Delay(3000); //10000;
 							outro.Clear();
 							intro.Draw();
@@ -213,7 +215,8 @@ int main(int argc, char *argv[])
 						game.DisplayStatistics(&credits,
 								recovery.lastWiningNumbers.back());
 					}
-					if (spin.IsReadyForBonus())
+					if (spin.IsReadyForBonus() != 0
+							&& credits.GetCreditsCollected() != 0)
 					{
 						game.Clear();
 						if (bonus.Draw() && bonus.getBonusCreditsText(&credits))
@@ -228,6 +231,37 @@ int main(int argc, char *argv[])
 									recovery.lastWiningNumbers.back());
 						}
 					}
+					if (game.history->isClicked(&e))
+					{
+						int x = 30;
+						int y = 180;
+
+						queue<int> historyShow(recovery.lastWiningNumbers);
+						int counter = 0;
+						SDL_Color red { 255, 0, 0, 255 };
+						SDL_Color black { 0, 255, 255, 255 };
+						while (!historyShow.empty())
+						{
+							if (counter == 9)
+							{
+								x = 30;
+								y = 230;
+							}
+							if (historyShow.front() != -1)
+							{
+								x += 40;
+								if (credits.colorToNumberInRoulette[historyShow.front()]
+										== 'r')
+									Text historyText(x, y, 35, 30, 20,
+											historyShow.front(), red); // view front element
+								else
+									Text historyText(x, y, 35, 30, 10,
+											historyShow.front(), black); // view front element
+							}
+							historyShow.pop(); // remove element
+							counter++;
+						}
+					}
 
 				}
 			}
@@ -239,142 +273,3 @@ int main(int argc, char *argv[])
 	SDL_Quit();
 	return 0;
 }
-
-//void ActivateInfo(SDL_Event e)
-//{
-//	if (info.infoBack->isClicked(&e)
-//			&& info.getFlag() == true)
-//	{
-//		info.Clear();
-//		intro.Draw();
-//	}
-//}
-//
-//void ActivateIntro(SDL_Event e)
-//{
-//	if (intro.introButtons[0]->isClicked(&e)
-//			&& intro.getFlag() == true)
-//	{
-//		intro.Clear();
-//		info.Draw();
-//	}
-//	if (intro.introButtons[1]->isRightClicked(&e)
-//			&& credits.GetCredit())
-//	{
-//		credits.ChangeCredits(-ADD_CREDIT_BUTTON_VALUE);
-//		intro.IntroScreenShowCredits(credits);
-//	}
-//	else
-//		if (intro.introButtons[1]->isClicked(&e)
-//				&& intro.getFlag() == true)
-//		{
-//			credits.ChangeCredits(ADD_CREDIT_BUTTON_VALUE);
-//			intro.IntroScreenShowCredits(credits);
-//		}
-//	if (intro.introButtons[2]->isClicked(&e)
-//			&& intro.getFlag() == true)
-//	{
-////						TODO: music
-//	}
-//	if (intro.introButtons[3]->isClicked(&e)
-//			&& intro.getFlag() == true)
-//	{
-//		intro.Clear();
-//		game.Draw();
-//		game.DisplayStatistics(&credits,
-//				recovery.lastWiningNumbers.back());
-//	}
-//	if (intro.introButtons[4]->isClicked(&e)
-//			&& intro.getFlag() == true)
-//	{
-////						TODO: resume
-//	}
-//}
-//
-//void ActivateGameBoard(SDL_Event e)
-//{
-//	int x, y;
-//	int color;
-//
-//	for (int i = 0; i < POOLS_BUTTON; i++)
-//		if (game.gameBoardPools[i]->isClicked(&e))
-//		{
-////							TODO: sound for placing pools on board
-////							game.sound->play(CLICKBUTTON);
-//			SDL_GetMouseState(&x, &y);
-//			color = i + 1;
-//		}
-//	if (e.type == SDL_MOUSEBUTTONDOWN)
-//	{
-//		if (e.button.button == SDL_BUTTON_LEFT)
-//		{
-//			SDL_GetMouseState(&x, &x);
-//			x = e.button.x;
-//			y = e.button.y;
-//
-//			game.DisplayBets(&credits, x, y, color);
-//		}
-//	}
-//	if (game.spin->isClicked(&e))
-//	{
-//		game.sound->play(CLICKBUTTON);
-//		game.Clear();
-//		if (spin.Draw())
-//		{
-//			spin.Clear();
-//			credits.AddCreditsCollected(
-//					+0.13 * credits.GetBet());
-//			if (credits.CollectProfit(spin.GetWinningNumber()))
-//			{
-//				win.Draw();
-//				win.ShowCredits(&credits);
-//				win.Clear();
-//			}
-//
-//			game.Draw();
-//			game.DisplayStatistics(&credits,
-//					recovery.lastWiningNumbers.back());
-//		}
-//	}
-//	if (game.cashOut->isClicked(&e))
-//	{
-//		game.sound->play(CLICKBUTTON);
-//		game.Clear();
-//		if (outro.Draw())
-//		{
-//			outro.Show(&credits);
-//			SDL_Delay(3000); //10000;
-//			outro.Clear();
-//			intro.Draw();
-//		}
-//	}
-//	if (game.clearBets->isClicked(&e))
-//	{
-//		game.sound->play(CLICKBUTTON);
-//		for (map<int, int>::iterator
-//		i = credits.betByNumberCell.begin();
-//				i != credits.betByNumberCell.end();
-//				i++)
-//			i->second = 0;
-//		credits.ChangeCredits(credits.GetBet());
-//		credits.AddBet(-credits.GetBet());
-//		game.Draw();
-//		game.DisplayStatistics(&credits,
-//				recovery.lastWiningNumbers.back());
-//	}
-//	if (spin.IsReadyForBonus())
-//	{
-//		game.Clear();
-//		if (bonus.Draw() && bonus.getBonusCreditsText(&credits))
-//		{
-//			credits.ChangeCredits(
-//					credits.GetCreditsCollected());
-//			credits.AddCreditsCollected(
-//					-credits.GetCreditsCollected());
-//			bonus.Clear();
-//			game.Draw();
-//			game.DisplayStatistics(&credits,
-//					recovery.lastWiningNumbers.back());
-//		}
-//	}
-//}

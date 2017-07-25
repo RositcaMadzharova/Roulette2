@@ -20,6 +20,8 @@ WinScreen::WinScreen()
 		coin[i]->setHeight(COIN_H);
 	}
 
+	sound = new Sound;
+
 	fillRectPosition();
 }
 

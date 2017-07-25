@@ -7,8 +7,6 @@
 
 #include "Credits.h"
 
-map<int, char> colorToNumberInRoulette;
-
 Credits::Credits(int cCredit)
 {
 	this->currentCredit = cCredit;

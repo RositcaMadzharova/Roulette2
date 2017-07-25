@@ -25,6 +25,7 @@ public:
 	bool Clear();
 	void WinAnimation();
 	void ShowCredits(Credits*);
+	Sound* sound;
 
 private:
 	void fillRectPosition();

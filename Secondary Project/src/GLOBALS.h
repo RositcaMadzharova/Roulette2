@@ -56,7 +56,7 @@ const int COIN_H = 110;
 const int SPINS_TO_BONUS = 3; // 1 more needed
 
 //SOUND
-const int SPECIAL_SOUNDS = 4;
+const int SPECIAL_SOUNDS = 5;
 const int NUMBER_SOUNDS = 37;
 
 //CREDITS

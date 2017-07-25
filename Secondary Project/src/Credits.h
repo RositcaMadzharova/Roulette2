@@ -30,6 +30,7 @@ public:
 	//37-41 - even, red, black, odd
 	map<int, int> betByNumberCell;
 
+	map<int, char> colorToNumberInRoulette;
 private:
 	int currentCredit;
 	int betCredit;

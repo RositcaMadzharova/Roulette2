@@ -16,6 +16,7 @@
 using namespace std;
 
 #include "Credits.h"
+#include "SpinScreen.h"
 
 class Recovery
 {
@@ -32,6 +33,7 @@ public:
 
 	queue<int> readXMLWriteQueue(string pathXml);
 
+	void ShowLastWinningNumber(SpinScreen* spin);
 public:
 	queue<int> lastWiningNumbers;
 

@@ -141,10 +141,22 @@ Credits Recovery::readXMLWriteCredit(string pathXml)
 	{
 		cerr << "file could not be read";
 	}
-	pugi::xml_node bet = doc.child("Credits");
+	pugi::xml_node bet;
+	bet = doc.child("Credits");
 	credit.AddCreditsCollected(doc.child("Credits").attribute("creditsColected").as_int());
 	credit.ChangeCredits(doc.child("Credits").attribute("currentCredit").as_int());
 	credit.SetBets(doc.child("Credits").attribute("creditsBet").as_int());
 
 	return credit;
+}
+
+void Recovery::ShowLastWinningNumber(SpinScreen* spin)
+{
+	if (lastWiningNumbers.size() >= 18)
+		lastWiningNumbers.pop();
+	lastWiningNumbers.push(
+			(*spin).GenerateWinningNumber());
+
+	appendToXMLHistory (lastWiningNumbers);
+
 }
