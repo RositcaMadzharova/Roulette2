@@ -14,18 +14,19 @@
 #include <iostream>
 using namespace std;
 
-class Recovery {
+class Recovery
+{
 public:
 	Recovery();
 	virtual ~Recovery();
 
-	void appendToXML(map<int, int> , int, int); //bets
+	void appendToXML(map<int, int>, int, int); //bets
 	void appendToXMLHistory(queue<int>); //history
 
 	map<int, int> readXMLWriteMap(string pathXml);
 	int readXMLWriteCurrentCredit(string pathXml);
 	int readXMLWriteBetCredits(string pathXml);
- 	queue<int> readXMLWriteQueue(string pathXml);
+	queue<int> readXMLWriteQueue(string pathXml);
 
 	queue<int> lastWiningNumbers;
 

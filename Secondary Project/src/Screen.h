@@ -11,15 +11,19 @@
 #include "LTexture.h"
 #include "Button.h"
 
-class Screen {
+class Screen
+{
 public:
 	Screen();
 	virtual ~Screen();
 	virtual bool Draw() = 0;
 	virtual bool Clear() = 0;
-	virtual bool getFlag() {return isActive;}
-private:
-	LTexture* board;
+	virtual bool getFlag()
+	{
+		return isActive;
+	}
+protected:
+	LTexture* background;
 	bool isActive;
 };
 

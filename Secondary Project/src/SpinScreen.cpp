@@ -10,22 +10,23 @@
 map<int, int> posissionToNumberInRoulette;
 
 SpinScreen::SpinScreen()
+		: Screen()
 {
 	numberOfSpins = 1;
 
-	rouletteBackground = new LTexture (0,0);
-	rouletteBackground->loadFromFile("EuropeanRouletteFinal.bmp");
-	rouletteBackground->setWidth(SCREEN_W);
-	rouletteBackground->setHeight(SCREEN_H);
-	rouletteBackground->setAlpha(100);
+	background->loadFromFile("EuropeanRouletteFinal.bmp");
+	background->setWidth(SCREEN_W);
+	background->setHeight(SCREEN_H);
+	background->setAlpha(100);
 
 	//center wheel boarder
-	roulette = new LTexture(250,0);
+	roulette = new LTexture(250, 0);
 	roulette->loadFromFile("RouletteBoard.png");
 	roulette->setWidth(SCREEN_H);
 	roulette->setHeight(SCREEN_H);
 
-	wheel = new LTexture(SCREEN_W / 2 - WHEEL_W / 2 , SCREEN_H / 2 - WHEEL_H / 2);
+	wheel = new LTexture(SCREEN_W / 2 - WHEEL_W / 2,
+			SCREEN_H / 2 - WHEEL_H / 2);
 	wheel->loadFromFile("wheel2.png");
 	wheel->setWidth(WHEEL_W);
 	wheel->setHeight(WHEEL_H);
@@ -36,8 +37,6 @@ SpinScreen::SpinScreen()
 	ball->setHeight(BALL_H);
 
 	sound = new Sound;
-	sound->load();
-	isActive = false;
 
 	FillTheMapsOfRoulette();
 }
@@ -53,53 +52,48 @@ SpinScreen::~SpinScreen()
 	ball->free();
 	delete ball;
 
-
 }
 
 bool SpinScreen::Draw()
 {
 	int result = GenerateWinningNumber();
 
-	rouletteBackground->render(NULL,0,NULL);
-	bool isStoped = false;
+	background->render(NULL, 0, NULL);
 	sound->play(SPINROULETTE);
 	SDL_Delay(2000);
 	int mFrame = 0;
-	double angleWheel = -3 + 9.7 * (posissionToNumberInRoulette [result] - 5) ;
-	double stepWheel = 2 ;
+	double angleWheel = -3 + 9.7 * (posissionToNumberInRoulette[result] - 5);
+	double stepWheel = 2;
 	double maxR = 310, minR = 210,
-			currentR=maxR, minAngle = -95,
+			currentR = maxR, minAngle = -95,
 			step = M_PI / 36, angleBall = 0;
 	do
 	{
-		angleBall -= ( maxR-currentR) / (12 * 200.0 / M_PI);
-		currentR -= (maxR - minR) / ( 10* 200.0 / M_PI);
+		angleBall -= (maxR - currentR) / (12 * 200.0 / M_PI);
+		currentR -= (maxR - minR) / (10 * 200.0 / M_PI);
 
-		if (currentR < minR) {
-			isStoped = true;
-		}
 		angleBall -= step;
-		ball->setX(SCREEN_W/2 - BALL_W / 2 + cos(angleBall) * maxR);
-		ball->setY(SCREEN_H/2 - BALL_H / 2 + sin(angleBall) * maxR);
+		ball->setX(SCREEN_W / 2 - BALL_W / 2 + cos(angleBall) * maxR);
+		ball->setY(SCREEN_H / 2 - BALL_H / 2 + sin(angleBall) * maxR);
 
-		if(mFrame % 3 == 0)
+		if (mFrame % 3 == 0)
 		{
-			roulette->render(NULL,0);
+			roulette->render(NULL, 0);
 			wheel->render( NULL, angleWheel);
 			ball->render( NULL, 0);
 		}
 		angleWheel += stepWheel;
 		maxR -= 0.1;
-		mFrame ++;
+		mFrame++;
 	}
-	while (angleBall  >  minAngle);
+	while (angleBall > minAngle);
 
 	sound->play(WINING_NUMBER);
 	SDL_Delay(2000);
 	sound->music(result);
 	SDL_Delay(1000);
 
-	numberOfSpins ++;
+	numberOfSpins++;
 	return true;
 }
 
@@ -125,14 +119,13 @@ int SpinScreen::GetWinningNumber()
 
 bool SpinScreen::IsReadyForBonus()
 {
-	if(numberOfSpins % SPINS_TO_BONUS == 0)
+	if (numberOfSpins % SPINS_TO_BONUS == 0)
 	{
 		numberOfSpins = 1;
 		return true;
 	}
 	return false;
 }
-
 
 void SpinScreen::FillTheMapsOfRoulette()
 {

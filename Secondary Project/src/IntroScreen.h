@@ -14,22 +14,19 @@
 #include "Credits.h"
 #include "Text.h"
 
-class IntroScreen
+#include "Screen.h"
+
+class IntroScreen: public Screen
 {
 public:
-	 IntroScreen();
-	 virtual ~IntroScreen();
-	 bool Draw();
-	 bool Clear();
-	 bool getFlag(){return isActive;}
+	IntroScreen();
+	virtual ~IntroScreen();
+	bool Draw();
+	bool Clear();
 
-	 void IntroScreenShowCredits(Credits& credits);
-public:
-	 LTexture* introBackground;
-	 Button* introButtons[INTRO_BUTTONS];
+	void IntroScreenShowCredits(Credits& credits);
 
-	 //bool for mouseEvents
-	 bool isActive;
+	Button* introButtons[INTRO_BUTTONS];
 };
 
 #endif /* INTROSCREEN_H_ */

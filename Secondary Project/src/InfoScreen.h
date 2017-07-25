@@ -12,18 +12,17 @@
 #include "Button.h"
 #include "Text.h"
 
-class InfoScreen
+#include "Screen.h"
+
+class InfoScreen: public Screen
 {
 public:
 	InfoScreen();
 	virtual ~InfoScreen();
 	bool Draw();
 	bool Clear();
-	bool getFlag(){return isActive;}
-public:
-	LTexture* infoBackground;
+
 	Button* infoBack;
-	bool isActive;
 };
 
 #endif /* INFOSCREEN_H_ */

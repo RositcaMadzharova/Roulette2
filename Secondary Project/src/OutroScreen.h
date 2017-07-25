@@ -11,19 +11,16 @@
 #include "Text.h"
 #include "Credits.h"
 
-class OutroScreen {
+#include "Screen.h"
+
+class OutroScreen: public Screen
+{
 public:
 	OutroScreen();
-
-	friend class Credits ;
-
 	virtual ~OutroScreen();
 	bool Draw();
-	void Show(Credits* credits);
 	bool Clear();
-	bool getFlag(){return isActive;}
-public:
-		LTexture* outro;
-		bool isActive;
+
+	void Show(Credits* credits);
 };
 #endif /* OUTROSCREEN_H_ */

@@ -13,17 +13,16 @@ GameBoard::GameBoard()
 {
 	double scaleX = 1200 / 1300.0;
 	double scaleY = 750 / 800.0;
-	gameBoard = new LTexture(0,0);
-	gameBoard->loadFromFile("EuropeanRouletteFinal.bmp");
-	gameBoard->setWidth(1200);
-	gameBoard->setHeight(750);
+	background->loadFromFile("EuropeanRouletteFinal.bmp");
+	background->setWidth(1200);
+	background->setHeight(750);
 
-	cashOut = new Button (958 * scaleX , 120 * scaleY);
+	cashOut = new Button(958 * scaleX, 120 * scaleY);
 	cashOut->loadFromFile("1.png");
 	cashOut->setWidth(GAME_BOARD_BUTTON_W);
 	cashOut->setHeight(GAME_BOARD_BUTTON_H);
 
-	spin = new Button(1035 * scaleX , 725 * scaleY);
+	spin = new Button(1035 * scaleX, 725 * scaleY);
 	spin->loadFromFile("1.png");
 	spin->setWidth(GAME_BOARD_BUTTON_W);
 	spin->setHeight(GAME_BOARD_BUTTON_H);
@@ -33,33 +32,30 @@ GameBoard::GameBoard()
 	history->setWidth(GAME_BOARD_BUTTON_W);
 	history->setHeight(GAME_BOARD_BUTTON_H);
 
-	accounting = new Button (555 * scaleX , 120 * scaleY);
+	accounting = new Button(555 * scaleX, 120 * scaleY);
 	accounting->loadFromFile("1.png");
 	accounting->setWidth(GAME_BOARD_BUTTON_W);
 	accounting->setHeight(GAME_BOARD_BUTTON_H);
 
-	clearBets = new Button(70 * scaleX , 725 * scaleY);
+	clearBets = new Button(70 * scaleX, 725 * scaleY);
 	clearBets->loadFromFile("1.png");
 	clearBets->setWidth(GAME_BOARD_BUTTON_W);
 	clearBets->setHeight(GAME_BOARD_BUTTON_H);
 
-	for(int i = 0 ; i < POOLS_BUTTON ; i++)
-		{
-			gameBoardPools[i]=new Button (335 + i * 123  * scaleX, 710 * scaleY);
-			gameBoardPools[i]->loadFromFile("Pools.png");
-			gameBoardPools[i]->setHeight(4 * POOLS_W);
-			gameBoardPools[i]->setWidth(4 * POOLS_H);
-		}
+	for (int i = 0; i < POOLS_BUTTON; i++)
+	{
+		gameBoardPools[i] = new Button(335 + i * 123 * scaleX, 710 * scaleY);
+		gameBoardPools[i]->loadFromFile("Pools.png");
+		gameBoardPools[i]->setHeight(4 * POOLS_W);
+		gameBoardPools[i]->setWidth(4 * POOLS_H);
+	}
 	isActive = false;
-	sound= new Sound;
-	sound->load();
+	sound = new Sound;
 }
 
 GameBoard::~GameBoard()
 {
-	gameBoard->free();
-	delete gameBoard;
-	for(int i = 0 ; i < POOLS_BUTTON ; i++)
+	for (int i = 0; i < POOLS_BUTTON; i++)
 	{
 		delete gameBoardPools[i];
 	}
@@ -78,14 +74,12 @@ GameBoard::~GameBoard()
 	clearBets->free();
 	delete clearBets;
 
-	sound->free();
 	delete sound;
 }
 
 bool GameBoard::Draw()
 {
-	gameBoard->render(NULL,0,NULL);
-
+	background->render(NULL, 0, NULL);
 
 // we have already the buttons dont need to render them :)
 
@@ -103,16 +97,12 @@ bool GameBoard::Draw()
 	return true;
 }
 
-
-
 bool GameBoard::Clear()
 {
 	SDL_RenderClear(LWindow::gRenderer);
 	isActive = false;
 	return true;
 }
-
-
 
 int GameBoard::CalcQuadrandClicked(int x, int y)
 {
@@ -158,7 +148,8 @@ int GameBoard::CalcQuadrandClicked(int x, int y)
 	return clickedCell;
 }
 
-void GameBoard::DisplayBets(Credits* credits , int x, int y, int color, bool resume)
+void GameBoard::DisplayBets(Credits* credits, int x, int y, int color,
+							bool resume)
 // also use for the credit calculations
 {
 	int coordX = -1;
@@ -203,17 +194,17 @@ void GameBoard::DisplayBets(Credits* credits , int x, int y, int color, bool res
 					gameBoardPools.setWidth(POOLS_W);
 					gameBoardPools.setHeight(POOLS_H);
 
-					SDL_Rect rec ={ j * 111 + 5, 1, 111, 110 };
+					SDL_Rect rec = { j * 111 + 5, 1, 111, 110 };
 
-					gameBoardPools.render(&rec ,0 , NULL, SDL_FLIP_NONE,60,60);
+					gameBoardPools.render(&rec, 0, NULL, SDL_FLIP_NONE, 60, 60);
 
 					//while piece to write on
 					LTexture overPullUnderText(coordX + 17, coordY + 17);
 					overPullUnderText.loadFromFile("BALL.png");
 					overPullUnderText.setWidth(POOLS_W);
 					overPullUnderText.setHeight(POOLS_H);
-					overPullUnderText.render(NULL, 0 , NULL, SDL_FLIP_NONE ,
-							POOLS_W / 3 , POOLS_H / 3);
+					overPullUnderText.render(NULL, 0, NULL, SDL_FLIP_NONE,
+							POOLS_W / 3, POOLS_H / 3);
 					sound->play(CLICKBUTTON);
 
 					if (!resume)
@@ -225,41 +216,41 @@ void GameBoard::DisplayBets(Credits* credits , int x, int y, int color, bool res
 //							value[j];
 					}
 					Text textInPool(coordX + 20, coordY + 22, POOLS_W / 2 + 8,
-							POOLS_H / 2 + 8 , 15 ,
+							POOLS_H / 2 + 8, 15,
 							credits->betByNumberCell[clickedCell]
-							, { 0, 0, 0, 255 } , "Intro.otf");
+							, { 0, 0, 0, 255 }, "Intro.otf");
 //					Text textCash(SCREEN_BOARD_W / 5, 40, 45, 35, 15,
 //								credits->GetCredit() * DENOMINATION , { 200, 200, 200,
 //										255 });
 
-						Text textBet(SCREEN_BOARD_W / 2 + 25, 40, 45, 35, 15,
-								credits->GetBet(),
-								{ 200, 200, 200, 255 });
+					Text textBet(SCREEN_BOARD_W / 2 + 25, 40, 45, 35, 15,
+							credits->GetBet(),
+							{ 200, 200, 200, 255 });
 
 				}					//end credits
 			}
 		}					//end if and for
 
-		LTexture underTextLayer(SCREEN_W / 2 - 25, 40);
-		underTextLayer.loadFromFile("EuropeanRouletteFinalGreen.bmp");
-		underTextLayer.setWidth(50);
-		underTextLayer.setHeight(35);
-		underTextLayer.render(NULL);
+	LTexture underTextLayer(SCREEN_W / 2 - 25, 40);
+	underTextLayer.loadFromFile("EuropeanRouletteFinalGreen.bmp");
+	underTextLayer.setWidth(50);
+	underTextLayer.setHeight(35);
+	underTextLayer.render(NULL);
 
-		Text textBet(SCREEN_BOARD_W / 2 + 25, 40, 45, 35, 15, credits->GetBet(),
-				{ 200, 200, 200, 255 });
+	Text textBet(SCREEN_BOARD_W / 2 + 25, 40, 45, 35, 15, credits->GetBet(),
+			{ 200, 200, 200, 255 });
 
 }
 
-void GameBoard::DisplayStatistics(Credits* credits , int lastWinningNumber)
+void GameBoard::DisplayStatistics(Credits* credits, int lastWinningNumber)
 {
 	Text textCash(SCREEN_BOARD_W / 5, 40, 45, 35, 15,
-									credits->GetCredit() * DENOMINATION ,
-									{ 200, 200, 200, 255 });
+			credits->GetCredit() * DENOMINATION,
+			{ 200, 200, 200, 255 });
 
 	Text textBet(SCREEN_BOARD_W / 2 + 25, 40, 45, 35, 15,
-									credits->GetBet(),
-									{ 200, 200, 200, 255 });
+			credits->GetBet(),
+			{ 200, 200, 200, 255 });
 
 	if (lastWinningNumber != -1)
 		Text textWin(SCREEN_W * 3 / 4, 40, 45, 35, 15,
@@ -270,5 +261,4 @@ void GameBoard::DisplayStatistics(Credits* credits , int lastWinningNumber)
 				"no spins yet", { 200,
 						200, 200, 255 });
 }
-
 

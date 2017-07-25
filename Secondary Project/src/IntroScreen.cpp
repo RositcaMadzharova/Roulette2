@@ -8,30 +8,27 @@
 #include "IntroScreen.h"
 
 IntroScreen::IntroScreen()
+		: Screen()
 {
-	introBackground = new LTexture(0,0);
-	introBackground->loadFromFile("IntroBackgroundFinal.bmp");
-	introBackground->setWidth(SCREEN_W);
-	introBackground->setHeight(SCREEN_H);
+	background->loadFromFile("IntroBackgroundFinal.bmp");
+	background->setWidth(SCREEN_W);
+	background->setHeight(SCREEN_H);
 
-	for (int i = 0 ; i < INTRO_BUTTONS ; i++)
+	for (int i = 0; i < INTRO_BUTTONS; i++)
 	{
-		introButtons[i]= new Button (  SCREEN_W / 2 - INTRO_BUTTONS_W / 2,
-				SCREEN_H / 13 - INTRO_BUTTONS_H / 2 + i * (INTRO_BUTTONS_H + 30));
+		introButtons[i] = new Button(SCREEN_W / 2 - INTRO_BUTTONS_W / 2,
+				SCREEN_H / 13 - INTRO_BUTTONS_H / 2
+						+ i * (INTRO_BUTTONS_H + 30));
 
-	introButtons[i]->loadFromFile("1.png");
-	introButtons[i]->setWidth(580);
-	introButtons[i]->setHeight(50);
+		introButtons[i]->loadFromFile("1.png");
+		introButtons[i]->setWidth(580);
+		introButtons[i]->setHeight(50);
 	}
-	isActive=false;
 }
 
 IntroScreen::~IntroScreen()
 {
-	introBackground->free();
-	delete introBackground;
-	introBackground = NULL;
-	for(int i = 0 ; i < INTRO_BUTTONS ; i++)
+	for (int i = 0; i < INTRO_BUTTONS; i++)
 	{
 		introButtons[i]->free();
 		delete introButtons[i];
@@ -40,21 +37,21 @@ IntroScreen::~IntroScreen()
 
 bool IntroScreen::Draw()
 {
-if(introBackground->render(NULL,0,NULL))
-{
-	isActive = true;
-}
+	if (background->render(NULL, 0))
+	{
+		isActive = true;
+	}
 
-return true;
+	return true;
 }
 
 bool IntroScreen::Clear()
 {
 
-SDL_RenderClear(LWindow::gRenderer);
-isActive=false;
+	SDL_RenderClear(LWindow::gRenderer);
+	isActive = false;
 
-return true;
+	return true;
 }
 
 void IntroScreen::IntroScreenShowCredits(Credits& credits)

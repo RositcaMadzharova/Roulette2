@@ -17,7 +17,7 @@ using namespace std;
 const double DENOMINATION = 0.01;
 
 // INTRO SCREEN
-const int SCREEN_W =1300;
+const int SCREEN_W = 1300;
 const int SCREEN_H = 800;
 const int INTRO_BUTTONS = 5;
 const int INTRO_BUTTONS_W = 600;

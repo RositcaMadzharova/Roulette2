@@ -19,8 +19,7 @@ Recovery::~Recovery()
 
 }
 
-void Recovery::appendToXML(map<int, int> betByNumberCell, int credits,
-								int bet)
+void Recovery::appendToXML(map<int, int> betByNumberCell, int credits, int bet)
 {
 	string XML_FILE_PATH = "roulette_recovery.xml";
 	pugi::xml_document doc;

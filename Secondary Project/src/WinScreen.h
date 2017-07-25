@@ -14,22 +14,21 @@
 #include "Text.h"
 #include <vector>
 
-class WinScreen {
+#include "Screen.h"
+
+class WinScreen: public Screen
+{
 public:
 	WinScreen();
 	virtual ~WinScreen();
 	bool Draw();
-//	friend class Credits;
 	bool Clear();
 	void WinAnimation();
 	void ShowCredits(Credits*);
-//	void ShowCredits(int, bool = true);
 
 private:
 	void fillRectPosition();
-	LTexture* win ;
 	LTexture* coin[COIN_COUNT];
-
 };
 
 #endif /* WINSCREEN_H_ */

@@ -27,18 +27,16 @@ class Sound
 {
 public:
 	Sound();
-	 bool load();
-	 void pause();
-	 bool playing();
-	 void free();
-	 void play(EFFECT sound);
-	 void music(int number);
+	void play(EFFECT sound);
+	void music(int number);
 	~Sound();
 
 private:
-	 Mix_Chunk* effect[SPECIAL_SOUNDS];
-	 Mix_Chunk* num[NUMBER_SOUNDS];
-};
+	bool load();
+	void free();
 
+	Mix_Chunk* effect[SPECIAL_SOUNDS];
+	Mix_Chunk* num[NUMBER_SOUNDS];
+};
 
 #endif /* SOUND_H_ */

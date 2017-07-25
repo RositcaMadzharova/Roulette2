@@ -60,11 +60,10 @@ void Credits::SetBets(int bet)
 	this->betCredit = bet;
 }
 
-
 bool Credits::CollectProfit(int roulletteWinningNumber)
 {
 	bool done;
-	 winProfit = betByNumberCell[NumberInCell(
+	winProfit = betByNumberCell[NumberInCell(
 			roulletteWinningNumber)]
 			* MULTIPLIER_NUMBER;
 	if (roulletteWinningNumber != 0)
@@ -83,12 +82,12 @@ bool Credits::CollectProfit(int roulletteWinningNumber)
 					* MULTIPLIER_COLOR;
 	}
 	done = winProfit > betCredit;
- 	ChangeCredits(winProfit);
+	ChangeCredits(winProfit);
 	for (int i = 0; i < NUMBER_OF_SECTORS + 2 + 4; i++)
-			betByNumberCell[i] = 0;
+		betByNumberCell[i] = 0;
 	betCredit = 0;
 
-	cout << winProfit <<" win Profits "<<endl;
+	cout << winProfit << " win Profits " << endl;
 	return done;
 }
 
@@ -104,7 +103,6 @@ int Credits::NumberInCell(int i)
 		return (i - 26) * i - 2;
 	return -100;
 }
-
 
 void Credits::FillTheMapsOfRoulette()
 {

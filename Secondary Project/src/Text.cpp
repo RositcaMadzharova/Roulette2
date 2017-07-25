@@ -46,7 +46,8 @@ std::string toString(int x)
 Text::Text(int x, int y, int w, int h,
 			int font_size,
 			std::string massage_text,
-			SDL_Color color , std::string massage_te)
+			SDL_Color color,
+			std::string massage_te)
 {
 	TTF_Init();
 	textRect = new SDL_Rect;
@@ -54,7 +55,7 @@ Text::Text(int x, int y, int w, int h,
 	textRect->h = h;
 	textRect->x = x;
 	textRect->y = y;
-	textTexture = loadFromFile(font_size, massage_text, color,massage_te);
+	textTexture = loadFromFile(font_size, massage_text, color, massage_te);
 	Show();
 
 	delete textRect;
@@ -63,7 +64,8 @@ Text::Text(int x, int y, int w, int h,
 Text::Text(int x, int y, int w, int h,
 			int font_size,
 			int massage_int,
-			SDL_Color color , std::string massage_te)
+			SDL_Color color,
+			std::string massage_te)
 {
 	TTF_Init();
 	textRect = new SDL_Rect;
@@ -71,7 +73,8 @@ Text::Text(int x, int y, int w, int h,
 	textRect->h = h;
 	textRect->x = x;
 	textRect->y = y;
-	textTexture = loadFromFile(font_size, toString(massage_int), color,massage_te);
+	textTexture = loadFromFile(font_size, toString(massage_int), color,
+			massage_te);
 	Show();
 
 	delete textRect;
@@ -80,7 +83,8 @@ Text::Text(int x, int y, int w, int h,
 Text::Text(int x, int y, int w, int h,
 			int font_size,
 			double massage_double,
-			SDL_Color color, std::string massage_te)
+			SDL_Color color,
+			std::string massage_te)
 {
 	TTF_Init();
 	textRect = new SDL_Rect;
@@ -88,7 +92,8 @@ Text::Text(int x, int y, int w, int h,
 	textRect->h = h;
 	textRect->x = x;
 	textRect->y = y;
-	textTexture = loadFromFile(font_size, toString(massage_double), color,massage_te);
+	textTexture = loadFromFile(font_size, toString(massage_double), color,
+			massage_te);
 	Show();
 
 	delete textRect;
@@ -102,15 +107,16 @@ Text::~Text()
 
 SDL_Texture* Text::loadFromFile(int font_size,
 								std::string massage_text,
-								SDL_Color color ,
+								SDL_Color color,
 								std::string massage_te,
-								int x  , int y
+								int x, int y
 								)
 {
 
-	if (x != 0 && y != 0){
-		textRect->x=x;
-		textRect->y=y;
+	if (x != 0 && y != 0)
+	{
+		textRect->x = x;
+		textRect->y = y;
 	}
 	TTF_Font* gFont = TTF_OpenFont(massage_te.c_str(), font_size);
 //	TTF_Font* gFont = TTF_OpenFont("lazy.ttf", font_size);

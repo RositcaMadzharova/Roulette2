@@ -12,20 +12,21 @@
 #include "Sound.h"
 #include "GLOBALS.h"
 
-class BonusScreen {
+#include "Screen.h"
+
+class BonusScreen: public Screen
+{
 public:
 	BonusScreen();
 	virtual ~BonusScreen();
 	bool Draw();
 	bool Clear();
+
 	bool getBonusCreditsText(Credits*);
 
-
 public:
-		LTexture* bonus;
-		LTexture* bonusSticker;
-		Sound* sound;
-		bool isActive;
+	LTexture* bonusSticker;
+	Sound* sound;
 };
 
 #endif /* BONUSSCREEN_H_ */

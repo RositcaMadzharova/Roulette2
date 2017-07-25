@@ -13,27 +13,27 @@
 #include <map>
 using std::map;
 
-class SpinScreen {
+#include "Screen.h"
+
+class SpinScreen: public Screen
+{
 public:
 	SpinScreen();
 	virtual ~SpinScreen();
 	bool Draw();
 	bool Clear();
-	bool getFlag(){return isActive;}
 
 	int GenerateWinningNumber();
 	int GetWinningNumber();
 
 	bool IsReadyForBonus();
-public:
-	LTexture* rouletteBackground;
+	private:
 	LTexture* roulette;
 	LTexture* wheel;
-	LTexture* ball ;
-	Sound* sound;
-	bool isActive;
+	LTexture* ball;
 
-private:
+	Sound* sound;
+	private:
 	int numberOfSpins;
 	int winningNumber;
 

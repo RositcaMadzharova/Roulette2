@@ -14,24 +14,22 @@
 #include "Text.h"
 #include "Sound.h"
 
+#include "Screen.h"
 
-
-class GameBoard
+class GameBoard: public Screen
 {
 public:
 	GameBoard();
 	virtual ~GameBoard();
 	bool Draw();
 	bool Clear();
-	bool getFlag(){return isActive;}
 
-	void DisplayStatistics(Credits* credits , int lastWinningNumber);
+	void DisplayStatistics(Credits* credits, int lastWinningNumber);
 
 	int CalcQuadrandClicked(int x, int y);
-	void DisplayBets(Credits* credits , int x, int y, int color,
-			bool resume = false);
+	void DisplayBets(Credits* credits, int x, int y, int color,
+						bool resume = false);
 public:
-	LTexture* gameBoard;
 	Button* gameBoardPools[POOLS_BUTTON];
 	Button* cashOut;
 	Button* spin;
@@ -40,7 +38,6 @@ public:
 	Button* clearBets;
 
 	Sound* sound;
-	bool isActive;
 };
 
 #endif /* GAMEBOARD_H_ */

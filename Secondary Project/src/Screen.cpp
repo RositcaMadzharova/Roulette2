@@ -9,11 +9,12 @@
 
 Screen::Screen()
 {
-	board = new LTexture(0,0);
+	background = new LTexture(0, 0);
 	isActive = false;
 }
 
 Screen::~Screen()
 {
-	delete board;
+	background->free();
+	delete background;
 }

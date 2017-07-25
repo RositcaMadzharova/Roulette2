@@ -20,13 +20,12 @@ public:
 	void ChangeCredits(int);
 	int GetBet() const;
 	int GetCredit() const;
-	void SetBets(int bet) ;
-	int GetWinProfit() {return winProfit;}
+	void SetBets(int bet);
+	int GetWinProfit(){	return winProfit;}
 	int GetCreditsCollected() const;
 	void AddCreditsCollected(int creditsCollected);
 
 	bool CollectProfit(int roulletteWinningNumber);
-
 
 	//37-41 - even, red, black, odd
 	map<int, int> betByNumberCell;
