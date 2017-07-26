@@ -84,8 +84,7 @@ bool Credits::CollectProfit(int roulletteWinningNumber)
 	for (int i = 0; i < NUMBER_OF_SECTORS + 2 + 4; i++)
 		betByNumberCell[i] = 0;
 	betCredit = 0;
-
-	cout << winProfit << " win Profits " << endl;
+	
 	return done;
 }
 
