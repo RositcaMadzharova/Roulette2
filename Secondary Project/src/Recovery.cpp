@@ -33,8 +33,6 @@ void Recovery::appendToXML(map<int, int> betByNumberCell)
 	map<int, int>::iterator itr;
 	for (itr = betByNumberCell.begin(); itr != betByNumberCell.end(); itr++)
 	{
-//		cout << "Bet: " << itr->first << " : " << itr->second << endl;
-
 		pugi::xml_node doc_attr = doc.append_child("Bet");
 		pugi::xml_attribute attr_cell;
 		attr_cell = doc_attr.append_attribute("cell") =
@@ -77,9 +75,6 @@ void Recovery::appendToXMLHistory(queue<int> lastWinningNumbers)
 	doc.reset(doc);
 	while (lastWinningNumbers.size() != 0)
 	{
-
-		cout << " " << lastWinningNumbers.front();
-
 		pugi::xml_node doc_attr;
 		doc_attr = doc.append_child("Number");
 		pugi::xml_attribute attr_cell;
