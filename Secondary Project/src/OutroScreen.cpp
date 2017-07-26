@@ -46,8 +46,6 @@ void OutroScreen::Show(Credits* credits)
 	Text textMoneyNumber((SCREEN_W / 8 + 520) * scale, 400 * scale, 180 * scale,
 			200 * scale, 15, credits->GetCredit() * DENOMINATION, { 200, 10, 10,
 					255 });
-
-	cout << credits->GetCredit() << "bbbb" << endl;
 }
 
 bool OutroScreen::Clear()
