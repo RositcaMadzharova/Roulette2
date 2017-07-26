@@ -251,9 +251,17 @@ void GameBoard::DisplayStatistics(Credits* credits, int lastWinningNumber)
 			{ 200, 200, 200, 255 });
 
 	if (lastWinningNumber != -1)
+	{
+		SDL_Color color;
+		if (credits->colorToNumberInRoulette[lastWinningNumber] == 'r')
+			color = { 255, 0, 0, 255 };
+		else
+			color = { 0, 255, 255, 255 };
+
 		Text textWin(SCREEN_W * 3 / 4, 40, 45, 35, 15,
 				lastWinningNumber,
-				{ 200, 200, 200, 255 });
+				color);
+	}
 	else
 		Text textWin(SCREEN_W * 3 / 4, 40, 100, 35, 15,
 				"no spins yet", { 200,
