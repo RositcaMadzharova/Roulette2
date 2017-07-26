@@ -266,5 +266,16 @@ void GameBoard::DisplayStatistics(Credits* credits, int lastWinningNumber)
 		Text textWin(SCREEN_W * 3 / 4, 40, 100, 35, 15,
 				"no spins yet", { 200,
 						200, 200, 255 });
+	
+	if(credits->GetWinProfit())
+	{
+		Text textWinProfitText(860, 200, 180, 35, 20,
+					"Winning $:",
+					{ 200,	200, 200, 255 });
+
+		Text textWinProfit(1060, 200, 50, 35, 15,
+					credits->GetWinProfit(),
+					{ 200,	200, 200, 255 });
+	}
 }
 
