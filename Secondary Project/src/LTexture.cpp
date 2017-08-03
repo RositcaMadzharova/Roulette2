@@ -114,6 +114,31 @@ bool LTexture::render(SDL_Rect* clip, double angle, SDL_Point* center,
 	return true;
 }
 
+void LTexture::Copy( LTexture* ptr , LTexture* seconPtr , double angle)
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { ptr->getX() ,  ptr->getY(), ptr->getWidth(), ptr->getHeight() };
+	SDL_Rect SecondenderQuad = { seconPtr->getX() ,  seconPtr->getY(), seconPtr->getWidth(), seconPtr->getHeight() };
+
+	SDL_RenderCopy(LWindow::gRenderer, seconPtr->mTexture, NULL , &SecondenderQuad);
+
+	SDL_RenderCopyEx(LWindow::gRenderer, ptr->mTexture, NULL , &renderQuad, angle, NULL , SDL_FLIP_NONE  );
+
+}
+
+
+void LTexture::draw(int x ,int y )
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	SDL_RenderCopy(LWindow::gRenderer, mTexture, NULL , &renderQuad);
+
+	SDL_RenderPresent(LWindow::gRenderer);
+}
+
+
+
 int LTexture::getWidth()
 {
 	return mWidth;

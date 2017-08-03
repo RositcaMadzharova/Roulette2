@@ -17,8 +17,8 @@ using namespace std;
 const double DENOMINATION = 0.01;
 
 // INTRO SCREEN
-const int SCREEN_W = 1300;
-const int SCREEN_H = 800;
+const int SCREEN_W = 1200;
+const int SCREEN_H = 750;
 const int INTRO_BUTTONS = 5;
 const int INTRO_BUTTONS_W = 600;
 const int INTRO_BUTTONS_H = 50;
@@ -34,6 +34,7 @@ const int INFO_BUTTON_W = 50;
 const int POOLS_BUTTON = 5;
 const int SCREEN_BOARD_W = 1200;
 const int SCREEN_BOARD_H = 750;
+
 const int POOLS_W = 30;
 const int POOLS_H = 30;
 const int BUTTON_W = 200;
@@ -42,8 +43,9 @@ const int GAME_BOARD_BUTTON_W = 170;
 const int GAME_BOARD_BUTTON_H = 90;
 
 //SPIN SCREEN
-const int BALL_W = 60;
-const int BALL_H = 60;
+const int BALL_W = 35;
+const int BALL_H = 35;
+
 const int WHEEL_W = 560;
 const int WHEEL_H = 560;
 

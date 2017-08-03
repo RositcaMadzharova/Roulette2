@@ -28,6 +28,9 @@ public:
 	//Display texture
 	void show();
 
+	void draw(int x ,int y ) ;
+	void Copy( LTexture* ptr , LTexture* seconPtr  , double angle);
+
 	//Deallocates texture
 	virtual void free();
 

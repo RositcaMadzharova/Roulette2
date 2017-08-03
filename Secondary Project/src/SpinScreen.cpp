@@ -15,19 +15,24 @@ SpinScreen::SpinScreen()
 	numberOfSpins = 1;
 
 	background->loadFromFile("EuropeanRouletteFinal.bmp");
-	background->setWidth(SCREEN_W);
+	background->setWidth(SCREEN_W );
 	background->setHeight(SCREEN_H);
 	background->setAlpha(100);
 
 	//center wheel boarder
-	roulette = new LTexture(250, 0);
+	roulette = new LTexture(211, (-12));
 	roulette->loadFromFile("RouletteBoard.png");
-	roulette->setWidth(SCREEN_H);
-	roulette->setHeight(SCREEN_H);
+
+	int blaq = 780 ;
+//	????????????????????????????????????????????
+	roulette->setWidth(blaq);
+	roulette->setHeight(blaq);
 
 	wheel = new LTexture(SCREEN_W / 2 - WHEEL_W / 2,
 			SCREEN_H / 2 - WHEEL_H / 2);
-	wheel->loadFromFile("wheel2.png");
+
+	wheel->loadFromFile("wheel.png");
+
 	wheel->setWidth(WHEEL_W);
 	wheel->setHeight(WHEEL_H);
 
@@ -54,40 +59,41 @@ SpinScreen::~SpinScreen()
 
 }
 
+
+
 bool SpinScreen::Draw()
 {
-
-	srand(time(NULL));
-	winningNumber = rand() % 37;
+	winningNumber = 5 ;//ra  nd() % 37;
 	int result = winningNumber;
 
 	background->render(NULL, 0, NULL);
-	sound->play(SPINROULETTE);
-	SDL_Delay(2000);
-	int mFrame = 0;
-	double angleWheel = -3 + 9.7 * (posissionToNumberInRoulette[result] - 5);
+
+
+		srand(time(NULL));
+		sound->play(SPINROULETTE);
+
+	//	for sound sinc
+		SDL_Delay(2000);
+
+
+	double angleWheel =   9.7 * (posissionToNumberInRoulette[result] - 7);
+
 	double stepWheel = 2;
-	double maxR = 310, minR = 210,
-			currentR = maxR, minAngle = -95,
+	double maxR = 310,
+			minAngle = -95,
 			step = M_PI / 36, angleBall = 0;
 	do
 	{
-		angleBall -= (maxR - currentR) / (12 * 200.0 / M_PI);
-		currentR -= (maxR - minR) / (10 * 200.0 / M_PI);
-
 		angleBall -= step;
-		ball->setX(SCREEN_W / 2 - BALL_W / 2 + cos(angleBall) * maxR);
-		ball->setY(SCREEN_H / 2 - BALL_H / 2 + sin(angleBall) * maxR);
 
-		if (mFrame % 3 == 0)
-		{
-			roulette->render(NULL, 0);
-			wheel->render( NULL, angleWheel);
-			ball->render( NULL, 0);
-		}
+		ball->Copy(wheel , roulette  , angleWheel);
+
+		ball->draw( SCREEN_W / 2 - BALL_W / 2 + cos(angleBall) * maxR
+				, SCREEN_H / 2 - BALL_H / 2 + sin(angleBall) * maxR );
+
 		angleWheel += stepWheel;
 		maxR -= 0.1;
-		mFrame++;
+//		mFrame++;
 	}
 	while (angleBall > minAngle);
 
@@ -97,7 +103,10 @@ bool SpinScreen::Draw()
 	SDL_Delay(1000);
 
 	numberOfSpins++;
-	return true;
+
+	isActive = true;
+//	SDL_RenderClear(LWindow::gRenderer);
+	return isActive;
 }
 
 bool SpinScreen::Clear()
